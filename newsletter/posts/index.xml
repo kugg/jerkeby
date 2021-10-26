@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Newsletter</title>
-    <link>https://www.jerkeby.se/newsletter/</link>
-    <description>Recent content on Newsletter</description>
+    <title>Posts on Newsletter</title>
+    <link>https://www.jerkeby.se/newsletter/posts/</link>
+    <description>Recent content in Posts on Newsletter</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 18 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.jerkeby.se/newsletter/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 18 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.jerkeby.se/newsletter/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Capturing Robots With Kvicksand</title>
       <link>https://www.jerkeby.se/newsletter/posts/capturing-robots-with-kvicksand/</link>
