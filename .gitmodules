@@ -1,0 +1,3 @@
+[submodule "quickstart/themes/paper"]
+	path = quickstart/themes/paper
+	url = https://github.com/nanxiaobei/hugo-paper
