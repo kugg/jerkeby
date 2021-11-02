@@ -6,7 +6,16 @@
     <description>Recent content on Newsletter</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 18 Oct 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.jerkeby.se/newsletter/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 02 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.jerkeby.se/newsletter/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>History of the ROP</title>
+      <link>https://www.jerkeby.se/newsletter/posts/history-of-rop/</link>
+      <pubDate>Tue, 02 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.jerkeby.se/newsletter/posts/history-of-rop/</guid>
+      <description>From 0 to eternity Hi buddies! I&amp;rsquo;m now celebrating one month down in my one man megacorp. I have decided to take some time off from client work to study and write about the future of memory corruption vulnerabilities. I want to help you understand the risks, and known controls for C programs. I think it&amp;rsquo;s easier to remember all of this in a story context. I got in to this type of hacking in just about the right time.</description>
+    </item>
+    
     <item>
       <title>Capturing Robots With Kvicksand</title>
       <link>https://www.jerkeby.se/newsletter/posts/capturing-robots-with-kvicksand/</link>

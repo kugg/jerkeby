@@ -1,0 +1,23 @@
+---
+title: "The Backdoor"
+date: "2021-10-01"
+draft: false
+---
+Today is my first day as an independent consultant and I'd like ot start off with telling you a secret. Before I open up I want to say thanks for joining my journey and give you a recap. In last weeks issue I wrote about the balance of releasing offensive research and making a positive impact. I try my best to be conscious about decisions and reduce negative impact. Because of that I'm always open to feedback on my actions so just press reply after reading this email if there is anything you think I could have done differently.
+
+Story time
+==========
+
+In late 2018 I was working with a Swedish financial institution reviewing their APIs when I stumbled upon F5 BIG-IP series. The product is a virtual machine running Linux with a web written in Java and a bunch of traffic shaping logic written in TCL. The TCL traffic shaping magic is called iRules. iRules can evaluate the incoming packets before deciding where to send them off. Pretty neat. Unfortunately TCL is a scripting language that pre-dates modern secure coding practices so its very easy to make mistakes. One mistake is doing input evaluation where the input can be evaluated as executable code. This happens for instance if the input is a number and you want to evaluate if the number is greater or lesser then something else. The evaluation will execute TCL code attached to that number as it tries to evaluate the actual value of the number.
+
+One thing led to another and reporting this risk to F5 was quite straight forward. Reducing risk of negative impact was difficult because F5's are built in to a lot of complex systems in places were they are notoriously difficult to replace. The notorious BIG-IP. So the logical mitigation recommendation is to write safer iRules. I contributed to two tools for safer coding, one called [TESTCL](https://github.com/landro/TesTcl) (pronounced testicle) and [tclscan](https://github.com/aidanhs/tclscan). TESTCL essentially tests iRule code logic and tclscan looks for evaluations. So far no backdoors.
+
+I also made a third tool that made things a bit more complicated. The i[Rule detector plugin for burp](https://github.com/kugg/irule-detector/blob/master/iruledetector.py). This turned out to be a quite effective method for finding iRule injection vulnerabilities in remote sites. Unfortunately this tool can easily be used by an attacker with hostile intents. In this tool I decided to plant a backdoor. So far none has spotted the backdoor but I have seen my tool forked a few times in to various other purposes with the backdoor intact so I thought I should share.
+
+![](https://dim.mcusercontent.com/cs/ddd7ae486331199e51e491d97/images/cba68663-fbbd-11ba-ffed-99da2bfbc363.png?w=564&dpr=2)
+
+On Line 86, a token uuid1 value is generated as "random data" to the remote server. This value is later used to detect if the server responds back with the same value (ie. the hack was successful).
+
+What you should know is that uuid.uuid1 in Python is vulnerable to prediction attacks. A uuid1 is generated from the local time of the client and the mac address of the client machine. The remote server only needs to note the time of the attack attempt and guess the MAC address by using the uuid1 function and thus they will have sufficient evidence collected about the attacker machine. If you want to try it for yourself check out the [uuid1 source code](https://github.com/python/cpython/blob/3.9/Lib/uuid.py).
+
+My only intent was to reduce the negative impact of releasing a PoC tool to the public. Do you agree with my method?
