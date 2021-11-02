@@ -58,12 +58,12 @@ Today producing a ROP chain means to scan through a binary using a ROP chain sea
 
 ## Mitigations
 
-In 2000-2001 two mitigations angainst the buffer overflow attack was deviced. First came the Non eXecutable (NX) stack as suggested already back in 1997 and closely after the Address Space Layout Randomization from the PaX project.
-At that time the kernel security mitigation space was dominated by one single researcher: Brad Spengler, aka Spender. Spender made a patch set for Linux called the grsec & PaX patches. Hes patches were well written stable, secur and very inventive. The Linux kernel community however was not keen on hardening at all, because it meant making feature tradeoffs and it would create complications. (Read more about that story here https://lwn.net/Articles/721848/)
+In 2000-2001 two mitigations angainst the buffer overflow attack was deviced. First came the Non eXecutable (NX) stack as suggested already back in 1997 and after the Address Space Layout Randomization from the PaX project in 2000. PaX for Linux was initially written by a hungarian hacker named pipacs and paxteam. Read more about pipacs backstory here: http://phrack.org/issues/66/2.html#article.
+A few years later the kernel security mitigation space was dominated by another researcher: Brad Spengler, aka Spender. Spender made a patch set for Linux called grsec, it sported an array of defenses and detection mechanisms. Spender also worked on improving and packaging PaX as part of grsecurity. Hes patches were considered well written, stable, secure and very inventive. The Linux kernel community however was not keen on hardening at all, because it meant making feature tradeoffs and it would create complications. (Read more about that story here https://lwn.net/Articles/721848/)
 
 The idea is that the addresses used in the .data section of a binary program can be randomized so that an attacker that has been able to create a buffer overflow would not know where their code would end up. 
 
-Things are moving slowly in the Linux world due to perosnal conflicts between Spender and parts of the Linux Kernel community. When Intel announced the ia64 architecture they had introduced hardware support for the NX bit proposed back in 1997 by Solar Designer. Suddenly the kernel world sprung to action with the support from Intel the two security features from the PaX project was merged in 2003-2004 (2.6.8). As a comparison Windows integrated support for the same security features in October 2009 with the release of Windows 7.
+Things are moving slowly in the Linux world due to perosnal conflicts between Spender and parts of the Linux Kernel community. When Intel announced the Itanium ia64 architecture they had introduced hardware support for the NX bit proposed back in 1997 by Solar Designer. Suddenly the kernel world sprung to action with the support from Intel the two security features from the PaX project was merged in 2003-2004 (2.6.8). As a comparison Windows integrated support for the same security features in October 2009 with the release of Windows 7.
 
 In 97 the bugtraq people summarized the mitigations, these were the solutions proposed (https://seclists.org/bugtraq/1997/Apr/125):
 
@@ -92,12 +92,19 @@ A Linux Kernel recently complained to me that thre are 6 security researchers lo
 
 When we try to erradicate a bug class we try to attack the root cause if possible but sometimes that means taking away the core functionality of a language and in this case menmory corruption in itself is a core issue in the C programming language that probably never will be solved. Even though you dont write C code you still use C optimizations in all available frameworks and languages. First, C is used in core functionality of languages like PHP, Perl, Java, Python, Erlang etc. Its used to write compilers, memory managers and time critical operations like precise floating point math. My main concern is that operating system kernels, virtualization environments and web servers are written in C. A language that has so many inherent risks that despite 20 years of active mitigation work have only been able to partly address the issues found in 97. 
 
+I want to give a final mention to the mitigation method RELRO that maps the .data and .bss are mapped as reado only. This means that a buffer overflow can no longer overwrite the execution stack.
+Find out more about relro here: http://phrack.org/issues/66/2.html#article
+Unfortunately today buffer overflows is no longer the only fish in the "memory corruption sea", integer overflow, heap based overflows, double free and null pointer dereference are a few new methods to cause trouble when the stack is read only.
+
 ## Perfect is the enemy of the good
 
 The above mentioned protection mechanisms have all served in reducing the probability of a successful memory corurption attack. This newsletter post is about assessing and introducing yet another measure for lowering the impact of ROP attacks. 
 
 Perfect is the enemy of the good meaning that if we would have expected to find the perfect solution and introduced it first we wouldnt have had any mitigations (which is bad). Instead I think it's a better approach to attempt a layered security by experimenting and improving on existing solutions. However this approach requires historic knowledge and experience to understand the motive behind every little knob on the controlboard.
 
+I want to give a final mention to the mitigation method RELRO that maps the .data and .bss are mapped as reado only. This means that a buffer overflow can no longer overwrite the execution stack.
+These are the basic options in GCC taken from https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods they consitute a foundation of the compiler controlled hardening features.
+Understanding and using these options drastically improves security in C programs in various ways.
 ```
 -Wall -Wextra
   Turn on all warnings.
@@ -113,7 +120,7 @@ Perfect is the enemy of the good meaning that if we would have expected to find 
   Your choice of "-fstack-protector" does not protect all functions (see comments). You need -fstack-protector-all to guarantee guards are applied to all functions, although this will likely incur a performance penalty. Consider -fstack-protector-strong as a middle ground.
   The -Wstack-protector flag here gives warnings for any functions that aren't going to get protected.
 -pie -fPIE
-  For ASLR
+  Position independent executable this is an enable for ASLR memory mapping by the kernel
 -ftrapv
   Generates traps for signed overflow (currently bugged in gcc)
 -D_FORTIFY_SOURCE=2 ­O2
@@ -125,13 +132,12 @@ Perfect is the enemy of the good meaning that if we would have expected to find 
 -Wl,nxcompat
   Tell linker to use DEP protection
 ```
-These are the basic options in GCC taken from https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods
 
 ## return 0
 
 I have now talked about how the ROP attack came to be and the reasons for the slow mitigations in early 00s. In the next newsletter I'll introduce a new ROP mitigation technique released with GCC 11 that you may see in your distros from next year. The GCC option is called zero-call-user-reg and I want to share some risks as well as the benefits of using it. I have collected some statistics of it's performance.
 
-For this edition I would like to thank Linus Walleij who explained the social aspects of kernel development community in the early 00s. And Calle Svensson (@ZetaTwo) for following along and arguing for vaious ROP chain options.
+For this edition I would like to thank Linus Walleij who explained the social aspects of kernel development community in the early 00s. And Calle Svensson (https://twitter.com/ZetaTwo) for following along and arguing for various ROP chain options. I want to thank Laban (https://twitter.com/LabanSkoller) who corrected my spelling again. Andreas (https://twitter.com/hyyyy) who pointed out that I was wrong about ASLR and gave some more context to relro.
 
 Stay tuned for the follow up!
 
