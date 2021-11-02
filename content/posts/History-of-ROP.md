@@ -11,11 +11,11 @@ Hi buddies! I'm now celebrating one month down in my one man megacorp. I have de
 
 ## The threat of memory corruption
 
-I vividly remember the spring of 1997. I had deciced I was going to be a hacker. Started lending programming books about C in our local library and was reading up on the mailing list Bugtraq.
+I vividly remember the spring of 1997. I had decided I was going to be a hacker. Started lending programming books about C in our local library and was reading up on the mailing list Bugtraq.
 But most vividly I remember getting a hold of and printing the phrack issue by Aleph one "Smashing the stack for fun and profit" that had been released during the winter of 1996 (http://phrack.org/issues/49/14.html).
 A complete gamechanger to hacking. From a generation of desperately bruteforcing teenagers arose a tribe of warriors ready to smash that stack. We started learning how compilers and assembler works (still lots to learn there). Smashing the stack explained how to overwrite memory of a computer program with your own instructions using unexpectedly long inputs. Back then there was only one known memory corruption vulnerability: the buffer overflow. Since then plenty of new memory corruption vulnerability classes have surfaced.
 
-By the summer of 1997 stack smashing and buffer overflows was on everybody's lips, at least if you were part of the bugtraq community (https://seclists.org/bugtraq/1997/Apr/125). A hacker named Solar Designer posted a Linux Kernel patch to the kernel community mailing list for adding executable stack support (http://lkml.iu.edu/hypermail/linux/kernel/9706.0/0341.html) The same hacker diligently pointed out that the patch could be circumvented using a new technique called return to libc http://lkml.iu.edu/hypermail/linux/kernel/9706.0/0234.html. The response to the non executable stack patch was that even though you can mark the stack as non executable and attacker can use already existing memory and libraries and jump to existing code that would be executable and run from there. Solar Designer then wrote a proof of concept exploit and published the first return to libc attack in August to the public "full disclosure" mailininglist bugtraq (https://seclists.org/bugtraq/1997/Aug/63).
+By the summer of 1997 stack smashing and buffer overflows was on everybody's lips, at least if you were part of the bugtraq community (https://seclists.org/bugtraq/1997/Apr/125). A hacker named Solar Designer posted a Linux Kernel patch to the kernel community mailing list for adding executable stack support (http://lkml.iu.edu/hypermail/linux/kernel/9706.0/0341.html) The same hacker diligently pointed out that the patch could be circumvented using a new technique called return to libc http://lkml.iu.edu/hypermail/linux/kernel/9706.0/0234.html. The response to the non executable stack patch was that even though you can mark the stack as non executable and attacker can use already existing memory and libraries and jump to existing code that would be executable and run from there. Solar Designer then wrote a proof of concept exploit and published the first return to libc attack in August to the public "full disclosure" mailing-list bugtraq (https://seclists.org/bugtraq/1997/Aug/63).
 
 Without knowing it Tim Newsham describes the ROP attack on bugtraq while providing criticism towards the Non eXecutable (NX) stack approach: https://seclists.org/bugtraq/1997/Apr/129
 ```
@@ -73,7 +73,7 @@ In 97 the bugtraq people summarized the mitigations, these were the solutions pr
 4. Compiler modifications, bounds checking, (https://web.archive.org/web/20160326081542/https://www.doc.ic.ac.uk/~phjk/BoundsChecking.html)
 5. Controlled intepretters like LISP and ADA (what we today call scripting languages). This is done in RUST in the Linux kernel today
 6. "The problem is not that privileged code is insecure. The problem is that there is too much privileged code.". Today this is adressed with Microkernel intitiatives and Memory Space Separation on MMU level
-7. Stack canaries in gcc introduced as a patch-set by StackGuard (https://www.usenix.org/legacy/publications/library/proceedings/sec98/full_papers/cowan/cowan.pdf)
+7. Stack canaries in GCC introduced as a patch-set by StackGuard (https://www.usenix.org/legacy/publications/library/proceedings/sec98/full_papers/cowan/cowan.pdf)
 
 All of the above methods have been tried and all of them have contributed to limiting the impact of buffer overflow attacks. 
 I mentioned that ASLR was added in 2004. Buffer overflows continued to be a successful attack vector due to a new circumvention technique called the NOP sled (https://en.wikipedia.org/wiki/Buffer_overflow#NOP_sled_technique). The Stack canary became default in modern compilers, a method that checked that function was intact by comparing a random value before executing a function and the same intact value just after returning. This method has been circumvented by using format string vulnerabilities to leak canary values, on Windows an attacker can cause Exceptions that trigger the System Interupt Handler that does not use stack canaries.
@@ -100,10 +100,10 @@ Unfortunately today buffer overflows is no longer the only fish in the "memory c
 
 The above mentioned protection mechanisms have all served in reducing the probability of a successful memory coruption attack. This newsletter post is about assessing and introducing yet another measure for lowering the impact of ROP attacks. 
 
-Perfect is the enemy of the good meaning that if we would have expected to find the perfect solution and introduced it first we would'nt have had any mitigations (which is bad). Instead I think it's a better approach to attempt a layered security by experimenting and improving on existing solutions. However this approach requires historic knowledge and experience to understand the motive behind every little knob on the control-board.
+Perfect is the enemy of the good meaning that if we would have expected to find the perfect solution and introduced it first we wouldn't have had any mitigations (which is bad). Instead I think it's a better approach to attempt a layered security by experimenting and improving on existing solutions. However this approach requires historic knowledge and experience to understand the motive behind every little knob on the control-board.
 
-I want to give a final mention to the mitigation method RELRO that maps the .data and .bss are mapped as reado only. This means that a buffer overflow can no longer overwrite the execution stack.
-These are the basic options in GCC taken from https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods they consitute a foundation of the compiler controlled hardening features.
+I want to give a final mention to the mitigation method RELRO that maps the .data and .bss are mapped as read only. This means that a buffer overflow can no longer overwrite the execution stack.
+These are the basic options in GCC taken from https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods they constitute a foundation of the compiler controlled hardening features.
 Understanding and using these options drastically improves security in C programs in various ways.
 ```
 -Wall -Wextra
@@ -122,7 +122,7 @@ Understanding and using these options drastically improves security in C program
 -pie -fPIE
   Position independent executable this is an enable for ASLR memory mapping by the kernel
 -ftrapv
-  Generates traps for signed overflow (currently bugged in gcc)
+  Generates traps for signed overflow
 -D_FORTIFY_SOURCE=2 ­O2
   Buffer overflow checks. See also difference between =2 and =1
 ­-Wl,-z,relro,-z,now
@@ -140,4 +140,3 @@ I have now talked about how the ROP attack came to be and the reasons for the sl
 For this edition I would like to thank Linus Walleij who explained the social aspects of kernel development community in the early 00s. And Calle Svensson (https://twitter.com/ZetaTwo) for following along and arguing for various ROP chain options. I want to thank Laban (https://twitter.com/LabanSkoller) who corrected my spelling again. Andreas (https://twitter.com/hyyyy) who pointed out that I was wrong about ASLR and gave some more context to relro.
 
 Stay tuned for the follow up!
-
