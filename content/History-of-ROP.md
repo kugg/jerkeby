@@ -17,7 +17,7 @@ A complete gamechanger to hacking. From a generation of desperately bruteforcing
 
 By the summer of 1997 stack smashing and buffer overflows was on everybodys lips, at least if you were part of the bugtraq community (https://seclists.org/bugtraq/1997/Apr/125). A hacker named Solar Designer posted a Linux Kernel patch to the kernel community mailing list for adding executable stack support (http://lkml.iu.edu/hypermail/linux/kernel/9706.0/0341.html) The same hacker diligently pointed out that the patch could be circumvented using a new technique called return to libc http://lkml.iu.edu/hypermail/linux/kernel/9706.0/0234.html. The response to the non executable stack patch was that even though you can mark the stack as non executable and attacker can use already existing memory and libraries and jump to existing code that would be executable and run from there. Solar Designer then wrote a proof of concept exploit and published the first return to libc attack in August to the public "full disclosure" mailininglist bugtraq (https://seclists.org/bugtraq/1997/Aug/63).
 
-Without knowing it Tim Newsham describes the ROP attack on bugtraq while providing critiscism towards the NX approach: https://seclists.org/bugtraq/1997/Apr/129
+Without knowing it Tim Newsham describes the ROP attack on bugtraq while providing critiscism towards the Non eXecutable (NX) stack approach: https://seclists.org/bugtraq/1997/Apr/129
 ```
 ...
 The ability to overwrite the stack with arbitrary data
