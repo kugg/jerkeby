@@ -94,6 +94,7 @@ When we try to eradicate a bug class we try to attack the root cause if possible
 
 I want to give a final mention to the mitigation method RELRO that maps the `.data` and `.bss` sections are mapped as read-only. This means that a buffer overflow can no longer overwrite the execution stack.
 Find out more about RELRO here: https://trapkit.de/articles/relro/
+
 Unfortunately, today buffer overflow is no longer the only fish in the "memory corruption sea". Integer overflow, heap based overflows, double free and null pointer dereference are a few new methods to cause trouble when the stack is read-only.
 
 ## Perfect is the enemy of good
