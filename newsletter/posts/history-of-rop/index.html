@@ -84,7 +84,7 @@
   <meta itemprop="name" content="History of the ROP">
 <meta itemprop="description" content="From 0 to eternity Hi buddies! I&rsquo;m now celebrating one month down in my one man megacorp. I have decided to take some time off from client work to study and write about the future of memory corruption vulnerabilities. I want to help you understand the risks, and known controls for C programs. I think it&rsquo;s easier to remember all of this in a story context. This newsletter is divided in two."><meta itemprop="datePublished" content="2021-11-02T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-11-02T00:00:00+00:00" />
-<meta itemprop="wordCount" content="2631">
+<meta itemprop="wordCount" content="2394">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/>
@@ -204,36 +204,12 @@ A few years later the kernel security mitigation space was dominated by another 
 <p>Things are moving slowly in the Linux world due to personal conflicts between Spender and parts of the Linux kernel community. When Intel announced the Itanium ia64 architecture they had introduced hardware support for the NX bit proposed back in 1997 by Solar Designer. Suddenly the kernel world sprung to action with the support from Intel. The two security features from the PaX project were merged in 2003-2004 (in kernel version 2.6.8). As a comparison, Windows integrated support for the same security features in October 2009 with the release of Windows 7.</p>
 <p>In &lsquo;97 the Bugtraq people summarized the mitigations. These were the solutions proposed (<a href="https://seclists.org/bugtraq/1997/Apr/125):">https://seclists.org/bugtraq/1997/Apr/125):</a></p>
 <ol>
-<li>Kernel exec stack permission (NX): Proposed by Solar Designer
-&laquo;&laquo;&laquo;&lt; HEAD</li>
-<li>Function wrapping, a method that replace one function with another at compile or runtime to limit the damage. Massimo at IBM</li>
-<li>Automatic code review tools : Brian Marick&rsquo;s GCT (Generic Coverage Tool), CodeCenter and Purify</li>
-<li>Compiler modifications, bounds checking, (<a href="https://web.archive.org/web/20160326081542/https://www.doc.ic.ac.uk/~phjk/BoundsChecking.html">https://web.archive.org/web/20160326081542/https://www.doc.ic.ac.uk/~phjk/BoundsChecking.html</a>)</li>
-<li>Controlled intepretters like LISP and ADA (what we today call scripting languages). This is done in RUST in the Linux kernel today</li>
-<li>&ldquo;The problem is not that privileged code is insecure. The problem is that there is too much privileged code.&rdquo;. Today this is adressed with Microkernel intitiatives and Memory Space Separation on MMU level
-=======</li>
+<li>Kernel exec stack permission (NX): Proposed by Solar Designer</li>
 <li>Function wrapping, a method that replaces one function with another at compile or runtime to limit the damage. By Massimo at IBM.</li>
 <li>Automatic code review tools: Brian Marick&rsquo;s GCT (Generic Coverage Tool), CodeCenter and Purify</li>
 <li>Compiler modifications, bounds checking (<a href="https://web.archive.org/web/20160326081542/https://www.doc.ic.ac.uk/~phjk/BoundsChecking.html">https://web.archive.org/web/20160326081542/https://www.doc.ic.ac.uk/~phjk/BoundsChecking.html</a>)</li>
 <li>Controlled interpreters like Lisp and Ada (what we today call scripting languages). This is done in Rust in the Linux kernel today.</li>
 <li>&ldquo;The problem is not that privileged code is insecure. The problem is that there is too much privileged code.&rdquo; Today this is adressed with micro kernel initiatives and Memory Space Separation on MMU level</li>
-</ol>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>81847b149a5fe81b618b87491fd46a727e908fc8</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-<ol start="7">
 <li>Stack canaries in GCC introduced as a patch-set by StackGuard (<a href="https://www.usenix.org/legacy/publications/library/proceedings/sec98/full_papers/cowan/cowan.pdf">https://www.usenix.org/legacy/publications/library/proceedings/sec98/full_papers/cowan/cowan.pdf</a>)</li>
 </ol>
 <p>All of the above methods have been tried and all of them have contributed to limiting the impact of buffer overflow attacks.
@@ -251,29 +227,10 @@ Find out more about RELRO here: <a href="http://phrack.org/issues/66/2.html#arti
 Unfortunately, today buffer overflow is no longer the only fish in the &ldquo;memory corruption sea&rdquo;. Integer overflow, heap based overflows, double free and null pointer dereference are a few new methods to cause trouble when the stack is read-only.</p>
 <h2 id="perfect-is-the-enemy-of-good">Perfect is the enemy of good</h2>
 <p>The above mentioned protection mechanisms have all served in reducing the probability of a successful memory coruption attack. This newsletter post is about assessing and introducing yet another measure for lowering the impact of ROP attacks.</p>
-<p>&laquo;&laquo;&laquo;&lt; HEAD
-Perfect is the enemy of the good meaning that if we would have expected to find the perfect solution and introduced it first we wouldn&rsquo;t have had any mitigations (which is bad). Instead I think it&rsquo;s a better approach to attempt a layered security by experimenting and improving on existing solutions. However this approach requires historic knowledge and experience to understand the motive behind every little knob on the control-board.</p>
-<h1 id="these-are-the-basic-options-in-gcc-taken-from-httpswikidebianorghardeningnotes_on_memory_corruption_mitigation_methods-they-constitute-a-foundation-of-the-compiler-controlled-hardening-features">I want to give a final mention to the mitigation method RELRO that maps the .data and .bss are mapped as read only. This means that a buffer overflow can no longer overwrite the execution stack.
-These are the basic options in GCC taken from <a href="https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods">https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods</a> they constitute a foundation of the compiler controlled hardening features.</h1>
 <p>Perfect is the enemy of good, meaning that if we would have expected to find the perfect solution and introduced it first we wouldn&rsquo;t have had any mitigations (which is bad). Instead I think it&rsquo;s a better approach to attempt a layered security by experimenting and improving on existing solutions. However this approach requires historic knowledge and experience to understand the motive behind every little knob on the control board.</p>
 <p>I want to give a final mention to the mitigation method RELRO that maps the <code>.data</code> and <code>.bss</code> sections are mapped as read-only. This means that a buffer overflow can no longer overwrite the execution stack.
-These are the basic options in GCC taken from <a href="https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods">https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods</a>. They constitute a foundation of the compiler controlled hardening features.</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>81847b149a5fe81b618b87491fd46a727e908fc8
+These are the basic options in GCC taken from <a href="https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods">https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods</a>. They constitute a foundation of the compiler controlled hardening features.
 Understanding and using these options drastically improves security in C programs in various ways.</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
 <pre tabindex="0"><code>-Wall -Wextra
   Turn on all warnings.
 -Wconversion -Wsign-conversion
@@ -302,24 +259,7 @@ Understanding and using these options drastically improves security in C program
 </code></pre><h2 id="return-0">return 0</h2>
 <p>I have now talked about how the ROP attack came to be and the reasons for the slow mitigations in early 00s. In the next newsletter I&rsquo;ll introduce a new ROP mitigation technique released with GCC 11 that you may see in your distros from next year. The GCC option is called zero-call-used-regs and I want to share some risks as well as the benefits of using it. I have collected some statistics of its performance.</p>
 <p>For this edition I would like to thank Linus Walleij who explained the social aspects of the kernel development community in the early 2000&rsquo;s. And Calle Svensson (<a href="https://twitter.com/ZetaTwo">https://twitter.com/ZetaTwo</a>) for following along and arguing for various ROP chain options. I want to thank Laban (<a href="https://twitter.com/LabanSkoller">https://twitter.com/LabanSkoller</a>) who corrected my spelling again. Andreas (<a href="https://twitter.com/hyyyy">https://twitter.com/hyyyy</a>) who pointed out that I was wrong about ASLR and gave some more context to RELRO.</p>
-<h1 id="stay-tuned-for-the-follow-up">&laquo;&laquo;&laquo;&lt; HEAD
-Stay tuned for the follow up!</h1>
 <p>Stay tuned for the follow-up!</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>81847b149a5fe81b618b87491fd46a727e908fc8</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
 </section>
 
   
