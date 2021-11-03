@@ -93,7 +93,7 @@ A Linux kernel developer recently complained to me that there are six security r
 When we try to eradicate a bug class we try to attack the root cause if possible but sometimes that means taking away the core functionality of a language and in this case memory corruption in itself is a core issue in the C programming language that probably never will be solved. Even though you don't write C code you still use C optimizations in all available frameworks and languages. First, C is used in core functionality of languages like PHP, Perl, Java, Python, Erlang etc. Its used to write compilers, memory managers and time critical operations like precise floating point math. My main concern is that operating system kernels, virtualization environments and web servers are written in C, a language that has so many inherent risks that despite 20 years of active mitigation work has only been able to partly address the issues found in '97.
 
 I want to give a final mention to the mitigation method RELRO that maps the `.data` and `.bss` sections are mapped as read-only. This means that a buffer overflow can no longer overwrite the execution stack.
-Find out more about RELRO here: http://phrack.org/issues/66/2.html#article
+Find out more about RELRO here: https://trapkit.de/articles/relro/
 Unfortunately, today buffer overflow is no longer the only fish in the "memory corruption sea". Integer overflow, heap based overflows, double free and null pointer dereference are a few new methods to cause trouble when the stack is read-only.
 
 ## Perfect is the enemy of good
