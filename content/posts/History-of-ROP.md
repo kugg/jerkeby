@@ -68,19 +68,11 @@ Things are moving slowly in the Linux world due to personal conflicts between Sp
 In '97 the Bugtraq people summarized the mitigations. These were the solutions proposed (https://seclists.org/bugtraq/1997/Apr/125):
 
 1. Kernel exec stack permission (NX): Proposed by Solar Designer
-<<<<<<< HEAD
-2. Function wrapping, a method that replace one function with another at compile or runtime to limit the damage. Massimo at IBM
-3. Automatic code review tools : Brian Marick's GCT (Generic Coverage Tool), CodeCenter and Purify
-4. Compiler modifications, bounds checking, (https://web.archive.org/web/20160326081542/https://www.doc.ic.ac.uk/~phjk/BoundsChecking.html)
-5. Controlled intepretters like LISP and ADA (what we today call scripting languages). This is done in RUST in the Linux kernel today
-6. "The problem is not that privileged code is insecure. The problem is that there is too much privileged code.". Today this is adressed with Microkernel intitiatives and Memory Space Separation on MMU level
-=======
 2. Function wrapping, a method that replaces one function with another at compile or runtime to limit the damage. By Massimo at IBM.
 3. Automatic code review tools: Brian Marick's GCT (Generic Coverage Tool), CodeCenter and Purify
 4. Compiler modifications, bounds checking (https://web.archive.org/web/20160326081542/https://www.doc.ic.ac.uk/~phjk/BoundsChecking.html)
 5. Controlled interpreters like Lisp and Ada (what we today call scripting languages). This is done in Rust in the Linux kernel today.
 6. "The problem is not that privileged code is insecure. The problem is that there is too much privileged code." Today this is adressed with micro kernel initiatives and Memory Space Separation on MMU level
->>>>>>> 81847b149a5fe81b618b87491fd46a727e908fc8
 7. Stack canaries in GCC introduced as a patch-set by StackGuard (https://www.usenix.org/legacy/publications/library/proceedings/sec98/full_papers/cowan/cowan.pdf)
 
 All of the above methods have been tried and all of them have contributed to limiting the impact of buffer overflow attacks. 
@@ -108,17 +100,10 @@ Unfortunately, today buffer overflow is no longer the only fish in the "memory c
 
 The above mentioned protection mechanisms have all served in reducing the probability of a successful memory coruption attack. This newsletter post is about assessing and introducing yet another measure for lowering the impact of ROP attacks. 
 
-<<<<<<< HEAD
-Perfect is the enemy of the good meaning that if we would have expected to find the perfect solution and introduced it first we wouldn't have had any mitigations (which is bad). Instead I think it's a better approach to attempt a layered security by experimenting and improving on existing solutions. However this approach requires historic knowledge and experience to understand the motive behind every little knob on the control-board.
-
-I want to give a final mention to the mitigation method RELRO that maps the .data and .bss are mapped as read only. This means that a buffer overflow can no longer overwrite the execution stack.
-These are the basic options in GCC taken from https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods they constitute a foundation of the compiler controlled hardening features.
-=======
 Perfect is the enemy of good, meaning that if we would have expected to find the perfect solution and introduced it first we wouldn't have had any mitigations (which is bad). Instead I think it's a better approach to attempt a layered security by experimenting and improving on existing solutions. However this approach requires historic knowledge and experience to understand the motive behind every little knob on the control board.
 
 I want to give a final mention to the mitigation method RELRO that maps the `.data` and `.bss` sections are mapped as read-only. This means that a buffer overflow can no longer overwrite the execution stack.
 These are the basic options in GCC taken from https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods. They constitute a foundation of the compiler controlled hardening features.
->>>>>>> 81847b149a5fe81b618b87491fd46a727e908fc8
 Understanding and using these options drastically improves security in C programs in various ways.
 ```
 -Wall -Wextra
@@ -154,9 +139,5 @@ I have now talked about how the ROP attack came to be and the reasons for the sl
 
 For this edition I would like to thank Linus Walleij who explained the social aspects of the kernel development community in the early 2000's. And Calle Svensson (https://twitter.com/ZetaTwo) for following along and arguing for various ROP chain options. I want to thank Laban (https://twitter.com/LabanSkoller) who corrected my spelling again. Andreas (https://twitter.com/hyyyy) who pointed out that I was wrong about ASLR and gave some more context to RELRO.
 
-<<<<<<< HEAD
-Stay tuned for the follow up!
-=======
 Stay tuned for the follow-up!
 
->>>>>>> 81847b149a5fe81b618b87491fd46a727e908fc8
