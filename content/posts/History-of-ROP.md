@@ -80,7 +80,7 @@ I mentioned that ASLR was added in 2004. Buffer overflows continued to be a succ
 
 ## RELRO
 
-I want to give a mention to a mitigation method named RELRO. It comes in two flavors partial RELRO means that the Global Offset Table (GOT) is rearranged so that its before the `.bss` (block starting symbol / statics) on the stack. When an overflow occurs it tends to overflow forward and therefore the partial RELRO is safe from overflows in local variables. However if an attacker gain contol over the array index in a global buffer the partial RELRO won't be sufficient.
+I want to give a mention to a mitigation method named RELRO. It comes in two flavors partial RELRO and full RELRO. Partial RELRO means that the Global Offset Table (GOT) is rearranged so that its before the `.bss` (block starting symbol / statics) on the stack. When an overflow occurs it tends to overflow forward and therefore the partial RELRO is safe from overflows in local variables. However if an attacker gain contol over the array index in a global buffer the partial RELRO won't be sufficient.
 ```
 my_global[attacker_controlled1] = attacker_controlled2;
 ```
