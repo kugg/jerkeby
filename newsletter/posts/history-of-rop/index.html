@@ -60,7 +60,7 @@
   <link rel="apple-touch-icon" href="https://www.jerkeby.se/newsletter/apple-touch-icon.png" />
 
   
-  <meta name="generator" content="Hugo 0.88.1" />
+  <meta name="generator" content="Hugo 0.89.0" />
 
   
   
@@ -84,7 +84,7 @@
   <meta itemprop="name" content="History of the ROP">
 <meta itemprop="description" content="From 0 to eternity Hi buddies! I&rsquo;m now celebrating one month down in my one man megacorp. I have decided to take some time off from client work to study and write about the future of memory corruption vulnerabilities. I want to help you understand the risks, and known controls for C programs. I think it&rsquo;s easier to remember all of this in a story context. This newsletter is divided in two."><meta itemprop="datePublished" content="2021-11-02T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-11-02T00:00:00+00:00" />
-<meta itemprop="wordCount" content="2394">
+<meta itemprop="wordCount" content="2468">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/>
@@ -214,6 +214,11 @@ A few years later the kernel security mitigation space was dominated by another 
 </ol>
 <p>All of the above methods have been tried and all of them have contributed to limiting the impact of buffer overflow attacks.
 I mentioned that ASLR was added in 2004. Buffer overflows continued to be a successful attack vector due to a new circumvention technique called the NOP sled (<a href="https://en.wikipedia.org/wiki/Buffer_overflow#NOP_sled_technique)">https://en.wikipedia.org/wiki/Buffer_overflow#NOP_sled_technique)</a>. The stack canary became default in modern compilers - a method that checks that the stack is intact by checking a random value before executing a function and then checking that the same intact value is intact just after returning. This method has been circumvented by using format string vulnerabilities to leak canary values. On Windows an attacker can cause exceptions that trigger the System Interrupt Handler that does not use stack canaries.</p>
+<h2 id="relro">RELRO</h2>
+<p>I want to give a mention to a mitigation method named RELRO. It comes in two flavors partial RELRO means that the Global Offset Table (GOT) is rearranged so that its before the <code>.bss</code> (block starting symbol / statics) on the stack. When an overflow occurs it tends to overflow forward and therefore the partial RELRO is safe from overflows in local variables. However if an attacker gain contol over the array index in a global buffer the partial RELRO won&rsquo;t be sufficient.</p>
+<pre tabindex="0"><code>my_global[attacker_controlled1] = attacker_controlled2;
+</code></pre><p>In this case if the <code>attacker_controlled1</code> is wrapped around to become negative the attacker can potentially overwrite the GOT table. This is why we need full RELRO. With full RELRO the linker has to resolve and populate the entire GOT table and the memory section is (re) mapped as read only before starting the main function of the program.</p>
+<p>Find out more about RELRO here: <a href="https://trapkit.de/articles/relro/">https://trapkit.de/articles/relro/</a></p>
 <h2 id="architecture-specific-approaches">Architecture specific approaches</h2>
 <p>At this point in time hardware supported methods are not being discussed by the software focused security community. Earlier attempts had been made towards building memory tagged MMU&rsquo;s and cryptography into memory management.
 These research concepts are picked up today by ARM who use pointer authentication in the M1 chips from Apple which limits ROP significantly. (<a href="https://www.usenix.org/system/files/login/articles/login_summer19_03_serebryany.pdf">https://www.usenix.org/system/files/login/articles/login_summer19_03_serebryany.pdf</a>) My concern with this is that security benefits will only be served on certain architectures where approaches differ from one architecture to another. A responsibility shift that separates platforms to the extent that it&rsquo;s impossible to determine risk for software or code alone. As an example the Rowhammer attack was mitigated by using ECC memory checksums to protect RAM from the attack but Intel recently removed the feature again (<a href="https://www.realworldtech.com/forum/?threadid=198497&amp;curpostid=198647)">https://www.realworldtech.com/forum/?threadid=198497&amp;curpostid=198647)</a>. On the other hand using every available means for protection can help the end user and organisation, but then ties are made to one hardware architecture.</p>
@@ -222,14 +227,11 @@ These research concepts are picked up today by ARM who use pointer authenticatio
 A Linux kernel developer recently complained to me that there are six security researchers looking for bugs on every developer trying to fix and mitigate the bugs. It&rsquo;s all in the incentive and rewards. We see a rapid development where there are short term incentives and goals for hardware related security. Just look at how swiftly the bugs Spectre and Meltdown were addressed with the support from the architecture companies. The problem of attention and reward in software warrants it&rsquo;s own newsletter post.</p>
 <h2 id="a-long-way-back-to-safety">A long way back to safety</h2>
 <p>When we try to eradicate a bug class we try to attack the root cause if possible but sometimes that means taking away the core functionality of a language and in this case memory corruption in itself is a core issue in the C programming language that probably never will be solved. Even though you don&rsquo;t write C code you still use C optimizations in all available frameworks and languages. First, C is used in core functionality of languages like PHP, Perl, Java, Python, Erlang etc. Its used to write compilers, memory managers and time critical operations like precise floating point math. My main concern is that operating system kernels, virtualization environments and web servers are written in C, a language that has so many inherent risks that despite 20 years of active mitigation work has only been able to partly address the issues found in &lsquo;97.</p>
-<p>I want to give a final mention to the mitigation method RELRO that maps the <code>.data</code> and <code>.bss</code> sections are mapped as read-only. This means that a buffer overflow can no longer overwrite the execution stack.
-Find out more about RELRO here: <a href="https://trapkit.de/articles/relro/">https://trapkit.de/articles/relro/</a></p>
 <p>Unfortunately, today buffer overflow is no longer the only fish in the &ldquo;memory corruption sea&rdquo;. Integer overflow, heap based overflows, double free and null pointer dereference are a few new methods to cause trouble when the stack is read-only.</p>
 <h2 id="perfect-is-the-enemy-of-good">Perfect is the enemy of good</h2>
 <p>The above mentioned protection mechanisms have all served in reducing the probability of a successful memory coruption attack. This newsletter post is about assessing and introducing yet another measure for lowering the impact of ROP attacks.</p>
 <p>Perfect is the enemy of good, meaning that if we would have expected to find the perfect solution and introduced it first we wouldn&rsquo;t have had any mitigations (which is bad). Instead I think it&rsquo;s a better approach to attempt a layered security by experimenting and improving on existing solutions. However this approach requires historic knowledge and experience to understand the motive behind every little knob on the control board.</p>
-<p>I want to give a final mention to the mitigation method RELRO that maps the <code>.data</code> and <code>.bss</code> sections are mapped as read-only. This means that a buffer overflow can no longer overwrite the execution stack.
-These are the basic options in GCC taken from <a href="https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods">https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods</a>. They constitute a foundation of the compiler controlled hardening features.
+<p>These are the basic options in GCC taken from <a href="https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods">https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods</a>. They constitute a foundation of the compiler controlled hardening features.
 Understanding and using these options drastically improves security in C programs in various ways.</p>
 <pre tabindex="0"><code>-Wall -Wextra
   Turn on all warnings.

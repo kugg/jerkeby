@@ -78,6 +78,16 @@ In '97 the Bugtraq people summarized the mitigations. These were the solutions p
 All of the above methods have been tried and all of them have contributed to limiting the impact of buffer overflow attacks. 
 I mentioned that ASLR was added in 2004. Buffer overflows continued to be a successful attack vector due to a new circumvention technique called the NOP sled (https://en.wikipedia.org/wiki/Buffer_overflow#NOP_sled_technique). The stack canary became default in modern compilers - a method that checks that the stack is intact by checking a random value before executing a function and then checking that the same intact value is intact just after returning. This method has been circumvented by using format string vulnerabilities to leak canary values. On Windows an attacker can cause exceptions that trigger the System Interrupt Handler that does not use stack canaries.
 
+## RELRO
+
+I want to give a mention to a mitigation method named RELRO. It comes in two flavors partial RELRO means that the Global Offset Table (GOT) is rearranged so that its before the `.bss` (block starting symbol / statics) on the stack. When an overflow occurs it tends to overflow forward and therefore the partial RELRO is safe from overflows in local variables. However if an attacker gain contol over the array index in a global buffer the partial RELRO won't be sufficient.
+```
+my_global[attacker_controlled1] = attacker_controlled2;
+```
+In this case if the `attacker_controlled1` is wrapped around to become negative the attacker can potentially overwrite the GOT table. This is why we need full RELRO. With full RELRO the linker has to resolve and populate the entire GOT table and the memory section is (re) mapped as read only before starting the main function of the program. 
+
+Find out more about RELRO here: https://trapkit.de/articles/relro/
+
 ## Architecture specific approaches
 
 At this point in time hardware supported methods are not being discussed by the software focused security community. Earlier attempts had been made towards building memory tagged MMU's and cryptography into memory management.
@@ -92,9 +102,6 @@ A Linux kernel developer recently complained to me that there are six security r
 
 When we try to eradicate a bug class we try to attack the root cause if possible but sometimes that means taking away the core functionality of a language and in this case memory corruption in itself is a core issue in the C programming language that probably never will be solved. Even though you don't write C code you still use C optimizations in all available frameworks and languages. First, C is used in core functionality of languages like PHP, Perl, Java, Python, Erlang etc. Its used to write compilers, memory managers and time critical operations like precise floating point math. My main concern is that operating system kernels, virtualization environments and web servers are written in C, a language that has so many inherent risks that despite 20 years of active mitigation work has only been able to partly address the issues found in '97.
 
-I want to give a final mention to the mitigation method RELRO that maps the `.data` and `.bss` sections are mapped as read-only. This means that a buffer overflow can no longer overwrite the execution stack.
-Find out more about RELRO here: https://trapkit.de/articles/relro/
-
 Unfortunately, today buffer overflow is no longer the only fish in the "memory corruption sea". Integer overflow, heap based overflows, double free and null pointer dereference are a few new methods to cause trouble when the stack is read-only.
 
 ## Perfect is the enemy of good
@@ -103,7 +110,6 @@ The above mentioned protection mechanisms have all served in reducing the probab
 
 Perfect is the enemy of good, meaning that if we would have expected to find the perfect solution and introduced it first we wouldn't have had any mitigations (which is bad). Instead I think it's a better approach to attempt a layered security by experimenting and improving on existing solutions. However this approach requires historic knowledge and experience to understand the motive behind every little knob on the control board.
 
-I want to give a final mention to the mitigation method RELRO that maps the `.data` and `.bss` sections are mapped as read-only. This means that a buffer overflow can no longer overwrite the execution stack.
 These are the basic options in GCC taken from https://wiki.debian.org/Hardening#Notes_on_Memory_Corruption_Mitigation_Methods. They constitute a foundation of the compiler controlled hardening features.
 Understanding and using these options drastically improves security in C programs in various ways.
 ```
