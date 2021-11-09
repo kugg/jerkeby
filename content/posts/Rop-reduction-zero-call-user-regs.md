@@ -18,7 +18,6 @@ If you are unfamiliar with the concepte of ROP, you may read up in https://www.j
 I have decided to cover x64 intel assembler because thats the platforms I have available.
 
 As I was writing this article the Linux Kernel v5.15 was released including the feature discussed.
-
 Maxploit released a new remote heap buffer overflow in that affect the 5.15 kernel in the TIPC protocol that can lead to kernel RCE if the attacker has access to appropriate ROP gadgets.
 https://www.sentinelone.com/labs/tipc-remote-linux-kernel-heap-overflow-allows-arbitrary-code-execution/
 
@@ -70,7 +69,7 @@ In the upcoming release of GCC 11 there is a feature that does cleans up registe
 I want to determine what risks are actually mitigated by the -fzero-call-user-regs option in gcc. The intent of the patch is to reduce the probability of a successful ROP attack.
 
 ### The options zero-call-user-regs
-
+TODO: Write about the option reasoning from the original release in gcc and how it was received by Kling and Cook
 This is the GCC patch we want to use:
 https://github.com/gcc-mirror/gcc/commit/d10f3e900b0377b4760a090b0f90371bcef01686
 
@@ -204,6 +203,14 @@ parameters. By chaining these malicious stack frames together, a sequence of fun
 om du har en enda pop edx-gadget så kan du ju styra edx,ecx,esi,edi,r8,r9,10 och r11 genom att anropa dem med minskande offset
 
 
+### The busybox target
+
+Busybox was originally a shell used in embedded devices. Nowdays a full environment containing everything you may want for debugging a IoT device. Busybox is compiled as a static by default which is exactly the type of target where ROP attacks are useful.
+Like the linux kernel the configure stage of the compilation is done using `make menuconfig` inside the compilation options menu in "Settings" you can configure the `CFLAGS`. Initially Ill compile using `-fzero-call-used-regs=skip` it will simply compile without any ROP protections.
+
+
+./rp-lin-x64 -f ./busybox_skip --unique --rop=8 
+
 ### The Linux kernel target
 
 The option has been added to the Linux kernel version 5.15 under  `> Security options > Kernel hardening options > Memory initialization`
@@ -234,6 +241,14 @@ The option has been added to the Linux kernel version 5.15 under  `> Security op
   │         -> Memory initialization 
 ```
 This kernel option corresponds to adding the gcc argument -fzero-call-used-regs=used-gpr.
+
+Skip:
+A total of 40624 gadgets found.
+You decided to keep only the unique ones, 18050 unique gadgets found.
+
+Used-gpr:
+A total of 49648 gadgets found.
+You decided to keep only the unique ones, 15262 unique gadgets found.
 
 
 Ok this pretty much sums up what I was going to investigate but for the sake of it, lets compare rop gadgets!
