@@ -3,25 +3,58 @@ title: "Gadget reduction using zero-call-user-regs"
 date: "2021-11-08"
 draft: true
 ---
-
-TODO: Decide if we should focus on used-gpr or make a full comparison
-TODO: Redo the bash experiment but with busybox
-TODO: Write something about maxploits attack and how it relates risk wise
 TODO: Attempt to reduce length by using external references
 
 # Gadget reduction using zero-call-user-regs
 
 ## Introduction
 
-If you are unfamiliar with the concepte of ROP, you may read up in https://www.jerkeby.se/newsletter/posts/history-of-rop/
 
-I have decided to cover x64 intel assembler because thats the platforms I have available.
+Examples in this newsletter are written in x64 intel assembler because thats the platforms I have available.
 
 As I was writing this article the Linux Kernel v5.15 was released including the feature discussed.
-Maxploit released a new remote heap buffer overflow in that affect the 5.15 kernel in the TIPC protocol that can lead to kernel RCE if the attacker has access to appropriate ROP gadgets.
-https://www.sentinelone.com/labs/tipc-remote-linux-kernel-heap-overflow-allows-arbitrary-code-execution/
 
-## The gadget
+## Understanding the risks
+When I find memory corruption vulnerabilities while during pentests, clients have a tendency to dispute the impact of the vulnerabilites. The reason why the impact of memory corruption vulnerabilities are disputed is that it is very difficult to distinguish weather the various mitigations are effective or not. 
+
+In my previous article (https://www.jerkeby.se/newsletter/posts/history-of-rop/), "history of ROP" I cover the fundamental mitigation techniques and methods to circumvent them.
+
+A tool like checksec (https://github.com/slimm609/checksec.sh) determines which compiler based mitigations are used on an executable.
+```
+$ checksec --file=/usr/bin/ls
+RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH      Symbols         FORTIFY Fortified       Fortifiable     FILE
+Full RELRO      Canary found      NX enabled    PIE enabled     No RPATH   No RUNPATH   No Symbols        Yes   5       17              /usr/bin/ls
+````
+
+Determining the exploitability of a memory corruption bug is called triaging. In this process the researcher determines how the vulnerability can be exploited and to what degree. Modern mitigations aim to reduce the probability of a successfull exploit. 
+Back in F-Secure I made a youtube livestrewam covering the process of triaging memory corruption vulnerabilities, check out the recording here: https://www.youtube.com/watch?v=SiFWF1i5Quc
+
+## Current events
+Last week my old collegue Maxploit released a new remote heap buffer overflow in that affect the 5.15 kernel in the TIPC protocol that can lead to kernel RCE if the attacker has access to appropriate ROP gadgets.
+https://www.sentinelone.com/labs/tipc-remote-linux-kernel-heap-overflow-allows-arbitrary-code-execution/
+This shows that the vulnerability class still makes a lot of impact to its targets (the Linux kernel in particular).
+
+## My experiment with zero-call-user-regs
+In the upcoming release of GCC 11 there is a feature that does cleans up registers used by a function prior to returning. One usecase for the feature can be to reduce the probability of usable ROP gadgets. The feature also impacts the "speculative execution" bugclass, but let's talk about that elsewhere.
+
+I want to determine to what extent ROP is mitigated by the -fzero-call-user-regs option in gcc.
+
+In 2018 Graham Markall suggested the idea of doing stack and registry erasure prior to exit during "GNU Tools Cauldron 2018" https://gcc.gnu.org/wiki/cauldron2018#secure
+The suggestion is connected to a few challenges: `Stack and register erasure. Ensuring that on return from a function, no data is left lying on the stack or in registers. Particular challenges are in dealing with inlining, shrink wrapping and caching.`
+
+### The options zero-call-user-regs
+
+https://github.com/KSPP/linux/issues/84
+
+The SerenityOS prject have been using the zero-call-used-regs=used-gpr compiler option since July this year without reporting any negative impact  https://github.com/SerenityOS/serenity/pull/8950.
+
+
+TODO: Write about the option reasoning from the original release in gcc and how it was received by Kling and Cook
+This is the GCC patch we want to use:
+https://github.com/gcc-mirror/gcc/commit/d10f3e900b0377b4760a090b0f90371bcef01686
+
+
+## The ROP gadget
 In 2007 a researcher named Hovav Shacham published a paper with the title "The Geometry of Innocent Flesh on the Bone" that attempts to refine the return-to-libc attack by defining an algorithm for finding "gadgets" in legitemate code.
 https://hovav.net/ucsd/dist/geometry.pdf
 
@@ -62,16 +95,6 @@ to be potentially useful in our attacks, it need only end in a return instructio
 byte c3
 
 ```
-
-## My experiment with zero-call-user-regs
-
-In the upcoming release of GCC 11 there is a feature that does cleans up registers used by a function prior to returning. One usecase for the feture can be to reduce ROP attacks.
-I want to determine what risks are actually mitigated by the -fzero-call-user-regs option in gcc. The intent of the patch is to reduce the probability of a successful ROP attack.
-
-### The options zero-call-user-regs
-TODO: Write about the option reasoning from the original release in gcc and how it was received by Kling and Cook
-This is the GCC patch we want to use:
-https://github.com/gcc-mirror/gcc/commit/d10f3e900b0377b4760a090b0f90371bcef01686
 
 ### The comparison
 
@@ -403,3 +426,6 @@ I want to thank:
 * Laban Sköllermark, grammar and spelling
 * Dick Svensson, feedback
 * Andreas Kling, kernel experience and feedback from Serenity OS
+
+## Future research
+Adding support for "unsigned overflow protection" in gcc would reduce the risk of overwriting the GOT table (and circumventing RELRO) using global variables.
