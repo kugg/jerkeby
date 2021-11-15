@@ -43,6 +43,8 @@ In 2018 Graham Markall suggested the idea of doing stack and registry erasure pr
 The suggestion is connected to a few challenges: `Stack and register erasure. Ensuring that on return from a function, no data is left lying on the stack or in registers. Particular challenges are in dealing with inlining, shrink wrapping and caching.`
 
 ### The options zero-call-user-regs
+Options explained:
+https://github.com/clearlinux-pkgs/gcc/blob/master/0001-x86-Add-mzero-caller.patch
 
 https://github.com/KSPP/linux/issues/84
 
