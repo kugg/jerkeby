@@ -34,7 +34,13 @@ Last week my old collegue Maxploit released a new remote heap buffer overflow in
 https://www.sentinelone.com/labs/tipc-remote-linux-kernel-heap-overflow-allows-arbitrary-code-execution/
 This shows that the vulnerability class still makes a lot of impact to its targets (the Linux kernel in particular).
 
-## My experiment with zero-call-user-regs
+## Background on register zeroing
+Scientific background.
+
+https://dustri.org/b/files/papers/7c3954f7d19392056f072837b3a3775e_rop_reg_clean.pdf
+
+
+## My experiment with GCC zero-call-user-regs
 In the upcoming release of GCC 11 there is a feature that does cleans up registers used by a function prior to returning. One usecase for the feature can be to reduce the probability of usable ROP gadgets. The feature also impacts the "speculative execution" bugclass, but let's talk about that elsewhere.
 
 I want to determine to what extent ROP is mitigated by the -fzero-call-user-regs option in gcc.
