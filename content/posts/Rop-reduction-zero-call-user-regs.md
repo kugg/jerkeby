@@ -322,11 +322,14 @@ the traditional return-into-libc approach, this new value is a pointer to a func
 parameters. By chaining these malicious stack frames together, a sequence of functions can be executed.
 ```
 
-### Missaligned offsets
+### Misaligned offsets
+Its clear that the GCC11 feateure didn't take misaligned offsets in to consideration.
 
+### Added gadgets
+Adding code to each function also adds gadgets, an attacker wants to have unique gadgets but these are pretty much all the same. The amount of added gadgets are negligable.
 
 ### Other circumvention
-om du har en enda pop edx-gadget så kan du ju styra edx,ecx,esi,edi,r8,r9,10 och r11 genom att anropa dem med minskande offset
+Om du har en enda pop edx-gadget (eller rdx) så kan du ju styra edx,ecx,esi,edi,r8,r9,10 och r11 genom att anropa dem med minskande offset
 
 
 ### The busybox target
@@ -440,6 +443,7 @@ For details type `warranty'.
 76687
 ```
 
+### Debian
 Lets take peak in to the future of major distirbutions. First, lets look at the mental part of debian experimental https://packages.debian.org/experimental/ia64/linux-kbuild-5.15
 The bubild depends on gcc11. We can find the package here: http://ftp.de.debian.org/debian-ports//pool-ia64/main/l/linux/linux-kbuild-5.15_5.15-1~exp1_ia64.deb
 
@@ -501,6 +505,7 @@ I want to thank:
 * Laban Sköllermark, grammar and spelling
 * Dick Svensson, feedback
 * Andreas Kling, kernel experience and feedback from Serenity OS
+* Calle Svensson, Technical guidance and understanding of circumvention methods
 
 ## Future research
 Adding support for "unsigned overflow protection" in gcc would reduce the risk of overwriting the GOT table (and circumventing RELRO) using global variables.
