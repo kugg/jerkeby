@@ -8,18 +8,14 @@ TODO: Attempt to reduce length by using external references
 # Gadget reduction using zero-call-user-regs
 
 ## Introduction
-
-
-Examples in this newsletter are written in x64 intel assembler because thats the platforms I have available.
-
-As I was writing this article the Linux Kernel v5.15 was released including the feature discussed.
+In my previous article [history of ROP"](https://www.jerkeby.se/newsletter/posts/history-of-rop/), I cover the fundamental mitigation techniques and methods to circumvent them. In this article I'll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it's potential.
 
 ## Understanding the risks
-When I find memory corruption vulnerabilities while during pentests, clients have a tendency to dispute the impact of the vulnerabilites. The reason why the impact of memory corruption vulnerabilities are disputed is that it is very difficult to distinguish weather the various mitigations are effective or not. 
+When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites. The reason why the impact of memory corruption vulnerabilities are disputed is that it's very difficult to evaluate if the various mitigations are effective. 
+With the tool [checksec](https://github.com/slimm609/checksec.sh) 
 
-In my previous article (https://www.jerkeby.se/newsletter/posts/history-of-rop/), "history of ROP" I cover the fundamental mitigation techniques and methods to circumvent them.
+you can gather security information about an executable, how it was compiled and in what enivornment it runs to understand which mitigations are in place.
 
-A tool like checksec (https://github.com/slimm609/checksec.sh) determines which compiler based mitigations are used on an executable.
 ```
 $ checksec --file=/usr/bin/ls
 RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH      Symbols         FORTIFY Fortified       Fortifiable     FILE
@@ -27,49 +23,22 @@ Full RELRO      Canary found      NX enabled    PIE enabled     No RPATH   No RU
 ````
 
 Determining the exploitability of a memory corruption bug is called triaging. In this process the researcher determines how the vulnerability can be exploited and to what degree. Modern mitigations aim to reduce the probability of a successfull exploit. 
-Back in F-Secure I made a youtube livestrewam covering the process of triaging memory corruption vulnerabilities, check out the recording here: https://www.youtube.com/watch?v=SiFWF1i5Quc
+Back in F-Secure I made a youtube livestrewam covering the process of triaging memory corruption vulnerabilities, check out the recording [here](https://www.youtube.com/watch?v=SiFWF1i5Quc).
 
 ## Current events
-Last week my old collegue Maxploit released a new remote heap buffer overflow in that affect the 5.15 kernel in the TIPC protocol that can lead to kernel RCE if the attacker has access to appropriate ROP gadgets.
-https://www.sentinelone.com/labs/tipc-remote-linux-kernel-heap-overflow-allows-arbitrary-code-execution/
+Last week my old collegue [Maxploit published a new remote heap buffer overflow](https://www.sentinelone.com/labs/tipc-remote-linux-kernel-heap-overflow-allows-arbitrary-code-execution/) that affects the 5.15 kernel in the TIPC protocol. The vulnerability can lead to kernel Remote Code Execution (RCE) if the attacker has access to "appropriate ROP gadgets".
+
 This shows that the vulnerability class still makes a lot of impact to its targets (the Linux kernel in particular).
 
-## Background on register zeroing
-Scientific background.
-
-https://dustri.org/b/files/papers/7c3954f7d19392056f072837b3a3775e_rop_reg_clean.pdf
-
-
-## My experiment with GCC zero-call-user-regs
-In the upcoming release of GCC 11 there is a feature that does cleans up registers used by a function prior to returning. One usecase for the feature can be to reduce the probability of usable ROP gadgets. The feature also impacts the "speculative execution" bugclass, but let's talk about that elsewhere.
-
-I want to determine to what extent ROP is mitigated by the -fzero-call-user-regs option in gcc.
-
-In 2018 Graham Markall suggested the idea of doing stack and registry erasure prior to exit during "GNU Tools Cauldron 2018" https://gcc.gnu.org/wiki/cauldron2018#secure
-The suggestion is connected to a few challenges: `Stack and register erasure. Ensuring that on return from a function, no data is left lying on the stack or in registers. Particular challenges are in dealing with inlining, shrink wrapping and caching.`
-
-### The options zero-call-user-regs
-Options explained:
-https://github.com/clearlinux-pkgs/gcc/blob/master/0001-x86-Add-mzero-caller.patch
-
-https://github.com/KSPP/linux/issues/84
-
-The SerenityOS prject have been using the zero-call-used-regs=used-gpr compiler option since July this year without reporting any negative impact  https://github.com/SerenityOS/serenity/pull/8950.
-
-
-TODO: Write about the option reasoning from the original release in gcc and how it was received by Kling and Cook
-This is the GCC patch we want to use:
-https://github.com/gcc-mirror/gcc/commit/d10f3e900b0377b4760a090b0f90371bcef01686
-
-
 ## The ROP gadget
-In 2007 a researcher named Hovav Shacham published a paper with the title "The Geometry of Innocent Flesh on the Bone" that attempts to refine the return-to-libc attack by defining an algorithm for finding "gadgets" in legitemate code.
-https://hovav.net/ucsd/dist/geometry.pdf
 
-The paper is the first to coin the phrase ROP attack but it also does what had been described by Tim Newsham as "a matter of simple coding" ten years earlier.
-The technique was not novel, but the implementation was. Before we move in to gadget land let it sink in. The idea of how to do automated rop searches took ten years to be implemented. This is a reminder that our future may be implementations of our greatest ideas of today.
+In 2007 a researcher named Hovav Shacham published a paper with the title ["The Geometry of Innocent Flesh on the Bone"](https://hovav.net/ucsd/dist/geometry.pdf) that attempts to refine the return-to-libc attack by defining an algorithm for finding "gadgets" in legitemate code.
 
-Back again to the gadgets. The compiler of a c program is a machine code generator that create machine code according to the format appropriate for the target CPU architecture and operatingsystem environment. IN a dynamically linked program, building blocks make use of compiled code libraries that are linked from external sources. In a statically linked program all logical functionalities is contained within the program. The Linux kernel is typically statically linked because it cannot depend on a specific outside library or component.
+The paper is the first to coin the phrase ROP attack but it also does what had been described by Tim Newsham as "a matter of simple coding" ten years earlier in the Bugtraq mailing list.
+
+The technique was not novel, but the implementation was. Before we move in to "gadget-land", let it sink in. The idea of how to do automated rop searches took ten years to be implemented. This is a reminder that our future in ten years may be implementations of our greatest ideas of today.
+
+Back again to the gadgets. The compiler of a C program is a machine code generator that create machine code according to the format appropriate for the target CPU architecture and file format of the operatingsystem environment. 
 
 From the Shacham paper:
 ```
@@ -103,6 +72,142 @@ to be potentially useful in our attacks, it need only end in a return instructio
 byte c3
 
 ```
+
+## Background on register zeroing
+Scientific background.
+In 2018 Graham Markall suggested the idea of doing stack and registry erasure prior to exit during [GNU Tools Cauldron 2018](https://gcc.gnu.org/wiki/cauldron2018#secure)
+The suggestion is connected to a few challenges: `Stack and register erasure. Ensuring that on return from a function, no data is left lying on the stack or in registers. Particular challenges are in dealing with inlining, shrink wrapping and caching.`
+
+The same year, Zelin Rong, Peidai Xie, Jingyuan Wang, Shenglin Xu, Yongjun Wang published a paper called [Clean the Scratch Registers:A Way to Mitigate
+Return-Oriented Programming Attacks](https://dustri.org/b/files/papers/7c3954f7d19392056f072837b3a3775e_rop_reg_clean.pdf). The paper shows results from an experiement where [Intel PIN](https://www.intel.com/content/www/us/en/developer/articles/tool/pin-a-dynamic-binary-instrumentation-tool.html) is used in Justin In Time mode to add scratch register zeroing to the end of every function. This instrumentaiton method is used on known vulnerable CTF (Capture The Flag) challenges where we know that the target is exploitable using ROP. In the five experiments presented in in the paper all of them became unsolvable using ROP after using "register zeroing".
+
+## Register zeroing 
+An assembler function typically it's temporary variables in "registers". When the function is finished it runs the instruction "ret" (return). A good ROP gadget does something to a register and ends with ret, just like a function.
+
+Here is a function that returns its only argument written in C.
+```
+int test(int r) {
+   return r;
+}
+```
+Here is the assembler that the compiler produced: 
+```
+test(int):
+        push    rbp
+        mov     rbp, rsp
+        mov     DWORD PTR [rbp-4], edi
+        mov     eax, DWORD PTR [rbp-4]
+        pop     rbp
+        ret
+```
+The `edi` register is used in this function to store the return value.
+Zeroing the `edi` register means that its contents is set to zero before returning fromt he function. The quickest way to do this is using the instruction `xor edi, edi`.
+
+This is what the same function looks like after zeroing `edi`
+```
+test(int):
+        push    rbp
+        mov     rbp, rsp
+        mov     DWORD PTR [rbp-4], edi
+        mov     eax, DWORD PTR [rbp-4]
+        pop     rbp
+        xor     edi, edi
+        ret
+```
+
+As a result this function is now less usable as a ROP gadget because the value of the general purpose register `edi` is Zeroed before return.
+
+## Experiment with GCC zero-call-user-regs
+In 2018 Victor Rodriguez was quick to add a patch to the [CLEAR Linux project GCC branch](https://github.com/clearlinux-pkgs/gcc/blob/master/0001-x86-Add-mzero-caller.patch) following up on the idea of zeroing registers. The patch is so far only used within the CLEAR Linux projects internal GCC branch. But it is a reference that helps the GCC group move forward on accepting an upstream patch in 2020.
+
+In the upcoming release of GCC 11 there is a feature written by (Qing Zhao from Oracle) that does register zeroing prior to returning. One usecase for the feature can be to reduce the probability of usable ROP gadgets just as suggested in the "Clean the Scratch registers article". The feature also impacts the "speculative execution" bugclass, but let's talk about that elsewhere.
+
+I want to determine to what extent ROP is mitigated by the `-fzero-call-user-regs` option in GCC.
+
+### The options zero-call-user-regs
+
+Before we look in to the details of each option lets just clear up a few things.
+
+#### Callee-saved-register / Non-volatile 
+Callee-saved registers (AKA non-volatile registers, or call-preserved) are used to hold long-lived values that should be preserved across calls.
+
+When the caller makes a procedure call, it can expect that those registers will hold the same value after the callee returns, making it the responsibility of the callee to save them and restore them before returning to the caller. Or to not touch them.
+
+x64 ABI define thse args as non-volatile: r12, r13, r14, r15, rbx, rsp and rbp
+
+#### Caller saved registers
+Volatile registers, or call-clobbered registers. It is the caller's responsibility to push these registers onto the stack or copy them somewhere else if it wants to restore this value after a procedure call. It's normal to let a call destroy temporary values in these registers.
+
+
+Here are the options:
+```
+
+
+  ZERO_CALL_USED_REGS_OPT (skip, zero_regs_flags::SKIP),
+  ZERO_CALL_USED_REGS_OPT (used-gpr-arg, zero_regs_flags::USED_GPR_ARG),
+  ZERO_CALL_USED_REGS_OPT (used-gpr, zero_regs_flags::USED_GPR),
+  ZERO_CALL_USED_REGS_OPT (used-arg, zero_regs_flags::USED_ARG),
+  ZERO_CALL_USED_REGS_OPT (used, zero_regs_flags::USED),
+  ZERO_CALL_USED_REGS_OPT (all-gpr-arg, zero_regs_flags::ALL_GPR_ARG),
+  ZERO_CALL_USED_REGS_OPT (all-gpr, zero_regs_flags::ALL_GPR),
+  ZERO_CALL_USED_REGS_OPT (all-arg, zero_regs_flags::ALL_ARG),
+  ZERO_CALL_USED_REGS_OPT (all, zero_regs_flags::ALL),
+```
+
+Qing Zhao writes a good summary of the integration discussion on the [GCC mailing list](https://gcc.gnu.org/pipermail/gcc-patches/2020-August/552262.html).
+
+The reason why there are 9 different options to this argument is that when the patch was deviced there was a general anxiety in the GCC community that the overhead from patching every single function would bloat the code and ruin performance.
+The options that have "used" in the name does something clever. After initial compilation the option reads every function backwards from return and looks where a register has ended upon the right hand side of an instruction (Example: `mov 0, eax`). It lists all the "used registers" and adds them in the end for zeroing. "GPR" stands for general purpose registers and by choosing to only zero them the risk of causing damage to the program is reguced.
+
+From `gcc/function.c`:
+```
+/*
+ * If only_gpr is true, only zero call-used registers that are
+ * general-purpose registers; if only_used is true, only zero
+ * call-used registers that are used in the current function;
+ * if only_arg is true, only zero call-used registers that pass
+ * parameters defined by the flatform's calling conversion.
+ */
+```
+
+The options called "all" does not distinguish if the register is used in the function. This argument could turn out to be interesting for experimentation as all-gpr can reduce information leakage. For now this option is unlikely to be used.
+
+#### Linux kernel v5.15
+
+While I was writing this article the Linux kernel released version 5.15 which include a [configure option](https://github.com/KSPP/linux/issues/84) for using `-fzero-call-user-regs`. The Linux kernel community under supervision of Kees Cook decided to use the `used-gpr` option. 
+
+`> Security options > Kernel hardening options > Memory initialization`
+
+```
+  │ CONFIG_ZERO_CALL_USED_REGS:                                                                                                                                                                        │  
+  │                                                                                                                                                                                                    │  
+  │ At the end of functions, always zero any caller-used register                                                                                                                                      │  
+  │ contents. This helps ensure that temporary values are not                                                                                                                                          │  
+  │ leaked beyond the function boundary. This means that register                                                                                                                                      │  
+  │ contents are less likely to be available for side channels                                                                                                                                         │  
+  │ and information exposures. Additionally, this helps reduce the                                                                                                                                     │  
+  │ number of useful ROP gadgets by about 20% (and removes compiler                                                                                                                                    │  
+  │ generated "write-what-where" gadgets) in the resulting kernel                                                                                                                                      │  
+  │ image. This has a less than 1% performance impact on most                                                                                                                                          │  
+  │ workloads. Image size growth depends on architecture, and should                                                                                                                                   │  
+  │ be evaluated for suitability. For example, x86_64 grows by less                                                                                                                                    │  
+  │ than 1%, and arm64 grows by about 5%.                                                                                                                                                              │  
+  │                                                                                                                                                                                                    │  
+  │ Symbol: ZERO_CALL_USED_REGS [=y]                                                                                                                                                                   │  
+  │ Type  : bool                                                                                                                                                                                       │  
+  │ Defined at security/Kconfig.hardening:235                                                                                                                                                          │  
+  │   Prompt: Enable register zeroing on function exit                                                                                                                                                 │  
+  │   Depends on: CC_HAS_ZERO_CALL_USED_REGS [=y]                                                                                                                                                      │  
+  │   Location:                                                                                                                                                                                        │  
+  │     -> Security options                                                                                                                                                                            │  
+  │       -> Kernel hardening options                                                                                                                                                                  │  
+  │         -> Memory initialization 
+```
+This kernel option corresponds to adding the gcc argument -fzero-call-used-regs=used-gpr.
+
+#### Other operating systems
+
+The SerenityOS project have been using the zero-call-used-regs=used-gpr compiler option since July this year without reporting any negative impact  https://github.com/SerenityOS/serenity/pull/8950.
 
 ### The comparison
 
@@ -202,16 +307,6 @@ We can see that the compiler is doing xor reg, reg beore ret and thereby ruiinin
 
 This makes things significantly more difficult for anyone who is building a rop attack. But a few problems remain.
 
-### Callee-saved-register / Non-volatile 
-Callee-saved registers (AKA non-volatile registers, or call-preserved) are used to hold long-lived values that should be preserved across calls.
-
-When the caller makes a procedure call, it can expect that those registers will hold the same value after the callee returns, making it the responsibility of the callee to save them and restore them before returning to the caller. Or to not touch them.
-
-x64 ABI define thse args as non-volatile: r12, r13, r14, r15, rbx, rsp and rbp
-
-#### Caller saved registers
-volatile registers, or call-clobbered registers. , it is the caller's responsibility to push these registers onto the stack or copy them somewhere else if it wants to restore this value after a procedure call. It's normal to let a call destroy temporary values in these registers.
-
 ### Jump Oriented Programming
 
 https://www.comp.nus.edu.sg/~liangzk/papers/asiaccs11.pdf
@@ -244,35 +339,7 @@ Like the linux kernel the configure stage of the compilation is done using `make
 
 ### The Linux kernel target
 
-The option has been added to the Linux kernel version 5.15 under  `> Security options > Kernel hardening options > Memory initialization`
-
-```
-  │ CONFIG_ZERO_CALL_USED_REGS:                                                                                                                                                                        │  
-  │                                                                                                                                                                                                    │  
-  │ At the end of functions, always zero any caller-used register                                                                                                                                      │  
-  │ contents. This helps ensure that temporary values are not                                                                                                                                          │  
-  │ leaked beyond the function boundary. This means that register                                                                                                                                      │  
-  │ contents are less likely to be available for side channels                                                                                                                                         │  
-  │ and information exposures. Additionally, this helps reduce the                                                                                                                                     │  
-  │ number of useful ROP gadgets by about 20% (and removes compiler                                                                                                                                    │  
-  │ generated "write-what-where" gadgets) in the resulting kernel                                                                                                                                      │  
-  │ image. This has a less than 1% performance impact on most                                                                                                                                          │  
-  │ workloads. Image size growth depends on architecture, and should                                                                                                                                   │  
-  │ be evaluated for suitability. For example, x86_64 grows by less                                                                                                                                    │  
-  │ than 1%, and arm64 grows by about 5%.                                                                                                                                                              │  
-  │                                                                                                                                                                                                    │  
-  │ Symbol: ZERO_CALL_USED_REGS [=y]                                                                                                                                                                   │  
-  │ Type  : bool                                                                                                                                                                                       │  
-  │ Defined at security/Kconfig.hardening:235                                                                                                                                                          │  
-  │   Prompt: Enable register zeroing on function exit                                                                                                                                                 │  
-  │   Depends on: CC_HAS_ZERO_CALL_USED_REGS [=y]                                                                                                                                                      │  
-  │   Location:                                                                                                                                                                                        │  
-  │     -> Security options                                                                                                                                                                            │  
-  │       -> Kernel hardening options                                                                                                                                                                  │  
-  │         -> Memory initialization 
-```
-This kernel option corresponds to adding the gcc argument -fzero-call-used-regs=used-gpr.
-
+The option has been added to the Linux kernel version 5.15 under  
 Skip:
 A total of 40624 gadgets found.
 You decided to keep only the unique ones, 18050 unique gadgets found.
