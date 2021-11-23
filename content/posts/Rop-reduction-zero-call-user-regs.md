@@ -398,10 +398,9 @@ This means that a vast majority of the gadgets found after used-gpr are JOP gadg
 
 ### The Linux kernel target
 
-Let's compile a linux kernel to see if we can reduce attack surface there:
-```
+Let's compile a linux kernel to see if we can reduce attack surface there.
 
-Here is a reference run with the skip option:
+Here is a reference run with the skip option (no protections).
 rp++:
 ```
 A total of 846030 gadgets found.
