@@ -383,6 +383,8 @@ The ROPgadget tool finds the following results:
 ```
 ROPgadget --ropchain --binary busybox_skip
 Unique gadgets found: 57972
+
+# Todo redo this with --nosys
 ROPgadget --nojop --ropchain --binary busybox_skip
 Unique gadgets found: 11221
 ```
