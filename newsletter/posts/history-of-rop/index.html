@@ -60,7 +60,7 @@
   <link rel="apple-touch-icon" href="https://www.jerkeby.se/newsletter/apple-touch-icon.png" />
 
   
-  <meta name="generator" content="Hugo 0.89.0" />
+  <meta name="generator" content="Hugo 0.89.4" />
 
   
   
@@ -202,7 +202,7 @@ stack overflows that you see today, but its still
 A few years later the kernel security mitigation space was dominated by another researcher: Brad Spengler, aka Spender. Spender made a patch set for Linux called grsec. It supported an array of defense and detection mechanisms. Spender also worked on improving and packaging PaX as part of grsecurity. His patches were considered well written, stable, secure and very inventive. The Linux kernel community however was not keen on hardening at all, because it meant making feature tradeoffs and it would create complications. (Read more about that story here <a href="https://lwn.net/Articles/721848/">https://lwn.net/Articles/721848/</a>)</p>
 <p>The idea is that the addresses used in the <code>.data</code> section of a binary program can be randomized so that an attacker that has been able to create a buffer overflow would not know where their code would end up.</p>
 <p>Things are moving slowly in the Linux world due to personal conflicts between Spender and parts of the Linux kernel community. When Intel announced the Itanium ia64 architecture they had introduced hardware support for the NX bit proposed back in 1997 by Solar Designer. Suddenly the kernel world sprung to action with the support from Intel. The two security features from the PaX project were merged in 2003-2004 (in kernel version 2.6.8). As a comparison, Windows integrated support for the same security features in October 2009 with the release of Windows 7.</p>
-<p>In &lsquo;97 the Bugtraq people summarized the mitigations. These were the solutions proposed (<a href="https://seclists.org/bugtraq/1997/Apr/125):">https://seclists.org/bugtraq/1997/Apr/125):</a></p>
+<p>In &lsquo;97 the Bugtraq people summarized the mitigations. These were the solutions proposed (<a href="https://seclists.org/bugtraq/1997/Apr/125)">https://seclists.org/bugtraq/1997/Apr/125)</a>:</p>
 <ol>
 <li>Kernel exec stack permission (NX): Proposed by Solar Designer</li>
 <li>Function wrapping, a method that replaces one function with another at compile or runtime to limit the damage. By Massimo at IBM.</li>
@@ -271,6 +271,8 @@ Understanding and using these options drastically improves security in C program
   
   
   <nav class="post-nav">
+    
+    <a class="prev" href="https://www.jerkeby.se/newsletter/posts/rop-reduction-zero-call-user-regs/"><span>←</span><span>Gadget reduction using zero-call-user-regs</span></a>
      
     <a class="next" href="https://www.jerkeby.se/newsletter/posts/capturing-robots-with-kvicksand/"><span>Capturing Robots With Kvicksand</span><span>→</span></a>
     
