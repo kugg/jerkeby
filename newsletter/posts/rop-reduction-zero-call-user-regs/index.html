@@ -26,7 +26,7 @@
   
   
   <meta name="description" content="Introduction In my previous article history of ROP&quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.
-Understanding the risks When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites." />
+Understanding the risks When I find memory corruption vulnerabilities during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites." />
   <meta name="author" content="" />
   
 
@@ -75,7 +75,7 @@ Understanding the risks When I find memory corruption vulnerabilities while duri
   
   <meta property="og:title" content="Gadget reduction using zero-call-user-regs" />
 <meta property="og:description" content="Introduction In my previous article history of ROP&quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.
-Understanding the risks When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites." />
+Understanding the risks When I find memory corruption vulnerabilities during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/rop-reduction-zero-call-user-regs/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-11-26T00:00:00+00:00" />
@@ -85,15 +85,15 @@ Understanding the risks When I find memory corruption vulnerabilities while duri
   
   <meta itemprop="name" content="Gadget reduction using zero-call-user-regs">
 <meta itemprop="description" content="Introduction In my previous article history of ROP&quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.
-Understanding the risks When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites."><meta itemprop="datePublished" content="2021-11-26T00:00:00+00:00" />
+Understanding the risks When I find memory corruption vulnerabilities during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites."><meta itemprop="datePublished" content="2021-11-26T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-11-26T00:00:00+00:00" />
-<meta itemprop="wordCount" content="4315">
+<meta itemprop="wordCount" content="4260">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gadget reduction using zero-call-user-regs"/>
 <meta name="twitter:description" content="Introduction In my previous article history of ROP&quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.
-Understanding the risks When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites."/>
+Understanding the risks When I find memory corruption vulnerabilities during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites."/>
 
   
   
@@ -164,16 +164,12 @@ Understanding the risks When I find memory corruption vulnerabilities while duri
   <section class="post-content"><h2 id="introduction">Introduction</h2>
 <p>In my previous article <a href="https://www.jerkeby.se/newsletter/posts/history-of-rop/">history of ROP&quot;</a>, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.</p>
 <h2 id="understanding-the-risks">Understanding the risks</h2>
-<p>When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites. The reason why the impact of memory corruption vulnerabilities are disputed is that it&rsquo;s very difficult to evaluate if the various mitigations are effective.
-With the tool <a href="https://github.com/slimm609/checksec.sh">checksec</a> you can gather security information about an executable, how it was compiled and in what enivornment it runs to understand which mitigations are in place.</p>
-<pre tabindex="0"><code>$ checksec --file=/usr/bin/ls
-RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH      Symbols         FORTIFY Fortified       Fortifiable     FILE
-Full RELRO      Canary found      NX enabled    PIE enabled     No RPATH   No RUNPATH   No Symbols        Yes   5       17              /usr/bin/ls
-</code></pre><p>Determining the exploitability of a memory corruption bug is called triaging. In this process the researcher determines how the vulnerability can be exploited and to what degree. Modern mitigations aim to reduce the probability of a successfull exploit.
-Back in F-Secure I made a youtube livestrewam covering the process of triaging memory corruption vulnerabilities, check out the recording <a href="https://www.youtube.com/watch?v=SiFWF1i5Quc">here</a>.</p>
+<p>When I find memory corruption vulnerabilities during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites. The reason why the impact of memory corruption vulnerabilities are disputed is that it&rsquo;s very difficult to evaluate if the various mitigations are effective.</p>
+<p>Determining the exploitability of a memory corruption bug is called triaging. In this process the researcher determines how the vulnerability can be exploited and to what degree. Modern mitigations aim to reduce the probability of a successfull exploit.
+Back in F-Secure I made a youtube livestream with a collegue covering the process of triaging memory corruption vulnerabilities, check out the recording <a href="https://www.youtube.com/watch?v=SiFWF1i5Quc">here</a>.</p>
 <h2 id="current-events">Current events</h2>
 <p>Last week my old collegue <a href="https://www.sentinelone.com/labs/tipc-remote-linux-kernel-heap-overflow-allows-arbitrary-code-execution/">Maxploit published a new remote heap buffer overflow</a> that affects the 5.15 kernel in the TIPC protocol. The vulnerability can lead to kernel Remote Code Execution (RCE) if the attacker has access to &ldquo;appropriate ROP gadgets&rdquo;.</p>
-<p>This shows that the vulnerability class still makes a lot of impact to its targets (the Linux kernel in particular).</p>
+<p>Edit: <a href="https://haxx.in/posts/pwning-tipc/">The vulnerability can be exploited with only one single ROP gadget</a>.</p>
 <h2 id="the-rop-gadget">The ROP gadget</h2>
 <p>In 2007 a researcher named Hovav Shacham published a paper with the title <a href="https://hovav.net/ucsd/dist/geometry.pdf">&ldquo;The Geometry of Innocent Flesh on the Bone&rdquo;</a> that attempts to refine the return-to-libc attack by defining an algorithm for finding &ldquo;gadgets&rdquo; in legitemate code.</p>
 <p>The paper is the first to coin the phrase ROP attack but it also does what had been described by Tim Newsham as &ldquo;a matter of simple coding&rdquo; ten years earlier in the Bugtraq mailing list.</p>
@@ -210,8 +206,7 @@ to be potentially useful in our attacks, it need only end in a return instructio
 byte c3
 
 </code></pre><h2 id="background-on-register-zeroing">Background on register zeroing</h2>
-<p>Scientific background.
-In 2018 Graham Markall suggested the idea of doing stack and registry erasure prior to exit during <a href="https://gcc.gnu.org/wiki/cauldron2018#secure">GNU Tools Cauldron 2018</a>
+<p>In 2018 Graham Markall suggested the idea of doing stack and registry erasure prior to exit during <a href="https://gcc.gnu.org/wiki/cauldron2018#secure">GNU Tools Cauldron 2018</a>
 The suggestion is connected to a few challenges: <code>Stack and register erasure. Ensuring that on return from a function, no data is left lying on the stack or in registers. Particular challenges are in dealing with inlining, shrink wrapping and caching.</code></p>
 <p>The same year, Zelin Rong, Peidai Xie, Jingyuan Wang, Shenglin Xu, Yongjun Wang published a paper called <a href="https://dustri.org/b/files/papers/7c3954f7d19392056f072837b3a3775e_rop_reg_clean.pdf">Clean the Scratch Registers:A Way to Mitigate
 Return-Oriented Programming Attacks</a>. The paper shows results from an experiement where <a href="https://www.intel.com/content/www/us/en/developer/articles/tool/pin-a-dynamic-binary-instrumentation-tool.html">Intel PIN</a> is used in Justin In Time mode to add scratch register zeroing to the end of every function. This instrumentaiton method is used on known vulnerable CTF (Capture The Flag) challenges where we know that the target is exploitable using ROP. In the five experiments presented in in the paper all of them became unsolvable using ROP after using &ldquo;register zeroing&rdquo;.</p>
@@ -251,7 +246,7 @@ Qing Zhao writes a rationale for the overall design on the <a href="https://gcc.
 <p>When the caller makes a procedure call, it can expect that those registers will hold the same value after the callee returns, making it the responsibility of the callee to save them and restore them before returning to the caller. Or to not touch them.</p>
 <p>x64 ABI define thse args as non-volatile: <code>r12, r13, r14, r15, rbx, rsp and rbp</code>.</p>
 <h4 id="caller-saved-registers-and-shrink-wrapping">Caller saved registers and shrink wrapping</h4>
-<p>Volatile registers, or call-clobbered registers. It is the caller&rsquo;s responsibility to push these registers onto the stack or copy them somewhere else if it wants to restore this value after a procedure call. It&rsquo;s normal to let a call destroy temporary values in these registers.</p>
+<p>Caller saved, volatile registers are also called call-clobbered registers. It is the caller&rsquo;s responsibility to push these registers onto the stack or copy them somewhere else if it wants to restore this value after a procedure call. It&rsquo;s normal to let a call destroy temporary values in these registers.</p>
 <p>As Graham Markall feared back in 2018 there might also be problems with <a href="https://gcc.gnu.org/onlinedocs/gcc-7.1.0/gccint/Shrink-wrapping-separate-components.html">&ldquo;shrink wrapping&rdquo;</a> when zeroing &ldquo;all registers&rdquo;. This is <a href="https://gcc.gnu.org/pipermail/gcc-patches/2020-August/551448.html">addressed by making all zeroing based on only call-used registers</a>.</p>
 <h3 id="definition-of-call-used">Definition of call-used</h3>
 <p>We now know, that this patch only zeroes <code>call-used</code> registers. Let&rsquo;s find out what the definition of a <code>call-used</code> register is.</p>
@@ -359,7 +354,7 @@ To be clear, even if you compile you program with <code>all</code> the non-volat
   │     -&gt; Security options                                                                                                                                                                            │  
   │       -&gt; Kernel hardening options                                                                                                                                                                  │  
   │         -&gt; Memory initialization 
-</code></pre><p>This kernel option corresponds to adding the gcc argument -fzero-call-used-regs=used-gpr.</p>
+</code></pre><p>This kernel option corresponds to adding the gcc argument <code>-fzero-call-used-regs=used-gpr</code>.</p>
 <h4 id="other-operating-systems">Other operating systems</h4>
 <p>The SerenityOS project have been using the zero-call-used-regs=used-gpr compiler option since July this year <a href="https://github.com/SerenityOS/serenity/pull/8950">without reporting any negative impact</a>.</p>
 <h3 id="the-comparison">The comparison</h3>
@@ -424,7 +419,7 @@ You decided to keep only the unique ones, 18050 unique gadgets found.
 </code></pre><p>Used-gpr:</p>
 <pre tabindex="0"><code>A total of 49648 gadgets found.
 You decided to keep only the unique ones, 15262 unique gadgets found.
-</code></pre><p>Interesting! The total amount of gadgets increase on the busybox target, but the amount of unique gadgets decrease somewhat. Remember that for exploitation, we are interested in unique gadgets.</p>
+</code></pre><p>Interesting! The total amount of gadgets increase on the busybox target, but the amount of unique gadgets decrease somewhat. Remember that for exploitation, we are interested in unique gadgets. We will address the gadget increase later in the Kernel section.</p>
 <p>The ROPgadget tool finds the following results.</p>
 <p>All gadgets:</p>
 <pre tabindex="0"><code>ROPgadget --ropchain --binary busybox_skip
@@ -454,7 +449,7 @@ Unique gadgets found: 777954
 Unique gadgets found: 213884
 </code></pre><p>The number to keep in mind here is <code>213884</code> this is the amount of unique usable ROP gadgets.
 What is noteworthy about this run is that ROPgadget is able to autogenerate a full ROP chain. That is about to change.</p>
-<p>In this section we compile the kernel using the -fzero-call-used-regs=used-gpr</p>
+<p>In this section we compile the kernel using the <code>-fzero-call-used-regs=used-gpr</code></p>
 <p>All ROPgadgets on a used-gpr kernel:</p>
 <pre tabindex="0"><code>ROPgadget --ropchain --binary vmlinux-5.15-zero-regs
 Unique gadgets found: 776216
@@ -463,7 +458,7 @@ Unique gadgets found: 776216
 <pre tabindex="0"><code>ROPgadget --nosys --nojop --ropchain --binary vmlinux-5.15-zero-regs
 Unique gadgets found: 135814
 </code></pre><p>In reality the amount of ROP gadgets reduced are <code>78070</code> that is a unique ROP gadget reduction of <code>36,5%</code>.
-The automatic ROP chain generation fails on the early stages, because the quality of the ROP gadgets have gone down as well.</p>
+The automatic ROP chain generation fails on the early stages, because there are no good GPR write gadgets.</p>
 <p>So why is there an increase in JOP gadgets when the <code>used-gpr</code> protection is added?
 The used-gpr kernel had <code>640402</code> JOP and SYS gadgets, while the skip kernel had <code>564070</code>, this is an increase in <code>13%</code>.
 When the Linux kernel informative text tells you that this option reduces ROP gadgets by 20%, it lowers the ROP gadgets but increase the JOP gadgets.</p>
@@ -527,7 +522,7 @@ The tool will search for a gadget that can be used to trigger a syscall.</p>
 <li>Dick Svensson, feedback</li>
 <li>Andreas Kling, kernel experience and feedback from Serenity OS</li>
 <li>Calle Svensson, Technical guidance and understanding of circumvention methods</li>
-<li>Anderas from Romab gave some comforting words that cheered me up</li>
+<li>Anderas from Romab gave some comforting words that cheered me up when I was sick</li>
 </ul>
 <h2 id="future-research">Future research</h2>
 <p>Adding support for &ldquo;unsigned overflow protection&rdquo; in gcc would reduce the risk of overwriting the GOT table (and circumventing RELRO) using global variables.

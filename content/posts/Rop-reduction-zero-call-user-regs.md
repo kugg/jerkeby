@@ -7,22 +7,15 @@ draft: false
 In my previous article [history of ROP"](https://www.jerkeby.se/newsletter/posts/history-of-rop/), I cover the fundamental mitigation techniques and methods to circumvent them. In this article I'll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it's potential.
 
 ## Understanding the risks
-When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites. The reason why the impact of memory corruption vulnerabilities are disputed is that it's very difficult to evaluate if the various mitigations are effective. 
-With the tool [checksec](https://github.com/slimm609/checksec.sh) you can gather security information about an executable, how it was compiled and in what enivornment it runs to understand which mitigations are in place.
-
-```
-$ checksec --file=/usr/bin/ls
-RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH      Symbols         FORTIFY Fortified       Fortifiable     FILE
-Full RELRO      Canary found      NX enabled    PIE enabled     No RPATH   No RUNPATH   No Symbols        Yes   5       17              /usr/bin/ls
-````
+When I find memory corruption vulnerabilities during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites. The reason why the impact of memory corruption vulnerabilities are disputed is that it's very difficult to evaluate if the various mitigations are effective. 
 
 Determining the exploitability of a memory corruption bug is called triaging. In this process the researcher determines how the vulnerability can be exploited and to what degree. Modern mitigations aim to reduce the probability of a successfull exploit. 
-Back in F-Secure I made a youtube livestrewam covering the process of triaging memory corruption vulnerabilities, check out the recording [here](https://www.youtube.com/watch?v=SiFWF1i5Quc).
+Back in F-Secure I made a youtube livestream with a collegue covering the process of triaging memory corruption vulnerabilities, check out the recording [here](https://www.youtube.com/watch?v=SiFWF1i5Quc).
 
 ## Current events
 Last week my old collegue [Maxploit published a new remote heap buffer overflow](https://www.sentinelone.com/labs/tipc-remote-linux-kernel-heap-overflow-allows-arbitrary-code-execution/) that affects the 5.15 kernel in the TIPC protocol. The vulnerability can lead to kernel Remote Code Execution (RCE) if the attacker has access to "appropriate ROP gadgets".
 
-This shows that the vulnerability class still makes a lot of impact to its targets (the Linux kernel in particular).
+Edit: [The vulnerability can be exploited with only one single ROP gadget](https://haxx.in/posts/pwning-tipc/). 
 
 ## The ROP gadget
 
@@ -68,7 +61,6 @@ byte c3
 ```
 
 ## Background on register zeroing
-Scientific background.
 In 2018 Graham Markall suggested the idea of doing stack and registry erasure prior to exit during [GNU Tools Cauldron 2018](https://gcc.gnu.org/wiki/cauldron2018#secure)
 The suggestion is connected to a few challenges: `Stack and register erasure. Ensuring that on return from a function, no data is left lying on the stack or in registers. Particular challenges are in dealing with inlining, shrink wrapping and caching.`
 
@@ -127,7 +119,7 @@ When the caller makes a procedure call, it can expect that those registers will 
 x64 ABI define thse args as non-volatile: `r12, r13, r14, r15, rbx, rsp and rbp`.
 
 #### Caller saved registers and shrink wrapping
-Volatile registers, or call-clobbered registers. It is the caller's responsibility to push these registers onto the stack or copy them somewhere else if it wants to restore this value after a procedure call. It's normal to let a call destroy temporary values in these registers.
+Caller saved, volatile registers are also called call-clobbered registers. It is the caller's responsibility to push these registers onto the stack or copy them somewhere else if it wants to restore this value after a procedure call. It's normal to let a call destroy temporary values in these registers.
 
 As Graham Markall feared back in 2018 there might also be problems with ["shrink wrapping"](https://gcc.gnu.org/onlinedocs/gcc-7.1.0/gccint/Shrink-wrapping-separate-components.html) when zeroing "all registers". This is [addressed by making all zeroing based on only call-used registers](https://gcc.gnu.org/pipermail/gcc-patches/2020-August/551448.html).
 
@@ -257,7 +249,7 @@ While I was writing this article the Linux kernel released version 5.15 which in
   │       -> Kernel hardening options                                                                                                                                                                  │  
   │         -> Memory initialization 
 ```
-This kernel option corresponds to adding the gcc argument -fzero-call-used-regs=used-gpr.
+This kernel option corresponds to adding the gcc argument `-fzero-call-used-regs=used-gpr`.
 
 #### Other operating systems
 
@@ -355,7 +347,7 @@ Used-gpr:
 A total of 49648 gadgets found.
 You decided to keep only the unique ones, 15262 unique gadgets found.
 ```
-Interesting! The total amount of gadgets increase on the busybox target, but the amount of unique gadgets decrease somewhat. Remember that for exploitation, we are interested in unique gadgets.
+Interesting! The total amount of gadgets increase on the busybox target, but the amount of unique gadgets decrease somewhat. Remember that for exploitation, we are interested in unique gadgets. We will address the gadget increase later in the Kernel section.
 
 The ROPgadget tool finds the following results.
 
@@ -409,7 +401,7 @@ Unique gadgets found: 213884
 The number to keep in mind here is `213884` this is the amount of unique usable ROP gadgets.
 What is noteworthy about this run is that ROPgadget is able to autogenerate a full ROP chain. That is about to change.
 
-In this section we compile the kernel using the -fzero-call-used-regs=used-gpr
+In this section we compile the kernel using the `-fzero-call-used-regs=used-gpr`
 
 All ROPgadgets on a used-gpr kernel:
 ```
@@ -425,7 +417,7 @@ Unique gadgets found: 135814
 ```
 
 In reality the amount of ROP gadgets reduced are `78070` that is a unique ROP gadget reduction of `36,5%`.
-The automatic ROP chain generation fails on the early stages, because the quality of the ROP gadgets have gone down as well.
+The automatic ROP chain generation fails on the early stages, because there are no good GPR write gadgets.
 
 So why is there an increase in JOP gadgets when the `used-gpr` protection is added?
 The used-gpr kernel had `640402` JOP and SYS gadgets, while the skip kernel had `564070`, this is an increase in `13%`.
@@ -502,7 +494,7 @@ I want to thank:
 * Dick Svensson, feedback
 * Andreas Kling, kernel experience and feedback from Serenity OS
 * Calle Svensson, Technical guidance and understanding of circumvention methods
-* Anderas from Romab gave some comforting words that cheered me up
+* Anderas from Romab gave some comforting words that cheered me up when I was sick
 
 ## Future research
 Adding support for "unsigned overflow protection" in gcc would reduce the risk of overwriting the GOT table (and circumventing RELRO) using global variables.
