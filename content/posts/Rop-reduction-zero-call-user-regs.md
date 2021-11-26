@@ -1,7 +1,7 @@
 ---
 title: "Gadget reduction using zero-call-user-regs"
-date: "2021-11-08"
-draft: true
+date: "2021-11-26"
+draft: false
 ---
 # Gadget reduction using zero-call-user-regs
 
