@@ -3,8 +3,6 @@ title: "Gadget reduction using zero-call-user-regs"
 date: "2021-11-26"
 draft: false
 ---
-# Gadget reduction using zero-call-user-regs
-
 ## Introduction
 In my previous article [history of ROP"](https://www.jerkeby.se/newsletter/posts/history-of-rop/), I cover the fundamental mitigation techniques and methods to circumvent them. In this article I'll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it's potential.
 
@@ -441,6 +439,7 @@ Introducing more compiled code also increase the candidates for missaligned inst
 The ROPgadget search tool works in 5 steps these are the first four:
 
 1. Write-what-where gadgets
+
 In this step the search tool will try to find a list of gadgets to populate the registers for a future syscall.
 This is memory segments that POP GPR registers some data from the stack and then does return.
 
@@ -449,6 +448,7 @@ This gadget reside on an address that the search tool tries to find and write to
 The registers should point to the address of the arguments later passed to a syscall. Typically we are looking for the address of a string like "/bin/sh".
 
 2. Init syscall number gadgets
+
 Identify a group of gadgets to control the 
 Make the `eax/rax` register contain the number of the syscall instruction (0x80) or set it to a controlled value by finding a `xor eax, eax` / `xor rax,rax`.
 After using `used-gpr` there are thousands of gadgets for this purpose available in the kernel.
@@ -458,6 +458,7 @@ After using `used-gpr` there are thousands of gadgets for this purpose available
 The searchtool will try to find gadgets to configurae the arguemnts to a [syscall](https://filippo.io/linux-syscall-table/). Typically the desired syscall is `execve` which syscall number `59`.
 
 4. Syscall gadget
+
 This is done by calling a gadget that increments `eax` or `rax` by one and run it 80 times.
 The tool will search for a gadget that can be used to trigger a syscall.
 
@@ -482,11 +483,12 @@ I decided to post a [whishlist bugreport](https://lists.debian.org/debian-kernel
 
 
 ## Conclusions
-1. The gcc -fzero-call-used-regs is most commonly used with used-gpr, it was recently added to the Linux Kernel.
+1. The gcc `-fzero-call-used-regs` is most commonly used with the feature option `used-gpr`, it was recently added  as a non default configura option to the Linux Kernel.
 2. The option will identify volatile registers that has been touched by a function and zero them prior to return.
 3. Adding the option introduce new JOP gadgets by 13% and reduce the ROP gadgets by 36% in the Linux kernel.
 4. Commonly used ROP chain generators fail to produce chains automatically when the feature is enabled.
 5. Circumventions to the method exist using misaligned offsets that still produce usable gadgets.
+6. The gadgets addressed are registry altering gadgets.
 
 ## Acknowledgements
 I want to thank:
@@ -500,17 +502,16 @@ I want to thank:
 * Dick Svensson, feedback
 * Andreas Kling, kernel experience and feedback from Serenity OS
 * Calle Svensson, Technical guidance and understanding of circumvention methods
-* Anderas
+* Anderas from Romab gave some comforting words that cheered me up
 
 ## Future research
 Adding support for "unsigned overflow protection" in gcc would reduce the risk of overwriting the GOT table (and circumventing RELRO) using global variables.
 Zero init instead of stack erasure. https://gcc.gnu.org/pipermail/gcc-patches/2020-August/551444.html
 
 ## Caveats
-This is a work in progress section to be filled in with circumventions and potential issues with `fzero-call-used-regs`.
+This is a work in progress section to be filled in with circumventions and potential issues with `fzero-call-used-regs`. Hopefully these sections will qualify to be part of the main post.
 
 ### Jump Oriented Programming
-
 We have now extensively addresed the ROP problem. However there is also a problem surrounding JOP, this is a problem that is not addressed by this patch. However JOP gadgets are rarely useful without the combination of a good ROP gadget.
 
 Extract from a paper on the [JOP attack pattern](https://www.comp.nus.edu.sg/~liangzk/papers/asiaccs11.pdf)
@@ -532,5 +533,8 @@ The GCC11 zero-call-used-regs feateure didn't take misaligned offsets in to cons
 ### Added gadgets
 Adding code to each function also adds gadgets, an attacker wants to have unique gadgets but these are pretty much all the same.
 
+### Elastic objects to defeat KASLR
+Bypassing kernel protections using elastic objects by Yueqi Chen, Zhenpeng Lin, Xinyu Xin [Video](https://www.youtube.com/watch?v=yXhH0IJAxkE) read the [paper](https://zplin.me/papers/ELOISE.pdf).
+
 ### Other circumvention
-If you have a single pop edx gardget (or rdx) you can control edx, ecx, esi, edi, r8, r9, r10 and r11 by calling the main register with a decreasing offset.
+If you have a single pop edx gardget (or rdx) you can control `edx, ecx, esi, edi, r8, r9, r10 and r11` by calling the main register with a decreasing offset.

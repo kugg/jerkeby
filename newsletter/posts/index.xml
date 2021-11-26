@@ -13,7 +13,7 @@
       <pubDate>Fri, 26 Nov 2021 00:00:00 +0000</pubDate>
       
       <guid>https://www.jerkeby.se/newsletter/posts/rop-reduction-zero-call-user-regs/</guid>
-      <description>Gadget reduction using zero-call-user-regs Introduction In my previous article history of ROP&amp;quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&amp;rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&amp;rsquo;s potential.
+      <description>Introduction In my previous article history of ROP&amp;quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&amp;rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&amp;rsquo;s potential.
 Understanding the risks When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites.</description>
     </item>
     

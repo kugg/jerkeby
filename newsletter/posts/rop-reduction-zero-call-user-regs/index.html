@@ -25,7 +25,7 @@
 
   
   
-  <meta name="description" content="Gadget reduction using zero-call-user-regs Introduction In my previous article history of ROP&quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.
+  <meta name="description" content="Introduction In my previous article history of ROP&quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.
 Understanding the risks When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites." />
   <meta name="author" content="" />
   
@@ -74,7 +74,7 @@ Understanding the risks When I find memory corruption vulnerabilities while duri
   
   
   <meta property="og:title" content="Gadget reduction using zero-call-user-regs" />
-<meta property="og:description" content="Gadget reduction using zero-call-user-regs Introduction In my previous article history of ROP&quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.
+<meta property="og:description" content="Introduction In my previous article history of ROP&quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.
 Understanding the risks When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/rop-reduction-zero-call-user-regs/" /><meta property="article:section" content="posts" />
@@ -84,15 +84,15 @@ Understanding the risks When I find memory corruption vulnerabilities while duri
 
   
   <meta itemprop="name" content="Gadget reduction using zero-call-user-regs">
-<meta itemprop="description" content="Gadget reduction using zero-call-user-regs Introduction In my previous article history of ROP&quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.
+<meta itemprop="description" content="Introduction In my previous article history of ROP&quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.
 Understanding the risks When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites."><meta itemprop="datePublished" content="2021-11-26T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2021-11-26T00:00:00+00:00" />
-<meta itemprop="wordCount" content="4259">
+<meta itemprop="wordCount" content="4315">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Gadget reduction using zero-call-user-regs"/>
-<meta name="twitter:description" content="Gadget reduction using zero-call-user-regs Introduction In my previous article history of ROP&quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.
+<meta name="twitter:description" content="Introduction In my previous article history of ROP&quot;, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.
 Understanding the risks When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites."/>
 
   
@@ -161,8 +161,7 @@ Understanding the risks When I find memory corruption vulnerabilities while duri
     </p>
     <h1>Gadget reduction using zero-call-user-regs</h1>
   </header>
-  <section class="post-content"><h1 id="gadget-reduction-using-zero-call-user-regs">Gadget reduction using zero-call-user-regs</h1>
-<h2 id="introduction">Introduction</h2>
+  <section class="post-content"><h2 id="introduction">Introduction</h2>
 <p>In my previous article <a href="https://www.jerkeby.se/newsletter/posts/history-of-rop/">history of ROP&quot;</a>, I cover the fundamental mitigation techniques and methods to circumvent them. In this article I&rsquo;ll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it&rsquo;s potential.</p>
 <h2 id="understanding-the-risks">Understanding the risks</h2>
 <p>When I find memory corruption vulnerabilities while during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites. The reason why the impact of memory corruption vulnerabilities are disputed is that it&rsquo;s very difficult to evaluate if the various mitigations are effective.
@@ -473,34 +472,30 @@ Introducing more compiled code also increase the candidates for missaligned inst
 <h3 id="gadget-quality">Gadget quality</h3>
 <p>The ROPgadget search tool works in 5 steps these are the first four:</p>
 <ol>
-<li>Write-what-where gadgets
-In this step the search tool will try to find a list of gadgets to populate the registers for a future syscall.
-This is memory segments that POP GPR registers some data from the stack and then does return.</li>
+<li>Write-what-where gadgets</li>
 </ol>
+<p>In this step the search tool will try to find a list of gadgets to populate the registers for a future syscall.
+This is memory segments that POP GPR registers some data from the stack and then does return.</p>
 <p>Here is an example of such gadget: <code>pop rax ; ret</code>
 This gadget reside on an address that the search tool tries to find and write to the ROP chain.
 The registers should point to the address of the arguments later passed to a syscall. Typically we are looking for the address of a string like &ldquo;/bin/sh&rdquo;.</p>
 <ol start="2">
-<li>
-<p>Init syscall number gadgets
-Identify a group of gadgets to control the
+<li>Init syscall number gadgets</li>
+</ol>
+<p>Identify a group of gadgets to control the
 Make the <code>eax/rax</code> register contain the number of the syscall instruction (0x80) or set it to a controlled value by finding a <code>xor eax, eax</code> / <code>xor rax,rax</code>.
 After using <code>used-gpr</code> there are thousands of gadgets for this purpose available in the kernel.</p>
-</li>
-<li>
-<p>Init syscall arguments gadgets</p>
-</li>
+<ol start="3">
+<li>Init syscall arguments gadgets</li>
 </ol>
 <p>The searchtool will try to find gadgets to configurae the arguemnts to a <a href="https://filippo.io/linux-syscall-table/">syscall</a>. Typically the desired syscall is <code>execve</code> which syscall number <code>59</code>.</p>
 <ol start="4">
-<li>
-<p>Syscall gadget
-This is done by calling a gadget that increments <code>eax</code> or <code>rax</code> by one and run it 80 times.
+<li>Syscall gadget</li>
+</ol>
+<p>This is done by calling a gadget that increments <code>eax</code> or <code>rax</code> by one and run it 80 times.
 The tool will search for a gadget that can be used to trigger a syscall.</p>
-</li>
-<li>
-<p>Assemble the rop chain</p>
-</li>
+<ol start="5">
+<li>Assemble the rop chain</li>
 </ol>
 <p>When the search tool has assembled all the gadgets the addresses of the gadgets are stacked in the payload.</p>
 <p>The concept of <code>-fzero-call-used-regs=used-gpr</code> is that it effectively removes all gadgets usable to perform <code>Step 1.</code>. Everytime a GPR registry is popped, it is always zeroed using the xor technique prior to <code>ret</code>.</p>
@@ -513,11 +508,12 @@ The tool will search for a gadget that can be used to trigger a syscall.</p>
 <p>I decided to post a <a href="https://lists.debian.org/debian-kernel/2021/11/msg00057.html">whishlist bugreport</a> to improve kernel security in the Debian derivatives.</p>
 <h2 id="conclusions">Conclusions</h2>
 <ol>
-<li>The gcc -fzero-call-used-regs is most commonly used with used-gpr, it was recently added to the Linux Kernel.</li>
+<li>The gcc <code>-fzero-call-used-regs</code> is most commonly used with the feature option <code>used-gpr</code>, it was recently added  as a non default configura option to the Linux Kernel.</li>
 <li>The option will identify volatile registers that has been touched by a function and zero them prior to return.</li>
 <li>Adding the option introduce new JOP gadgets by 13% and reduce the ROP gadgets by 36% in the Linux kernel.</li>
 <li>Commonly used ROP chain generators fail to produce chains automatically when the feature is enabled.</li>
 <li>Circumventions to the method exist using misaligned offsets that still produce usable gadgets.</li>
+<li>The gadgets addressed are registry altering gadgets.</li>
 </ol>
 <h2 id="acknowledgements">Acknowledgements</h2>
 <p>I want to thank:</p>
@@ -531,13 +527,13 @@ The tool will search for a gadget that can be used to trigger a syscall.</p>
 <li>Dick Svensson, feedback</li>
 <li>Andreas Kling, kernel experience and feedback from Serenity OS</li>
 <li>Calle Svensson, Technical guidance and understanding of circumvention methods</li>
-<li>Anderas</li>
+<li>Anderas from Romab gave some comforting words that cheered me up</li>
 </ul>
 <h2 id="future-research">Future research</h2>
 <p>Adding support for &ldquo;unsigned overflow protection&rdquo; in gcc would reduce the risk of overwriting the GOT table (and circumventing RELRO) using global variables.
 Zero init instead of stack erasure. <a href="https://gcc.gnu.org/pipermail/gcc-patches/2020-August/551444.html">https://gcc.gnu.org/pipermail/gcc-patches/2020-August/551444.html</a></p>
 <h2 id="caveats">Caveats</h2>
-<p>This is a work in progress section to be filled in with circumventions and potential issues with <code>fzero-call-used-regs</code>.</p>
+<p>This is a work in progress section to be filled in with circumventions and potential issues with <code>fzero-call-used-regs</code>. Hopefully these sections will qualify to be part of the main post.</p>
 <h3 id="jump-oriented-programming">Jump Oriented Programming</h3>
 <p>We have now extensively addresed the ROP problem. However there is also a problem surrounding JOP, this is a problem that is not addressed by this patch. However JOP gadgets are rarely useful without the combination of a good ROP gadget.</p>
 <p>Extract from a paper on the <a href="https://www.comp.nus.edu.sg/~liangzk/papers/asiaccs11.pdf">JOP attack pattern</a></p>
@@ -554,8 +550,10 @@ parameters. By chaining these malicious stack frames together, a sequence of fun
 <p>The GCC11 zero-call-used-regs feateure didn&rsquo;t take misaligned offsets in to consideration.</p>
 <h3 id="added-gadgets">Added gadgets</h3>
 <p>Adding code to each function also adds gadgets, an attacker wants to have unique gadgets but these are pretty much all the same.</p>
+<h3 id="elastic-objects-to-defeat-kaslr">Elastic objects to defeat KASLR</h3>
+<p>Bypassing kernel protections using elastic objects by Yueqi Chen, Zhenpeng Lin, Xinyu Xin <a href="https://www.youtube.com/watch?v=yXhH0IJAxkE">Video</a> read the <a href="https://zplin.me/papers/ELOISE.pdf">paper</a>.</p>
 <h3 id="other-circumvention">Other circumvention</h3>
-<p>If you have a single pop edx gardget (or rdx) you can control edx, ecx, esi, edi, r8, r9, r10 and r11 by calling the main register with a decreasing offset.</p>
+<p>If you have a single pop edx gardget (or rdx) you can control <code>edx, ecx, esi, edi, r8, r9, r10 and r11</code> by calling the main register with a decreasing offset.</p>
 </section>
 
   
