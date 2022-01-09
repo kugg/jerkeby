@@ -4,28 +4,28 @@ date: "2021-11-26"
 draft: false
 ---
 ## Introduction
-In my previous article [history of ROP"](https://www.jerkeby.se/newsletter/posts/history-of-rop/), I cover the fundamental mitigation techniques and methods to circumvent them. In this article I'll introduce you to yet another security feature in GCC and where its effective. This is a new feature and I think its important to investigate it's potential.
+In my previous article ["History of the ROP"](https://www.jerkeby.se/newsletter/posts/history-of-rop/), I cover the fundamental mitigation techniques and methods to circumvent them. In this article I'll introduce you to yet another security feature in GCC and where it's effective. This is a new feature and I think it's important to investigate its potential.
 
 ## Understanding the risks
-When I find memory corruption vulnerabilities during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilites. The reason why the impact of memory corruption vulnerabilities are disputed is that it's very difficult to evaluate if the various mitigations are effective. 
+When I find memory corruption vulnerabilities during pentests, clients and vendors have a tendency to dispute the impact of the vulnerabilities. The reason why the impact of memory corruption vulnerabilities are disputed is that it's very difficult to evaluate if the various mitigations are effective.
 
-Determining the exploitability of a memory corruption bug is called triaging. In this process the researcher determines how the vulnerability can be exploited and to what degree. Modern mitigations aim to reduce the probability of a successfull exploit. 
-Back in F-Secure I made a youtube livestream with a collegue covering the process of triaging memory corruption vulnerabilities, check out the recording [here](https://www.youtube.com/watch?v=SiFWF1i5Quc).
+Determining the exploitability of a memory corruption bug is called triaging. In this process the researcher determines how the vulnerability can be exploited and to what degree. Modern mitigations aim to reduce the probability of a successful exploit.
+Back in F-Secure I made a YouTube live stream with a colleague covering the process of triaging memory corruption vulnerabilities, check out the recording [here](https://www.youtube.com/watch?v=SiFWF1i5Quc).
 
 ## Current events
-Last week my old collegue [Maxploit published a new remote heap buffer overflow](https://www.sentinelone.com/labs/tipc-remote-linux-kernel-heap-overflow-allows-arbitrary-code-execution/) that affects the 5.15 kernel in the TIPC protocol. The vulnerability can lead to kernel Remote Code Execution (RCE) if the attacker has access to "appropriate ROP gadgets".
+Last week my old colleague [Maxploit published a new remote heap buffer overflow](https://www.sentinelone.com/labs/tipc-remote-linux-kernel-heap-overflow-allows-arbitrary-code-execution/) that affects the 5.15 kernel in the TIPC protocol. The vulnerability can lead to kernel Remote Code Execution (RCE) if the attacker has access to "appropriate ROP gadgets".
 
-Edit: [The vulnerability can be exploited with only one single ROP gadget](https://haxx.in/posts/pwning-tipc/). 
+Edit: [The vulnerability can be exploited with only one single ROP gadget](https://haxx.in/posts/pwning-tipc/).
 
 ## The ROP gadget
 
-In 2007 a researcher named Hovav Shacham published a paper with the title ["The Geometry of Innocent Flesh on the Bone"](https://hovav.net/ucsd/dist/geometry.pdf) that attempts to refine the return-to-libc attack by defining an algorithm for finding "gadgets" in legitemate code.
+In 2007 a researcher named Hovav Shacham published a paper with the title ["The Geometry of Innocent Flesh on the Bone"](https://hovav.net/ucsd/dist/geometry.pdf) that attempts to refine the return-to-libc attack by defining an algorithm for finding "gadgets" in legitimate code.
 
 The paper is the first to coin the phrase ROP attack but it also does what had been described by Tim Newsham as "a matter of simple coding" ten years earlier in the Bugtraq mailing list.
 
-The technique was not novel, but the implementation was. Before we move in to "gadget-land", let it sink in. The idea of how to do automated rop searches took ten years to be implemented. This is a reminder that our future in ten years may be implementations of our greatest ideas of today.
+The technique was not novel, but the implementation was. Before we move in to "gadget-land", let it sink in. The idea of how to do automated ROP searches took ten years to be implemented. This is a reminder that our future in ten years may be implementations of our greatest ideas of today.
 
-Back again to the gadgets. The compiler of a C program is a machine code generator that create machine code according to the format appropriate for the target CPU architecture and file format of the operatingsystem environment. 
+Back again to the gadgets. The compiler of a C program is a machine code generator that create machine code according to the format appropriate for the target CPU architecture and file format of the operating system environment.
 
 From the Shacham paper:
 ```
@@ -65,10 +65,10 @@ In 2018 Graham Markall suggested the idea of doing stack and registry erasure pr
 The suggestion is connected to a few challenges: `Stack and register erasure. Ensuring that on return from a function, no data is left lying on the stack or in registers. Particular challenges are in dealing with inlining, shrink wrapping and caching.`
 
 The same year, Zelin Rong, Peidai Xie, Jingyuan Wang, Shenglin Xu, Yongjun Wang published a paper called [Clean the Scratch Registers:A Way to Mitigate
-Return-Oriented Programming Attacks](https://dustri.org/b/files/papers/7c3954f7d19392056f072837b3a3775e_rop_reg_clean.pdf). The paper shows results from an experiement where [Intel PIN](https://www.intel.com/content/www/us/en/developer/articles/tool/pin-a-dynamic-binary-instrumentation-tool.html) is used in Justin In Time mode to add scratch register zeroing to the end of every function. This instrumentaiton method is used on known vulnerable CTF (Capture The Flag) challenges where we know that the target is exploitable using ROP. In the five experiments presented in in the paper all of them became unsolvable using ROP after using "register zeroing".
+Return-Oriented Programming Attacks](https://dustri.org/b/files/papers/7c3954f7d19392056f072837b3a3775e_rop_reg_clean.pdf). The paper shows results from an experiment where [Intel PIN](https://www.intel.com/content/www/us/en/developer/articles/tool/pin-a-dynamic-binary-instrumentation-tool.html) is used in Justin In Time mode to add scratch register zeroing to the end of every function. This instrumentation method is used on known vulnerable CTF (Capture The Flag) challenges where we know that the target is exploitable using ROP. In the five experiments presented in in the paper all of them became unsolvable using ROP after using "register zeroing".
 
-## Register zeroing 
-An assembler function typically it's temporary variables in "registers". When the function is finished it runs the instruction "ret" (return). A good ROP gadget does something to a register and ends with ret, just like a function.
+## Register zeroing
+An assembler function typically stores its temporary variables in "registers". When the function is finished it runs the instruction "ret" (return). A good ROP gadget does something to a register and ends with ret, just like a function.
 
 Here is a function that returns its only argument written in C.
 ```
@@ -76,7 +76,7 @@ int test(int r) {
    return r;
 }
 ```
-Here is the assembler that the compiler produced: 
+Here is the assembler that the compiler produced:
 ```
 test(int):
         push    rbp
@@ -106,17 +106,17 @@ As a result this function is now less usable as a ROP gadget because the value o
 ## Experiment with GCC zero-call-user-regs
 In 2018 Victor Rodriguez was quick to add a patch to the [CLEAR Linux project GCC branch](https://github.com/clearlinux-pkgs/gcc/blob/master/0001-x86-Add-mzero-caller.patch) following up on the idea of zeroing registers. The patch is so far only used within the CLEAR Linux projects internal GCC branch. But it is a reference that helps the GCC group move forward on accepting an upstream patch in 2020.
 
-In the upcoming release of GCC 11 there is a feature written by (Qing Zhao from Oracle) that does register zeroing prior to returning. One usecase for the feature can be to reduce the probability of usable ROP gadgets just as suggested in the "Clean the Scratch registers article". The feature also impacts the "speculative execution" bugclass, but let's talk about that elsewhere.
+In the upcoming release of GCC 11 there is a feature written by (Qing Zhao from Oracle) that does register zeroing prior to returning. One use-case for the feature can be to reduce the probability of usable ROP gadgets just as suggested in the "Clean the Scratch registers article". The feature also impacts the "speculative execution" bug class, but let's talk about that elsewhere.
 Qing Zhao writes a rationale for the overall design on the [GCC mailing list](https://gcc.gnu.org/pipermail/gcc-patches/2020-August/552262.html). He motivates why zeroing is better than randomization and which registers to erase. The concept is motivated by mitigating ROP and reducing information leakage from registers on exit.
 
 I want to determine to what extent ROP is mitigated by the `-fzero-call-user-regs` option in GCC.
 
-#### Callee-saved-register / Non-volatile 
+#### Callee-saved-register / Non-volatile
 Callee-saved registers (AKA non-volatile registers, or call-preserved) are used to hold long-lived values that should be preserved across calls.
 
 When the caller makes a procedure call, it can expect that those registers will hold the same value after the callee returns, making it the responsibility of the callee to save them and restore them before returning to the caller. Or to not touch them.
 
-x64 ABI define thse args as non-volatile: `r12, r13, r14, r15, rbx, rsp and rbp`.
+x64 ABI define these args as non-volatile: `r12, r13, r14, r15, rbx, rsp and rbp`.
 
 #### Caller saved registers and shrink wrapping
 Caller saved, volatile registers are also called call-clobbered registers. It is the caller's responsibility to push these registers onto the stack or copy them somewhere else if it wants to restore this value after a procedure call. It's normal to let a call destroy temporary values in these registers.
@@ -199,7 +199,7 @@ The [reasoning from Qing on the GCC mailinglist](https://www.mail-archive.com/gc
      'all-arg' are mainly used for ROP mitigation.
 ```
 
-The feature options that have `used` in the name does something clever. After initial compilation the option reads every function backwards from return and looks where a register has ended upon the right hand side of an instruction (Example: `mov 0, eax` have [clobbered](http://zvon.org/comp/r/ref-Jargon_file.html#Terms~clobber) eax so it will need zeroing.). It lists all the "used registers" and adds them in the end for zeroing. "GPR" stands for general purpose registers and by choosing to only zero them the risk of causing damage to the program is reguced.
+The feature options that have `used` in the name does something clever. After initial compilation the option reads every function backwards from return and looks where a register has ended upon the right hand side of an instruction (Example: `mov 0, eax` have [clobbered](http://zvon.org/comp/r/ref-Jargon_file.html#Terms~clobber) eax so it will need zeroing.). It lists all the "used registers" and adds them in the end for zeroing. "GPR" stands for general purpose registers and by choosing to only zero them the risk of causing damage to the program is reduced.
 
 From `gcc/function.c`:
 ```
@@ -220,7 +220,7 @@ That is: `r12, r13, r14, r15, rbx, rsp and rbp`.
 
 #### Linux kernel v5.15
 
-While I was writing this article the Linux kernel released version 5.15 which include a [configure option](https://github.com/KSPP/linux/issues/84) for using `-fzero-call-user-regs`. The Linux kernel community under supervision of Kees Cook decided to use the `used-gpr` option. 
+While I was writing this article the Linux kernel released version 5.15 which include a [configure option](https://github.com/KSPP/linux/issues/84) for using `-fzero-call-user-regs`. The Linux kernel community under supervision of Kees Cook decided to use the `used-gpr` option.
 
 `> Security options > Kernel hardening options > Memory initialization`
 
@@ -247,9 +247,9 @@ While I was writing this article the Linux kernel released version 5.15 which in
   │   Location:                                                                                                                                                                                        │  
   │     -> Security options                                                                                                                                                                            │  
   │       -> Kernel hardening options                                                                                                                                                                  │  
-  │         -> Memory initialization 
+  │         -> Memory initialization
 ```
-This kernel option corresponds to adding the gcc argument `-fzero-call-used-regs=used-gpr`.
+This kernel option corresponds to adding the `gcc` argument `-fzero-call-used-regs=used-gpr`.
 
 #### Other operating systems
 
@@ -257,21 +257,21 @@ The SerenityOS project have been using the zero-call-used-regs=used-gpr compiler
 
 ### The comparison
 
-I decided to use a rop gadget search tool to compare a binary with and without this feature.
+I decided to use a ROP gadget search tool to compare a binary with and without this feature.
 The concept behind the mitigation is to clear all used registers prior to calling return in a given function.
 In the comparison I want to focus on pure ROP gadgets as much as possible and exclude counting of [JOP and syscall gadgets]((https://www.comp.nus.edu.sg/~liangzk/papers/asiaccs11.pdf).
 
 Essentially this is a comparison of the quality of ROP gadgets in software compiled with and without `-fzero-call-user-regs`.
 
-Downloading my experiment stuff in case you want ot tag along:
+Downloading my experiment stuff in case you want to tag along:
 1. rp++: `git clone https://github.com/0vercl0k/rp`
-2. new gcc: `git clone --depth 1 --branch releases/gcc-11.2.0 https://github.com/gcc-mirror/gcc`
+2. new GCC: `git clone --depth 1 --branch releases/gcc-11.2.0 https://github.com/gcc-mirror/gcc`
 3. ROPchains: `pip install ropchains` Another ROP search tool that also builds chains
 
 RP++ searches a binary for patterns that can be used in a ROP chain.
-GCC version 11.2.0 is a version of gcc that has support for `-fzero-call-used-regs`.
+GCC version 11.2.0 is a version of GCC that has support for `-fzero-call-used-regs`.
 
-If you are reading this in late 2022 or later the `-fzero-call-used-regs` feature will already be in all recently stable distirbutions. Use `gcc --version` check to see if your compiler is above version.
+If you are reading this in late 2022 or later the `-fzero-call-used-regs` feature will already be in all recently stable distributions. Use `gcc --version` check to see if your compiler is above version.
 
 Compile GCC 11.2 and install it in the home dir like this:
 ```
@@ -281,7 +281,7 @@ mkdir ~/gcc
 make DESTDIR=~/gcc install
 ```
 
-Once you have gcc11, use a line like this one to compile your target:
+Once you have GCC 11, use a line like this one to compile your target:
 ```
 ./configure CC=~/gcc/usr/local/bin/gcc CFLAGS=-fzero-call-used-regs=used-gpr
 ```
@@ -296,10 +296,10 @@ int main() {
 }
 ```
 
-In gdb I run disas test to check how test is compiled in to asembler:
+In gdb I run disas test to check how test is compiled into assembler:
 A comparison on compiler explorer: https://godbolt.org/z/Tden7oKq7
 
-In compiler explorer we can compare the output assembler from diferent gcc versions and their respective options.
+In compiler explorer we can compare the output assembler from different GCC versions and their respective options.
 Dump of assembler code for function test compiled with used-gpr:
 ```
    0x0000000000401106 <+0>:	push   %rbp
@@ -308,7 +308,7 @@ Dump of assembler code for function test compiled with used-gpr:
    0x000000000040110d <+7>:	mov    -0x4(%rbp),%eax
    0x0000000000401110 <+10>:	pop    %rbp
    0x0000000000401111 <+11>:	xor    %edi,%edi
-   0x0000000000401113 <+13>:	retq  
+   0x0000000000401113 <+13>:	retq
 ```
 
 Without protection (skip) it looks like this:
@@ -319,25 +319,25 @@ Dump of assembler code for function test:
    0x000000000040110a <+4>:	mov    %edi,-0x4(%rbp)
    0x000000000040110d <+7>:	mov    -0x4(%rbp),%eax
    0x0000000000401110 <+10>:	pop    %rbp
-   0x0000000000401111 <+11>:	retq   
+   0x0000000000401111 <+11>:	retq
 End of assembler dump.
 ```
 
-We can see that the compiler is doing `xor reg, reg` beore ret and thereby ruiining the registers for anyone calling that gadget.
+We can see that the compiler is doing `xor reg, reg` before ret and thereby ruining the registers for anyone calling that gadget.
 
-This makes things significantly more difficult for anyone who is building a rop attack. But a few problems remain.
+This makes things significantly more difficult for anyone who is building a ROP attack. But a few problems remain.
 
 ### Experiment setup
 In this experiment we are deliberately excluding results that are JOP or syscalls.
 
-### The busybox target
+### The Busybox target
 
-Busybox was originally a shell used in embedded devices. Nowdays a full environment containing everything you may want for debugging a IoT device. Busybox is compiled as a static by default which is exactly the type of target where ROP attacks are useful.
-Like the linux kernel the configure stage of the compilation is done using `make menuconfig` inside the compilation options menu in `Settings` you can configure the `CFLAGS`. Initially I'll compile using `-fzero-call-used-regs=skip` it will simply compile without any ROP protections.
+Busybox was originally a shell used in embedded devices. Nowadays a full environment containing everything you may want for debugging a IoT device. Busybox is compiled as a static by default which is exactly the type of target where ROP attacks are useful.
+Like the Linux kernel the configure stage of the compilation is done using `make menuconfig` inside the compilation options menu in `Settings` you can configure the `CFLAGS`. Initially I'll compile using `-fzero-call-used-regs=skip` it will simply compile without any ROP protections.
 
 No protections:
 ```
-./rp-lin-x64 -f ./busybox_skip --unique --rop=8 
+./rp-lin-x64 -f ./busybox_skip --unique --rop=8
 A total of 40624 gadgets found.
 You decided to keep only the unique ones, 18050 unique gadgets found.
 ```
@@ -347,7 +347,7 @@ Used-gpr:
 A total of 49648 gadgets found.
 You decided to keep only the unique ones, 15262 unique gadgets found.
 ```
-Interesting! The total amount of gadgets increase on the busybox target, but the amount of unique gadgets decrease somewhat. Remember that for exploitation, we are interested in unique gadgets. We will address the gadget increase later in the Kernel section.
+Interesting! The total amount of gadgets increase on the Busybox target, but the amount of unique gadgets decrease somewhat. Remember that for exploitation, we are interested in unique gadgets. We will address the gadget increase later in the Kernel section.
 
 The ROPgadget tool finds the following results.
 
@@ -377,14 +377,14 @@ Unique gadgets found: 8254
 ```
 
 This means that a vast majority of the gadgets found after used-gpr are JOP gadgets (and a few syscall gadgets).
-The ROP Qunatity is reduced by 26.39%.
+The ROP quantity is reduced by 26.39%.
 
 ### The Linux kernel target
 
-Let's compile a linux kernel to see if we can reduce attack surface there.
+Let's compile a Linux kernel to see if we can reduce attack surface there.
 
 #### ROPgadget
-In this seciton I have compiled the Linux kernel using the Kees Cook option to zero regs found in 5.15:
+In this section I have compiled the Linux kernel using the Kees Cook option to zero regs found in 5.15:
 Here is a reference run with the skip option (no protections).
 
 All ROP gadgets on a skipped kernel:
@@ -399,16 +399,16 @@ ROPgadget --nosys --nojop --ropchain --binary vmlinux-5.15-skip
 Unique gadgets found: 213884
 ```
 The number to keep in mind here is `213884` this is the amount of unique usable ROP gadgets.
-What is noteworthy about this run is that ROPgadget is able to autogenerate a full ROP chain. That is about to change.
+What is noteworthy about this run is that ROPgadget is able to auto-generate a full ROP chain. That is about to change.
 
 In this section we compile the kernel using the `-fzero-call-used-regs=used-gpr`
 
-All ROPgadgets on a used-gpr kernel:
+All ROP gadgets on a used-gpr kernel:
 ```
 ROPgadget --ropchain --binary vmlinux-5.15-zero-regs
 Unique gadgets found: 776216
 ```
-The quantity of ROPgadgets found using ROPgadget has gone down by a `1738`. 
+The quantity of ROP gadgets found using ROPgadget has gone down by a `1738`.
 
 Only ROP gadgets on a used-gpr kernel:
 ```
@@ -424,7 +424,7 @@ The used-gpr kernel had `640402` JOP and SYS gadgets, while the skip kernel had 
 When the Linux kernel informative text tells you that this option reduces ROP gadgets by 20%, it lowers the ROP gadgets but increase the JOP gadgets.
 
 I think the explanation is "misaligned offset instructions". Remember how the Sacham paper quoted earlier explained that the word `dress` is a part of `address`?
-Introducing more compiled code also increase the candidates for missaligned instructions.
+Introducing more compiled code also increase the candidates for misaligned instructions.
 
 ### Gadget quality
 
@@ -441,31 +441,31 @@ The registers should point to the address of the arguments later passed to a sys
 
 2. Init syscall number gadgets
 
-Identify a group of gadgets to control the 
+Identify a group of gadgets to control the
 Make the `eax/rax` register contain the number of the syscall instruction (0x80) or set it to a controlled value by finding a `xor eax, eax` / `xor rax,rax`.
 After using `used-gpr` there are thousands of gadgets for this purpose available in the kernel.
 
 3. Init syscall arguments gadgets
 
-The searchtool will try to find gadgets to configurae the arguemnts to a [syscall](https://filippo.io/linux-syscall-table/). Typically the desired syscall is `execve` which syscall number `59`.
+The searchtool will try to find gadgets to configurae the arguments to a [syscall](https://filippo.io/linux-syscall-table/). Typically the desired syscall is `execve` which syscall number `59`.
 
 4. Syscall gadget
 
 This is done by calling a gadget that increments `eax` or `rax` by one and run it 80 times.
 The tool will search for a gadget that can be used to trigger a syscall.
 
-5. Assemble the rop chain
+5. Assemble the ROP chain
 
 When the search tool has assembled all the gadgets the addresses of the gadgets are stacked in the payload.
 
-The concept of `-fzero-call-used-regs=used-gpr` is that it effectively removes all gadgets usable to perform `Step 1.`. Everytime a GPR registry is popped, it is always zeroed using the xor technique prior to `ret`.
+The concept of `-fzero-call-used-regs=used-gpr` is that it effectively removes all gadgets usable to perform `Step 1.`. Every time a GPR registry is popped, it is always zeroed using the xor technique prior to `ret`.
 
 ### Debian
-Let's take peak in to the future of major distirbutions. First, lets look at debian experimental https://packages.debian.org/experimental/ia64/linux-kbuild-5.15
+Let's take a peak into the future of major distributions. First, let's look at Debian experimental https://packages.debian.org/experimental/ia64/linux-kbuild-5.15
 
-The bubild depends on gcc11, a good start! We can find the package here: http://ftp.de.debian.org/debian-ports//pool-ia64/main/l/linux/linux-kbuild-5.15_5.15-1~exp1_ia64.deb
+The build depends on gcc11, a good start! We can find the package here: http://ftp.de.debian.org/debian-ports//pool-ia64/main/l/linux/linux-kbuild-5.15_5.15-1~exp1_ia64.deb
 
-It's likely that GCC11.2 will be the candidate for the next stable Debian release.
+It's likely that GCC 11.2 will be the candidate for the next stable Debian release.
 
 In [this file we can find the current experimental Kernel configuration.](http://ftp.de.debian.org/debian-ports//pool-ia64/main/l/linux/linux-config-5.15_5.15-1~exp1_ia64.deb)
 
@@ -487,24 +487,24 @@ I want to thank:
 
 * Linus Walleij, for answering questions about the Linux kernel community
 * Kees Cook, for adding `CONFIG_ZERO_CALL_USED_REGS` to the Linux kernel
-* Qing Zhao, engineer from oracle who wrote the zero--call-user-regs patch
+* Qing Zhao, engineer from Oracle who wrote the zero--call-user-regs patch
 * Alve Björk, errata base pointer, instruction pointer correction
 * Odd Stranne, errata base pointer, DEP in Windows 2004, SafeSEH and CFG
 * Laban Sköllermark, grammar and spelling
 * Dick Svensson, feedback
-* Andreas Kling, kernel experience and feedback from Serenity OS
-* Calle Svensson, Technical guidance and understanding of circumvention methods
-* Anderas from Romab gave some comforting words that cheered me up when I was sick
+* Andreas Kling, kernel experience and feedback from SerenityOS
+* Calle Svensson, technical guidance and understanding of circumvention methods
+* Andreas from Romab gave some comforting words that cheered me up when I was sick
 
 ## Future research
-Adding support for "unsigned overflow protection" in gcc would reduce the risk of overwriting the GOT table (and circumventing RELRO) using global variables.
+Adding support for "unsigned overflow protection" in GCC would reduce the risk of overwriting the GOT table (and circumventing RELRO) using global variables.
 Zero init instead of stack erasure. https://gcc.gnu.org/pipermail/gcc-patches/2020-August/551444.html
 
 ## Caveats
 This is a work in progress section to be filled in with circumventions and potential issues with `fzero-call-used-regs`. Hopefully these sections will qualify to be part of the main post.
 
 ### Jump Oriented Programming
-We have now extensively addresed the ROP problem. However there is also a problem surrounding JOP, this is a problem that is not addressed by this patch. However JOP gadgets are rarely useful without the combination of a good ROP gadget.
+We have now extensively addressed the ROP problem. However there is also a problem surrounding JOP, this is a problem that is not addressed by this patch. However JOP gadgets are rarely useful without the combination of a good ROP gadget.
 
 Extract from a paper on the [JOP attack pattern](https://www.comp.nus.edu.sg/~liangzk/papers/asiaccs11.pdf)
 ```
@@ -529,4 +529,4 @@ Adding code to each function also adds gadgets, an attacker wants to have unique
 Bypassing kernel protections using elastic objects by Yueqi Chen, Zhenpeng Lin, Xinyu Xin [Video](https://www.youtube.com/watch?v=yXhH0IJAxkE) read the [paper](https://zplin.me/papers/ELOISE.pdf).
 
 ### Other circumvention
-If you have a single pop edx gardget (or rdx) you can control `edx, ecx, esi, edi, r8, r9, r10 and r11` by calling the main register with a decreasing offset.
+If you have a single pop edx gadget (or rdx) you can control `edx, ecx, esi, edi, r8, r9, r10 and r11` by calling the main register with a decreasing offset.
