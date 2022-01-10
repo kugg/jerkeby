@@ -1,6 +1,6 @@
 title: "Risk-aware applications"
-date: "2022-01-08"
-draft: true
+date: "2022-01-10"
+draft: false
 ---
 
 Last year ended in a rush to patch the Log4j vulnerability.
