@@ -6,7 +6,17 @@
     <description>Recent content on Newsletter</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 26 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://www.jerkeby.se/newsletter/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 10 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://www.jerkeby.se/newsletter/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Risk-aware applications</title>
+      <link>https://www.jerkeby.se/newsletter/posts/risk-aware-applications/</link>
+      <pubDate>Mon, 10 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.jerkeby.se/newsletter/posts/risk-aware-applications/</guid>
+      <description>Last year ended in a rush to patch the Log4j vulnerability. Most organisations lack controls to prevent or even detect exploitation of log4shell and similar vulnerabilities. That meant overtime, blocking productivity and costly delays. Once the dust settled, I started looking at options for reducing the cost in similar events.looking at options for reducing the cost in similar events.
+We want to increase detection capacity. Educate developers on the consequences of typical risks.</description>
+    </item>
+    
     <item>
       <title>Gadget reduction using zero-call-user-regs</title>
       <link>https://www.jerkeby.se/newsletter/posts/rop-reduction-zero-call-user-regs/</link>
@@ -61,26 +71,6 @@ Whats noticeable about the new issue of Phrack is that a majority of the article
       
       <guid>https://www.jerkeby.se/newsletter/posts/countdown-to-0day/</guid>
       <description>It&amp;rsquo;s a fuzzy feeling. That of anticipation, creativity and doing something new. When you find that one thing that no-one has done before that grant you new privileges and possibilities. Here we are, one week before the launch of my new company ready to teach and learn. Bringing 0day vulnerabilities in to the world you have to maintain a strategy to cause the least harm and yet make enough impact for vendors to fix and users to patch.</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://www.jerkeby.se/newsletter/posts/attacker-aware-applications/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.jerkeby.se/newsletter/posts/attacker-aware-applications/</guid>
-      <description>title: &amp;ldquo;Risk-aware applications&amp;rdquo; date: &amp;ldquo;2022-01-07&amp;rdquo; draft: true Last year ended in a rush to patch the Log4j vulnerability. Most organisations lack controls to prevent or even detect exploitation of log4shell and similar vulnerabilities. That meant overtime, blocking productivity and costly delays. Once the dust settled, I started looking at options for reducing the cost in similar events.looking at options for reducing the cost in similar events.
-We want to increase detection capacity.</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://www.jerkeby.se/newsletter/posts/risk-aware-applications/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.jerkeby.se/newsletter/posts/risk-aware-applications/</guid>
-      <description>title: &amp;ldquo;Risk-aware applications&amp;rdquo; date: &amp;ldquo;2022-01-10&amp;rdquo; draft: false Last year ended in a rush to patch the Log4j vulnerability. Most organisations lack controls to prevent or even detect exploitation of log4shell and similar vulnerabilities. That meant overtime, blocking productivity and costly delays. Once the dust settled, I started looking at options for reducing the cost in similar events.looking at options for reducing the cost in similar events.
-We want to increase detection capacity.</description>
     </item>
     
   </channel>

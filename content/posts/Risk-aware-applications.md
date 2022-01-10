@@ -1,8 +1,8 @@
+---
 title: "Risk-aware applications"
 date: "2022-01-10"
 draft: false
 ---
-
 Last year ended in a rush to patch the Log4j vulnerability.
 Most organisations lack controls to prevent or even detect exploitation of log4shell and similar vulnerabilities. That meant overtime, blocking productivity and costly delays. Once the dust settled, I started looking at options for reducing the cost in similar events.looking at options for reducing the cost in similar events.
 
@@ -10,7 +10,7 @@ We want to increase detection capacity. Educate developers on the consequences o
 
 If you feel that this method could be useful in your orgnisation, just reach out, I'll be happy to show you how!
 
-# The risk-aware application
+# Introduction
 I was introduced to this concept via Wiliam Jardine from F-Secure wrote an article on how to implement [attack-aware applications in practice](https://labs.f-secure.com/blog/application-level-purple-teaming). The idea is that there are checks inside the application that measure how the application is being used and make automated decisions based on the usage. When the application usage resembles an attack pattern, it can take restrictive measures to defend itself. 
 
 Here are some examples where such patterns are applied today:
@@ -157,6 +157,7 @@ Last but not least, logs have a severity indicator or log level. These are "`FAT
 
 Detecting the log4shell vulnerability was easier on an application running with log level "`DEBUG`" than one running on "`INFO`".
 
+![Risk aware applications](/images/Risk-aware-applications.png)
 ## Roadmap
 Here is an example of a roadmap to introduce application-aware logging:
 1. Harmonise the log format across the application.
