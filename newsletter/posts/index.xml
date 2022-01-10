@@ -65,16 +65,6 @@ Whats noticeable about the new issue of Phrack is that a majority of the article
     
     <item>
       <title></title>
-      <link>https://www.jerkeby.se/newsletter/posts/attacker-aware-applications/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.jerkeby.se/newsletter/posts/attacker-aware-applications/</guid>
-      <description>title: &amp;ldquo;Risk-aware applications&amp;rdquo; date: &amp;ldquo;2022-01-07&amp;rdquo; draft: true Last year ended in a rush to patch the Log4j vulnerability. Most organisations lack controls to prevent or even detect exploitation of log4shell and similar vulnerabilities. That meant overtime, blocking productivity and costly delays. Once the dust settled, I started looking at options for reducing the cost in similar events.looking at options for reducing the cost in similar events.
-We want to increase detection capacity.</description>
-    </item>
-    
-    <item>
-      <title></title>
       <link>https://www.jerkeby.se/newsletter/posts/risk-aware-applications/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
