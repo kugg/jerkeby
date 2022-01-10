@@ -159,7 +159,7 @@ Detecting the log4shell vulnerability was easier on an application running with 
 ## Roadmap
 Here is an example of a roadmap to introduce application-aware logging:
 1. Harmonise the log format across the application.
-2. Add rudimentary detection query in `logging/SIEM` service (Splunk/ELK).
+2. Add rudimentary detection query in `logging`/`SIEM` service (`Splunk`/`ELK`).
 3. Introduce application risk awareness into the threat model.
 4. Add common generic detection points for new features.
 5. Add feature specific detections for mature developers.
