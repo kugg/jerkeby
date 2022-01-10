@@ -40,7 +40,7 @@ The pattern:
 Each application is too small to make its own risk decisions in a microservice architecture. Therefore, a centralised function called a `Risk API` trigger actions and a `SIEM` solution trigger alerts.
 
 ## Generic risks
-The [Owasp Application Sensor](https://owasp.org/www-project-appsensor/) framework presents a few generic detection points and actions for web applications. 
+The [OWASP Application Sensor](https://owasp.org/www-project-appsensor/) framework presents a few generic detection points and actions for web applications. 
 
 ### The detection point
 In the OWASP [detection points](https://owasp.org/www-project-appsensor/#div-detection_points) list, we find a few categories of simple risk behaviours.
@@ -170,7 +170,7 @@ Here is an example of a roadmap to introduce application-aware logging:
 For this issue, I want to thank Lars Gråmark and Alexander Mohlin for discussing application logging potentials.
 
 ## Considerations
-While writing this post, I struggled with distinguishing between `Risk API` and `SIEM`. The `Risk API` solution works like a detection and response solution (`MDR`). One example of a `Risk API` product is [catle.io](https://www.castle.io). Taking active action requires using a `Risk API` while detecting fault requires a `SIEM`.
+While writing this post, I struggled with distinguishing between `Risk API` and `SIEM`. The `Risk API` solution works like a detection and response solution (`MDR`). One example of a `Risk API` product is [castle.io](https://www.castle.io). Taking active action requires using a `Risk API` while detecting fault requires a `SIEM`.
 
 ## Future work
 Investigate how to use [tracing](https://opentracing.io) and application profiling to speed up the investigation phase.
