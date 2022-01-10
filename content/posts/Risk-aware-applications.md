@@ -124,8 +124,6 @@ Here is an example format:
 ```
 Security Operation Center staff work with clear Indicators of Compromise. The SoC tend to focus on platform security indicators based on the [mitre attack framework](https://attack.mitre.org/) because these indicators are clear cut and have a low degree of false positives. The `Indicators of Compromise` (`IoC`) produced by the risk-aware applications must also be mature and well qualified to be accepted into the `SOC`.
 
-![Risk aware applications](/images/Risk-aware-applications.png)
-
 ### Risk Queries
 Queries are search terms used to create events. The queries search the log output for patterns that have `IoC`. There are two types of queries, `production queries` and `investigation queries`. 
 
