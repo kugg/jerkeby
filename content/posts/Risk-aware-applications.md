@@ -97,7 +97,7 @@ Platform exceptions to look out for:
 - Database errors
   - The database reports a syntax error in a query. Syntax errors in the database log indicate that a user has altered a database query (`SQL injection`).
 
-Essentially we are trying to catch very unexpected errors and use these as indicators of compromise (IoC).
+Essentially we are trying to catch very unexpected errors and use these as `Indicators of Compromise` (`IoC`).
 
 ## Manual Actions
 Some actions will require manual intervention. Such events must contain qualifying information for intervention to be helpful. In this `graduation`, the event exception handler must meet the criteria defined by the `Security Operation Center` (`SOC`).
@@ -122,10 +122,10 @@ Here is an example format:
    "EventOwner": String
 }
 ```
-Security Operation Center staff work with clear Indicators of Compromise. The SoC tend to focus on platform security indicators based on the [mitre attack framework](https://attack.mitre.org/) because these indicators are clear cut and have a low degree of false positives. The `Indicators of Compromise` (IoC) produced by the risk-aware applications must also be mature and well qualified to be accepted into the SoC.
+Security Operation Center staff work with clear Indicators of Compromise. The SoC tend to focus on platform security indicators based on the [mitre attack framework](https://attack.mitre.org/) because these indicators are clear cut and have a low degree of false positives. The `Indicators of Compromise` (`IoC`) produced by the risk-aware applications must also be mature and well qualified to be accepted into the `SOC`.
 
 ### Risk Queries
-Queries are search terms used to create events. The queries search the log output for patterns that have IoC. There are two types of queries, `production queries` and `investigation queries`. 
+Queries are search terms used to create events. The queries search the log output for patterns that have `IoC`. There are two types of queries, `production queries` and `investigation queries`. 
 
 #### Production queries
 A production query must be graduated using the qualification process. 
