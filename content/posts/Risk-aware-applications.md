@@ -4,7 +4,7 @@ date: "2022-01-10"
 draft: false
 ---
 Last year ended in a rush to patch the Log4j vulnerability.
-Most organisations lack controls to prevent or even detect exploitation of log4shell and similar vulnerabilities. That meant overtime, blocking productivity and costly delays. Once the dust settled, I started looking at options for reducing the cost in similar events.looking at options for reducing the cost in similar events.
+Most organisations lack controls to prevent or even detect exploitation of log4shell and similar vulnerabilities. That meant overtime, blocking productivity and costly delays. Once the dust settled, I started looking at options for reducing the cost in similar events.
 
 We want to increase detection capacity. Educate developers on the consequences of typical risks. We want to lower the investigation time so that security engineers can focus on coordination instead of fact-finding. We want the solution to be portable so that we don't depend on environment-specific detections and controls.
 

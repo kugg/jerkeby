@@ -13,8 +13,8 @@
       <pubDate>Mon, 10 Jan 2022 00:00:00 +0000</pubDate>
       
       <guid>https://www.jerkeby.se/newsletter/posts/risk-aware-applications/</guid>
-      <description>Last year ended in a rush to patch the Log4j vulnerability. Most organisations lack controls to prevent or even detect exploitation of log4shell and similar vulnerabilities. That meant overtime, blocking productivity and costly delays. Once the dust settled, I started looking at options for reducing the cost in similar events.looking at options for reducing the cost in similar events.
-We want to increase detection capacity. Educate developers on the consequences of typical risks.</description>
+      <description>Last year ended in a rush to patch the Log4j vulnerability. Most organisations lack controls to prevent or even detect exploitation of log4shell and similar vulnerabilities. That meant overtime, blocking productivity and costly delays. Once the dust settled, I started looking at options for reducing the cost in similar events.
+We want to increase detection capacity. Educate developers on the consequences of typical risks. We want to lower the investigation time so that security engineers can focus on coordination instead of fact-finding.</description>
     </item>
     
     <item>
