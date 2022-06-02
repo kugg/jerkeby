@@ -1,0 +1,27 @@
+baseURL = "https://www.jerkeby.se/newsletter"
+languageCode = "en-us"
+title = "Newsletter"
+theme = "paper"
+author = "Kugg"
+
+[params]
+ twitter = 'kuggofficial'
+ github = 'kugg'
+ dateFormat = "02 Jan 2006"
+
+[menu]
+  [[menu.main]]
+    identifier = "Home"
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "contact"
+    name = "Contact"
+    url = "/contact/"
+    weight = 2
+  [[menu.main]]
+    identifier = "signup"
+    name = "Sign Up"
+    url = "https://jerkeby.us5.list-manage.com/subscribe?u=ddd7ae486331199e51e491d97&id=0d2493f44c"
+    weight = 3
