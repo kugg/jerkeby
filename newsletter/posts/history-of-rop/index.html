@@ -60,7 +60,7 @@
   <link rel="apple-touch-icon" href="https://www.jerkeby.se/newsletter/apple-touch-icon.png" />
 
   
-  <meta name="generator" content="Hugo 0.91.2" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   
@@ -98,11 +98,11 @@
 </head>
 
 
-  <body class="not-ready" data-menu="false">
+  <body class="not-ready" data-menu="true">
     <header class="header">
   
   <p class="logo">
-  <a class="site-name" href="https://www.jerkeby.se/newsletter">Newsletter</a>&nbsp;&nbsp;&nbsp;<a href="https://jerkeby.us5.list-manage.com/subscribe?u=ddd7ae486331199e51e491d97&id=0d2493f44c" class="site-name">Sign Up</a><a class="btn-dark"></a>
+  <a class="site-name" href="https://www.jerkeby.se/newsletter">Newsletter</a><a class="btn-dark"></a>
   </p>
   
 
@@ -125,6 +125,16 @@
   </script>
 
   
+  
+  <nav class="menu">
+    
+    <a class="" href="/newsletter/">Home</a>
+    
+    <a class="" href="/newsletter/contact/">Contact</a>
+    
+    <a class="" href="https://jerkeby.us5.list-manage.com/subscribe?u=ddd7ae486331199e51e491d97&amp;id=0d2493f44c">Sign Up</a>
+    
+  </nav>
   
 
   
@@ -194,7 +204,7 @@ degree of freedom.  The attacks have to accurately compute
 the location of stack positions and code addresses so
 the attack is definitely a lot harder than the cookie-cutter
 stack overflows that you see today, but its still
-``just a simple matter of coding''.
+``just a simple matter of coding&#39;&#39;.
 ...
 </code></pre><h2 id="the-rop-chain">The ROP chain</h2>
 <p>In late 2001 a Phrack article by Nergal (<a href="http://phrack.org/issues/58/4.html">http://phrack.org/issues/58/4.html</a>) dealt with recent mitigations and the fully featured ROP attack is born. This time the Solar Designer idea of &ldquo;return to libc&rdquo; had been refined with a chain of calls to various libraries. This is the birth of the ROP chain, which is the actual topic of this article.</p>
@@ -246,8 +256,8 @@ Understanding and using these options drastically improves security in C program
 -arch x86_64
   Compile for 64-bit to take max advantage of address space (important for ASLR; more virtual address space to chose from when randomising layout).
 -fstack-protector-all -Wstack-protector --param ssp-buffer-size=4
-  Your choice of &quot;-fstack-protector&quot; does not protect all functions (see comments). You need -fstack-protector-all to guarantee guards are applied to all functions, although this will likely incur a performance penalty. Consider -fstack-protector-strong as a middle ground.
-  The -Wstack-protector flag here gives warnings for any functions that aren't going to get protected.
+  Your choice of &#34;-fstack-protector&#34; does not protect all functions (see comments). You need -fstack-protector-all to guarantee guards are applied to all functions, although this will likely incur a performance penalty. Consider -fstack-protector-strong as a middle ground.
+  The -Wstack-protector flag here gives warnings for any functions that aren&#39;t going to get protected.
 -pie -fPIE
   Position independent executable this is an enable for ASLR memory mapping by the kernel
 -ftrapv
@@ -255,7 +265,7 @@ Understanding and using these options drastically improves security in C program
 -D_FORTIFY_SOURCE=2 ­O2
   Buffer overflow checks. See also difference between =2 and =1
 ­-Wl,-z,relro,-z,now
-  RELRO (read-only relocation). The options relro &amp; now specified together are known as &quot;Full RELRO&quot;. You can specify &quot;Partial RELRO&quot; by omitting the now flag. RELRO marks various ELF memory sections read­only (E.g. the GOT)
+  RELRO (read-only relocation). The options relro &amp; now specified together are known as &#34;Full RELRO&#34;. You can specify &#34;Partial RELRO&#34; by omitting the now flag. RELRO marks various ELF memory sections read­only (E.g. the GOT)
 -Wl,dynamicbase
   Tell linker to use ASLR protection
 -Wl,nxcompat

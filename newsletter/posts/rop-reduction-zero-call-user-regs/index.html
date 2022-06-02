@@ -61,7 +61,7 @@ Understanding the risks When I find memory corruption vulnerabilities during pen
   <link rel="apple-touch-icon" href="https://www.jerkeby.se/newsletter/apple-touch-icon.png" />
 
   
-  <meta name="generator" content="Hugo 0.91.2" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   
@@ -102,11 +102,11 @@ Understanding the risks When I find memory corruption vulnerabilities during pen
 </head>
 
 
-  <body class="not-ready" data-menu="false">
+  <body class="not-ready" data-menu="true">
     <header class="header">
   
   <p class="logo">
-  <a class="site-name" href="https://www.jerkeby.se/newsletter">Newsletter</a>&nbsp;&nbsp;&nbsp;<a href="https://jerkeby.us5.list-manage.com/subscribe?u=ddd7ae486331199e51e491d97&id=0d2493f44c" class="site-name">Sign Up</a><a class="btn-dark"></a>
+  <a class="site-name" href="https://www.jerkeby.se/newsletter">Newsletter</a><a class="btn-dark"></a>
   </p>
   
 
@@ -129,6 +129,16 @@ Understanding the risks When I find memory corruption vulnerabilities during pen
   </script>
 
   
+  
+  <nav class="menu">
+    
+    <a class="" href="/newsletter/">Home</a>
+    
+    <a class="" href="/newsletter/contact/">Contact</a>
+    
+    <a class="" href="https://jerkeby.us5.list-manage.com/subscribe?u=ddd7ae486331199e51e491d97&amp;id=0d2493f44c">Sign Up</a>
+    
+  </nav>
   
 
   
@@ -206,7 +216,6 @@ be interpreted as a series of valid instructions with high probability [3]. Thus
 easy to find not just unintended words but entire unintended sequences of words. For a sequence
 to be potentially useful in our attacks, it need only end in a return instruction, represented by the
 byte c3
-
 </code></pre><h2 id="background-on-register-zeroing">Background on register zeroing</h2>
 <p>In 2018 Graham Markall suggested the idea of doing stack and registry erasure prior to exit during <a href="https://gcc.gnu.org/wiki/cauldron2018#secure">GNU Tools Cauldron 2018</a>
 The suggestion is connected to a few challenges: <code>Stack and register erasure. Ensuring that on return from a function, no data is left lying on the stack or in registers. Particular challenges are in dealing with inlining, shrink wrapping and caching.</code></p>
@@ -252,11 +261,11 @@ Qing Zhao writes a rationale for the overall design on the <a href="https://gcc.
 <p>As Graham Markall feared back in 2018 there might also be problems with <a href="https://gcc.gnu.org/onlinedocs/gcc-7.1.0/gccint/Shrink-wrapping-separate-components.html">&ldquo;shrink wrapping&rdquo;</a> when zeroing &ldquo;all registers&rdquo;. This is <a href="https://gcc.gnu.org/pipermail/gcc-patches/2020-August/551448.html">addressed by making all zeroing based on only call-used registers</a>.</p>
 <h3 id="definition-of-call-used">Definition of call-used</h3>
 <p>We now know, that this patch only zeroes <code>call-used</code> registers. Let&rsquo;s find out what the definition of a <code>call-used</code> register is.</p>
-<pre tabindex="0"><code>    A &quot;call-used&quot; register is a register whose contents can be changed
+<pre tabindex="0"><code>    A &#34;call-used&#34; register is a register whose contents can be changed
      by a function call; therefore, a caller cannot assume that the
      register has the same contents on return from the function as it
      had before calling the function.  Such registers are also called
-     &quot;call-clobbered&quot;, &quot;caller-saved&quot;, or &quot;volatile&quot;.
+     &#34;call-clobbered&#34;, &#34;caller-saved&#34;, or &#34;volatile&#34;.
 </code></pre><p>So <code>call used</code> does not mean that the register is used in the call, it means that the register &ldquo;can&rdquo; be used in the call.
 The term <code>used</code> however means that the register is actually used in the function.</p>
 <h3 id="all-the-options">All the options</h3>
@@ -268,23 +277,23 @@ The <a href="https://www.mail-archive.com/gcc-patches@gcc.gnu.org/msg247451.html
 
      The three basic values of CHOICE are:
 
-        * 'skip' doesn't zero any call-used registers.
+        * &#39;skip&#39; doesn&#39;t zero any call-used registers.
 
-        * 'used' only zeros call-used registers that are used in the
-          function.  A &quot;used&quot; register is one whose content has been set
+        * &#39;used&#39; only zeros call-used registers that are used in the
+          function.  A &#34;used&#34; register is one whose content has been set
           or referenced in the function.
 
-        * 'all' zeros all call-used registers.
+        * &#39;all&#39; zeros all call-used registers.
 
      In addition to these three basic choices, it is possible to modify
-     'used' or 'all' as follows:
+     &#39;used&#39; or &#39;all&#39; as follows:
 
-        * Adding '-gpr' restricts the zeroing to general-purpose
+        * Adding &#39;-gpr&#39; restricts the zeroing to general-purpose
           registers.
 
-        * Adding '-arg' restricts the zeroing to registers that can
+        * Adding &#39;-arg&#39; restricts the zeroing to registers that can
           sometimes be used to pass function arguments.  This includes
-          all argument registers defined by the platform's calling
+          all argument registers defined by the platform&#39;s calling
           conversion, regardless of whether the function uses those
           registers for function arguments or not.
 
@@ -293,31 +302,31 @@ The <a href="https://www.mail-archive.com/gcc-patches@gcc.gnu.org/msg247451.html
 
      The full list of CHOICEs is therefore:
 
-        * 'skip' doesn't zero any call-used register.
+        * &#39;skip&#39; doesn&#39;t zero any call-used register.
 
-        * 'used' only zeros call-used registers that are used in the
+        * &#39;used&#39; only zeros call-used registers that are used in the
           function.
 
-        * 'all' zeros all call-used registers.
+        * &#39;all&#39; zeros all call-used registers.
 
-        * 'used-arg' only zeros used call-used registers that pass
+        * &#39;used-arg&#39; only zeros used call-used registers that pass
           arguments.
 
-        * 'used-gpr' only zeros used call-used general purpose
+        * &#39;used-gpr&#39; only zeros used call-used general purpose
           registers.
 
-        * 'used-gpr-arg' only zeros used call-used general purpose
+        * &#39;used-gpr-arg&#39; only zeros used call-used general purpose
           registers that pass arguments.
 
-        * 'all-gpr-arg' zeros all call-used general purpose registers
+        * &#39;all-gpr-arg&#39; zeros all call-used general purpose registers
           that pass arguments.
 
-        * 'all-arg' zeros all call-used registers that pass arguments.
+        * &#39;all-arg&#39; zeros all call-used registers that pass arguments.
 
-        * 'all-gpr' zeros all call-used general purpose registers.
+        * &#39;all-gpr&#39; zeros all call-used general purpose registers.
 
-     Among this list, 'used-gpr-arg', 'used-arg', 'all-gpr-arg', and
-     'all-arg' are mainly used for ROP mitigation.
+     Among this list, &#39;used-gpr-arg&#39;, &#39;used-arg&#39;, &#39;all-gpr-arg&#39;, and
+     &#39;all-arg&#39; are mainly used for ROP mitigation.
 </code></pre><p>The feature options that have <code>used</code> in the name does something clever. After initial compilation the option reads every function backwards from return and looks where a register has ended upon the right hand side of an instruction (Example: <code>mov 0, eax</code> have <a href="http://zvon.org/comp/r/ref-Jargon_file.html#Terms~clobber">clobbered</a> eax so it will need zeroing.). It lists all the &ldquo;used registers&rdquo; and adds them in the end for zeroing. &ldquo;GPR&rdquo; stands for general purpose registers and by choosing to only zero them the risk of causing damage to the program is reduced.</p>
 <p>From <code>gcc/function.c</code>:</p>
 <pre tabindex="0"><code>/*
@@ -325,7 +334,7 @@ The <a href="https://www.mail-archive.com/gcc-patches@gcc.gnu.org/msg247451.html
  * general-purpose registers; if only_used is true, only zero
  * call-used registers that are used in the current function;
  * if only_arg is true, only zero call-used registers that pass
- * parameters defined by the flatform's calling conversion.
+ * parameters defined by the flatform&#39;s calling conversion.
  */
 </code></pre><p>The options called &ldquo;all&rdquo; does not distinguish if the register is used in the function. This argument could turn out to be interesting for experimentation as all-gpr can reduce information leakage. For now this option is unlikely to be used.
 To be clear, even if you compile you program with <code>all</code> the non-volatile registers will not be touched by this feature.</p>
@@ -341,7 +350,7 @@ To be clear, even if you compile you program with <code>all</code> the non-volat
   │ contents are less likely to be available for side channels                                                                                                                                         │  
   │ and information exposures. Additionally, this helps reduce the                                                                                                                                     │  
   │ number of useful ROP gadgets by about 20% (and removes compiler                                                                                                                                    │  
-  │ generated &quot;write-what-where&quot; gadgets) in the resulting kernel                                                                                                                                      │  
+  │ generated &#34;write-what-where&#34; gadgets) in the resulting kernel                                                                                                                                      │  
   │ image. This has a less than 1% performance impact on most                                                                                                                                          │  
   │ workloads. Image size growth depends on architecture, and should                                                                                                                                   │  
   │ be evaluated for suitability. For example, x86_64 grows by less                                                                                                                                    │  

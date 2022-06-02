@@ -61,7 +61,7 @@ We want to increase detection capacity. Educate developers on the consequences o
   <link rel="apple-touch-icon" href="https://www.jerkeby.se/newsletter/apple-touch-icon.png" />
 
   
-  <meta name="generator" content="Hugo 0.91.2" />
+  <meta name="generator" content="Hugo 0.96.0" />
 
   
   
@@ -102,11 +102,11 @@ We want to increase detection capacity. Educate developers on the consequences o
 </head>
 
 
-  <body class="not-ready" data-menu="false">
+  <body class="not-ready" data-menu="true">
     <header class="header">
   
   <p class="logo">
-  <a class="site-name" href="https://www.jerkeby.se/newsletter">Newsletter</a>&nbsp;&nbsp;&nbsp;<a href="https://jerkeby.us5.list-manage.com/subscribe?u=ddd7ae486331199e51e491d97&id=0d2493f44c" class="site-name">Sign Up</a><a class="btn-dark"></a>
+  <a class="site-name" href="https://www.jerkeby.se/newsletter">Newsletter</a><a class="btn-dark"></a>
   </p>
   
 
@@ -129,6 +129,16 @@ We want to increase detection capacity. Educate developers on the consequences o
   </script>
 
   
+  
+  <nav class="menu">
+    
+    <a class="" href="/newsletter/">Home</a>
+    
+    <a class="" href="/newsletter/contact/">Contact</a>
+    
+    <a class="" href="https://jerkeby.us5.list-manage.com/subscribe?u=ddd7ae486331199e51e491d97&amp;id=0d2493f44c">Sign Up</a>
+    
+  </nav>
   
 
   
@@ -286,19 +296,19 @@ If an attacker can execute arbitrary code or use existing functionality to extra
 <p>The graduation criteria are a clearly defined list of information points the <code>SOC</code> staff requires to take action.</p>
 <p>Here is an example format:</p>
 <pre tabindex="0"><code>{
-   &quot;EventId&quot;: String,
-   &quot;EventName&quot;: String,
-   &quot;EventType&quot;: String,
-   &quot;EventTime&quot;: Int,
-   &quot;RiskScore&quot;: Int,
-   &quot;RiskProbability&quot;: Int,
-   &quot;Breach&quot;: Bool,
-   &quot;Request&quot;: String,
-   &quot;ChildEvent&quot;: String,
-   &quot;Description&quot;: String,
-   &quot;Action&quot;: String,
-   &quot;Instruction&quot;: String,
-   &quot;EventOwner&quot;: String
+   &#34;EventId&#34;: String,
+   &#34;EventName&#34;: String,
+   &#34;EventType&#34;: String,
+   &#34;EventTime&#34;: Int,
+   &#34;RiskScore&#34;: Int,
+   &#34;RiskProbability&#34;: Int,
+   &#34;Breach&#34;: Bool,
+   &#34;Request&#34;: String,
+   &#34;ChildEvent&#34;: String,
+   &#34;Description&#34;: String,
+   &#34;Action&#34;: String,
+   &#34;Instruction&#34;: String,
+   &#34;EventOwner&#34;: String
 }
 </code></pre><p>Security Operation Center staff work with clear Indicators of Compromise. The SoC tend to focus on platform security indicators based on the <a href="https://attack.mitre.org/">mitre attack framework</a> because these indicators are clear cut and have a low degree of false positives. The <code>Indicators of Compromise</code> (<code>IoC</code>) produced by the risk-aware applications must also be mature and well qualified to be accepted into the <code>SOC</code>.</p>
 <h3 id="risk-queries">Risk Queries</h3>
