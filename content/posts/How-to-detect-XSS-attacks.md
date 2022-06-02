@@ -21,9 +21,14 @@ A successindicator is an indicator that a security violation has already occured
 #### Confidence level
 
 ### Cookie use from multiple IP addresses and/or agents
+The source IP address of a HTTP request does not nessecarily correspond to one client. Multiple users can use one ipaddress. This is why we refer to User-Agent and IP-Address combination.
+The User-Agent header is defined by the browser and descibes the browser environment and version.
 #### Descrption
+Collecting client identifiers helps investigations but may also be a success indicator.
 #### Indication
+If one cookie is used by multiple IP-Address/UA combinations it may indicate that a cookie has been extracted by an attecker from a victims browser.
 #### Detection point
+
 #### Confidence level
 
 ### Unexpected `Content-Type`
