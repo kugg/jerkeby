@@ -25,10 +25,8 @@
 
   
   
-  <meta name="description" content="Prototype poisoning, it&rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members.
-Example Server code:
-let input = JSON.parse(req.body); Request:
-POST / HTTP/2 Host: example.com Content-Type: application/JSON Content-Length: 45 { &#34;value&#34;: 1, &#34;__proto__&#34;: { &#34;toString&#34;: null } } The attacker overwrites the prototype members of the req." />
+  <meta name="description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
+Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON." />
   <meta name="author" content="" />
   
 
@@ -78,10 +76,8 @@ POST / HTTP/2 Host: example.com Content-Type: application/JSON Content-Length: 4
   
   
   <meta property="og:title" content="This is prototype poisoning" />
-<meta property="og:description" content="Prototype poisoning, it&rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members.
-Example Server code:
-let input = JSON.parse(req.body); Request:
-POST / HTTP/2 Host: example.com Content-Type: application/JSON Content-Length: 45 { &#34;value&#34;: 1, &#34;__proto__&#34;: { &#34;toString&#34;: null } } The attacker overwrites the prototype members of the req." />
+<meta property="og:description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
+Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/prototype-poisoning/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-08-06T00:00:00+00:00" />
@@ -90,20 +86,16 @@ POST / HTTP/2 Host: example.com Content-Type: application/JSON Content-Length: 4
 
   
   <meta itemprop="name" content="This is prototype poisoning">
-<meta itemprop="description" content="Prototype poisoning, it&rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members.
-Example Server code:
-let input = JSON.parse(req.body); Request:
-POST / HTTP/2 Host: example.com Content-Type: application/JSON Content-Length: 45 { &#34;value&#34;: 1, &#34;__proto__&#34;: { &#34;toString&#34;: null } } The attacker overwrites the prototype members of the req."><meta itemprop="datePublished" content="2022-08-06T00:00:00+00:00" />
+<meta itemprop="description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
+Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON."><meta itemprop="datePublished" content="2022-08-06T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-08-06T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1230">
+<meta itemprop="wordCount" content="1256">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="This is prototype poisoning"/>
-<meta name="twitter:description" content="Prototype poisoning, it&rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members.
-Example Server code:
-let input = JSON.parse(req.body); Request:
-POST / HTTP/2 Host: example.com Content-Type: application/JSON Content-Length: 45 { &#34;value&#34;: 1, &#34;__proto__&#34;: { &#34;toString&#34;: null } } The attacker overwrites the prototype members of the req."/>
+<meta name="twitter:description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
+Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON."/>
 
   
   
@@ -181,9 +173,9 @@ POST / HTTP/2 Host: example.com Content-Type: application/JSON Content-Length: 4
     </p>
     <h1>This is prototype poisoning</h1>
   </header>
-  <section class="post-content"><h1 id="prototype-poisoning-its-everywhere">Prototype poisoning, it&rsquo;s everywhere</h1>
-<p>Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment.
-Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;<code>__proto__</code>&rdquo; key in structured input. The value of the &ldquo;<code>__proto__</code>&rdquo; key overwrites the prototype of the destination object and its members.</p>
+  <section class="post-content"><p>Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.</p>
+<p>Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;<code>__proto__</code>&rdquo; key in structured input. The value of the &ldquo;<code>__proto__</code>&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON.
+<img src="/images/Prototype-Poisoning.png" alt="Prototype Poisoning"></p>
 <h2 id="example">Example</h2>
 <p>Server code:</p>
 <pre tabindex="0"><code>let input = JSON.parse(req.body);
@@ -191,7 +183,7 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
 <pre tabindex="0"><code>POST / HTTP/2
 Host: example.com
 Content-Type: application/JSON
-Content-Length: 45
+Content-Length: 42
 
 {
     &#34;value&#34;: 1,
@@ -199,7 +191,7 @@ Content-Length: 45
         &#34;toString&#34;: null
     }
 }
-</code></pre><p>The attacker overwrites the prototype members of the <code>req.body</code> object. The pollution occurs when the request body is parsed and assigned to an object without sanitizing the &ldquo;<code>__proto__</code>&rdquo; key.</p>
+</code></pre><p>The attacker overwrites the prototype members of the <code>input</code> object using the <code>&quot;__proto__&quot;</code> value from req.body. The pollution occurs when the request body is parsed and assigned to an object without sanitizing the &ldquo;<code>__proto__</code>&rdquo; key.</p>
 <p>The <code>toString</code> function is no longer a function. Instead, <code>toString</code> is a variable with the value <code>null</code>.</p>
 <h2 id="impact">Impact</h2>
 <p>To interact with an object, the consumer use member functions and variables. The object prototype is a list of member functions and variables added to the object if the same member name isn&rsquo;t already present.</p>
