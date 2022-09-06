@@ -1,5 +1,5 @@
 ---
-title: "This is prototype poisoning"
+title: "What is prototype poisoning? Prototype mutation bugs explained"
 date: "2022-08-06"
 draft: true
 authors:

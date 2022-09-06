@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="140.76022mm"
+   height="254.82124mm"
+   viewBox="0 0 140.76022 254.82124"
+   version="1.1"
+   id="svg2050"
+   sodipodi:docname="Prototype-Poisoning_white.svg"
+   inkscape:export-filename="/home/user/devel/jerkebyweb/new/jerkeby/images/Prototype-Poisoning_white.png"
+   inkscape:export-xdpi="96.686234"
+   inkscape:export-ydpi="96.686234"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <defs
+     id="defs2045" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="301.47826"
+     inkscape:cy="428.23541"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:window-width="3696"
+     inkscape:window-height="2032"
+     inkscape:window-x="144"
+     inkscape:window-y="54"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2050" />
+  <metadata
+     id="metadata2048">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     sodipodi:nodetypes="scsssscss"
+     inkscape:connector-curvature="0"
+     id="path819"
+     d="m 49.857407,10.592296 v 37.967001 c 0,0 -44.0197158,21.067639 -44.0197158,41.818729 0,46.632004 0.158263,104.407884 0.158263,131.920184 0,42.99721 128.9916158,42.99721 128.9916158,0 0,-38.51724 0.15826,-85.28818 0.15826,-131.920184 0,-20.75109 -44.019723,-41.818729 -44.019723,-41.818729 V 10.592296 c 0,-13.7562303 -41.2687,-13.7562303 -41.2687,0 z"
+     style="fill:#020202;fill-opacity:1;stroke:#000000;stroke-width:0.55024636px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  <path
+     id="path833"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:30.57616043px;line-height:1.25;font-family:Loma;-inkscape-font-specification:Loma;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.58970904"
+     d="M 49.633696,182.74695 66.865895,159.27391 51.713992,137.7259 h 7.141279 l 11.643373,17.01485 12.481689,-17.01485 h 7.14128 l -15.99024,21.54801 17.232199,23.47304 h -7.14128 L 70.498644,163.71391 56.774976,182.74695 Z"
+     inkscape:connector-curvature="0" />
+  <path
+     style="fill:none;stroke:#ffffff;stroke-width:5.50246382;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 3.2446112,106.74649 c 0,0 2.751239,10.87958 67.1300658,10.87958 64.929103,0 67.130063,-10.87958 67.130063,-10.87958"
+     id="path827"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="csc" />
+  <path
+     sodipodi:nodetypes="csc"
+     inkscape:connector-curvature="0"
+     id="path831"
+     d="m 2.7154442,187.08251 c 0,0 3.280406,20.12837 67.6592328,20.12837 64.929103,0 67.659233,-20.12837 67.659233,-20.12837"
+     style="fill:none;stroke:#ffffff;stroke-width:5.50253963;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+</svg>
