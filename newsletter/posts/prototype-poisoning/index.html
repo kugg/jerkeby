@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html lang="en-us">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  
+  <title>Prototype poisoning, it&#39;s everywhere - Newsletter</title>
+
+  
+  
+  <meta name="description" content="Prototype poisoning, it&rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members.
+Example The now patched qs input library used by body-parser for parsing HTTP messages in Express." />
+  <meta name="author" content="" />
+  
+
+  
+  
+  
+  
+  
+  
+  <link rel="preload stylesheet" as="style" href="https://www.jerkeby.se/newsletter/app.min.css" />
+
+  
+  <link rel="preload stylesheet" as="style" href="https://www.jerkeby.se/newsletter/an-old-hope.min.css" />
+  <script
+    defer
+    src="https://www.jerkeby.se/newsletter/highlight.min.js"
+    onload="hljs.initHighlightingOnLoad();"
+  ></script>
+  
+
+  
+  <link rel="preload" as="image" href="https://www.jerkeby.se/newsletter/theme.png" />
+
+  
+  <link rel="preload" as="image" href="https://www.jerkeby.se/newsletter/twitter.svg" />
+  
+  <link rel="preload" as="image" href="https://www.jerkeby.se/newsletter/github.svg" />
+  
+
+  
+  <link rel="icon" href="https://www.jerkeby.se/newsletter/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://www.jerkeby.se/newsletter/apple-touch-icon.png" />
+
+  
+  <meta name="generator" content="Hugo 0.102.3" />
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="Prototype poisoning, it&#39;s everywhere" />
+<meta property="og:description" content="Prototype poisoning, it&rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members.
+Example The now patched qs input library used by body-parser for parsing HTTP messages in Express." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/prototype-poisoning/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-08-06T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-08-06T00:00:00+00:00" />
+
+
+  
+  <meta itemprop="name" content="Prototype poisoning, it&#39;s everywhere">
+<meta itemprop="description" content="Prototype poisoning, it&rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members.
+Example The now patched qs input library used by body-parser for parsing HTTP messages in Express."><meta itemprop="datePublished" content="2022-08-06T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-08-06T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1228">
+<meta itemprop="keywords" content="" />
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Prototype poisoning, it&#39;s everywhere"/>
+<meta name="twitter:description" content="Prototype poisoning, it&rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members.
+Example The now patched qs input library used by body-parser for parsing HTTP messages in Express."/>
+
+  
+  
+</head>
+
+
+  <body class="not-ready" data-menu="true">
+    <header class="header">
+  
+  <p class="logo">
+  <a class="site-name" href="https://www.jerkeby.se/newsletter">Newsletter</a><a class="btn-dark"></a>
+  </p>
+  
+
+  <script>
+    let bodyClx = document.body.classList;
+    let btnDark = document.querySelector('.btn-dark');
+    let sysDark = window.matchMedia('(prefers-color-scheme: dark)');
+    let darkVal = localStorage.getItem('dark');
+
+    let setDark = (isDark) => {
+      bodyClx[isDark ? 'add' : 'remove']('dark');
+      localStorage.setItem('dark', isDark ? 'yes' : 'no');
+    };
+
+    setDark(darkVal ? darkVal === 'yes' : sysDark.matches);
+    requestAnimationFrame(() => bodyClx.remove('not-ready'));
+
+    btnDark.addEventListener('click', () => setDark(!bodyClx.contains('dark')));
+    sysDark.addEventListener('change', (event) => setDark(event.matches));
+  </script>
+
+  
+  
+  <nav class="menu">
+    
+    <a class="" href="/newsletter/">Home</a>
+    
+    <a class="" href="/newsletter/contact/">Contact</a>
+    
+    <a class="" href="https://jerkeby.us5.list-manage.com/subscribe?u=ddd7ae486331199e51e491d97&amp;id=0d2493f44c">Sign Up</a>
+    
+  </nav>
+  
+
+  
+  <nav class="social">
+    
+    <a
+      class="twitter"
+      style="--url: url(./twitter.svg)"
+      href="https://twitter.com/kuggofficial"
+      target="_blank"
+    ></a>
+    
+    <a
+      class="github"
+      style="--url: url(./github.svg)"
+      href="https://github.com/kugg"
+      target="_blank"
+    ></a>
+    
+  </nav>
+  
+</header>
+
+
+    <main class="main">
+
+<article class="post-single">
+  <header class="post-title">
+    <p>
+      <time>Aug 6, 2022</time>
+      
+    </p>
+    <h1>Prototype poisoning, it&#39;s everywhere</h1>
+  </header>
+  <section class="post-content"><h1 id="prototype-poisoning-its-everywhere">Prototype poisoning, it&rsquo;s everywhere</h1>
+<p>Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment.
+Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;<code>__proto__</code>&rdquo; key in structured input. The value of the &ldquo;<code>__proto__</code>&rdquo; key overwrites the prototype of the destination object and its members.</p>
+<h2 id="example">Example</h2>
+<p>The <a href="https://github.com/ljharb/qs/pull/428">now patched</a> qs input library used by <a href="https://github.com/expressjs/body-parser/releases/tag/1.19.2">body-parser</a> for parsing HTTP messages in Express.</p>
+<p>Server code:</p>
+<pre tabindex="0"><code>let input = JSON.parse(req.body);
+</code></pre><p>Request:</p>
+<pre tabindex="0"><code>POST / HTTP/2
+Host: example.com
+Content-Type: application/JSON
+Content-Length: 45
+
+{
+    &#34;value&#34;: 1,
+    &#34;__proto__&#34;: {
+        &#34;toString&#34;: null
+    }
+}
+</code></pre><p>The attacker overwrites the prototype members of the <code>req.body</code> object. The pollution occurs when the request body is parsed and assigned to an object without sanitizing the &ldquo;<code>__proto__</code>&rdquo; key.</p>
+<p>The <code>toString</code> function is no longer a function. Instead, <code>toString</code> is a variable with the value <code>null</code>.</p>
+<h2 id="impact">Impact</h2>
+<p>To interact with an object, the consumer use member functions and variables. The object prototype is a list of member functions and variables added to the object if the same member name isn&rsquo;t already present.</p>
+<p>Running <code>req.body.toString()</code> results in a <code>TypeError</code>. The server will respond to the request with a <code>500 Internal Error message</code>.</p>
+<p>Using the prototype poisoning technique, the attacker has replaced that function with <code>null</code>, causing a <code>TypeError</code>.
+The application never logs the value of the <code>req.body</code>.</p>
+<p>The typical attack avenues for this bug class are:</p>
+<ul>
+<li>Adding implicitly called functions with executable code. Function overwriting may be possible if the input format supports it. <code>JSON</code> does not support function bodies as a data type.</li>
+<li>Remote Code Execution, through code evaluation, when any prototype value is consumed by an <code>eval()</code> statement.</li>
+<li>Property injection by appending member variables such as &ldquo;<code>debug: true</code>&rdquo; can cause drastic alterations in application flow.</li>
+<li>Appending member values used as arguments to third-party libraries causes changes in application behaviour.</li>
+<li>Overwrite prototype members to bypass input validation schemas.</li>
+</ul>
+<h2 id="identifiction">Identifiction</h2>
+<p>This section covers guidance on how to get started with building prototype poisoning detections.
+The static code analysis (SAST) approach uses a code scanning tool such as SemGrep or CodeQL.
+A more dynamic approach (DAST), by tests the target application inputs with a <code>Prototype Poisoning Polyglot</code>.</p>
+<h3 id="dast-prototype-poisoning-polyglot">DAST (Prototype Poisoning Polyglot)</h3>
+<p>A verification string value must be appended to a structurally valid JSON input containing the expected fields of the target application. The input will get more coverage in the target application with a valid base request.</p>
+<p>Assuming the default input to an application is &ldquo;<code>username</code>&rdquo;, &ldquo;<code>password</code>&rdquo; the base request would look like this.</p>
+<pre tabindex="0"><code>{
+   &#39;username&#39;: &#39;a&#39;,
+   &#39;password&#39;: &#39;b&#39;
+}
+</code></pre><p>The modified discovery structure would be:</p>
+<pre tabindex="0"><code>{
+   &#39;username&#39;: &#39;a&#39;,
+   &#39;password&#39;: &#39;b&#39;,
+   &#39;__proto__&#39;: {
+      &#39;hasOwnProperty&#39;:null,
+      &#39;isPropertyOf&#39;:null,
+      &#39;propertyIsEnumerable&#39;:null,
+      &#39;toLocaleString&#39;:null,
+      &#39;toSource&#39;:null,
+      &#39;toString&#39;:null,
+      &#39;valueOf&#39;:null
+   }
+}
+</code></pre><p>The modified discovery string replaces the most common object prototypes with null. Access to source code can contribute to a more comprehensive list of possible implicit prototype members. The expected outcome of a successful poisoning attack is <code>500 Internal Server Error</code> or a connection Timeout. The application log should have &lsquo;TypeError&rsquo; message.</p>
+<h3 id="sast-codeql-">SAST (CodeQL )</h3>
+<p>A CodeQL query allows researchers to search for a defined behaviour through large codebases. The query to find prototype poisoning vulnerabilities must define a relevant source and sink. The source is a user-controlled input with hierarchical structures, such as an HTTP field containing named arrays, dictionaries or <code>JSON</code>. The sink is a reference to an inherited prototype member.
+The implicit prototype functions inherited from <code>Object</code> are:</p>
+<ul>
+<li>hasOwnProperty()</li>
+<li>isPrototypeOf()</li>
+<li>propertyIsEnumerable()</li>
+<li>toLocaleString()</li>
+<li>toSource()</li>
+<li>toString()</li>
+<li>valueOf()</li>
+</ul>
+<p>There may be other implicit members in the target environment. A well-crafted CodeQL query could first detect all
+implicit prototype members then search for their use.</p>
+<h1 id="prior-art-in-prototype-mutation-poisoning-and-pollution">Prior art in prototype Mutation, Poisoning and Pollution</h1>
+<p>As researchers, we acknowledge that it&rsquo;s difficult to distinguish one security flaw from another. This chapter aims to bring clarity to the related concepts.</p>
+<h2 id="prototype-mutation">Prototype Mutation</h2>
+<p>A prototype mutation is an intended effect of attempting to alter the object&rsquo;s prototype. Performing prototype poisoning and pollution is a form of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf">prototype mutation</a>.</p>
+<h2 id="prototype-pollution-and-poisoning">Prototype pollution and poisoning</h2>
+<p>The term <code>Prototype Poisoning</code> has been used to discuss two types of prototype mutations. In the early days (2018), the two bug classes were reported as prototype pollution and poisoning interchangeably.</p>
+<h3 id="poisoning">Poisoning</h3>
+<p>Prototype poisoning is when an attacker passes a structure containing a &ldquo;<code>__proto__</code>&rdquo; field to cause prototype assignment on <code>Object</code> initialization.</p>
+<p>Prototype poisoning is distinguished from pollution by the limitation that the parent object prototypes are immutable. The attacker can only affect the input object and children that inherit its prototype. Therefore the availability, attack methodology and
+impact are different. Prototype inheritance is an unavoidable JavaScript functionality.</p>
+<h3 id="pollution">Pollution</h3>
+<p>The prototype pollution vulnerability is similar in input but different in impact and effect. A prototype pollution vulnerability
+can affect the parent Object prototype by chaining multiple &ldquo;<code>__proto__.__proto__</code>&rdquo; to affect the <code>dunder object prototype</code>.</p>
+<p>Prototype pollution typically occurs when the attacker can control the name of the array field and its value.</p>
+<pre tabindex="0"><code>variable[NAME] = VALUE
+</code></pre><p>In this example the attacker can control both <code>NAME</code> and <code>VALUE</code> the attacker can choose to set <code>NAME</code> to &ldquo;<code>__proto__</code>&rdquo; or even &ldquo;<code>__proto__.__proto__</code>&rdquo; and <code>VALUE</code> to &ldquo;<code>{'toString': null}</code>&rdquo;. Thus overwriting the prototype or even the parent object prototype with any structure or array of members.</p>
+<p>Prototype pollution occurs in deep merge functions where a local Object merges with a user input Object. Read more <a href="https://github.com/HoLyVieR/prototype-pollution-nsec18/blob/master/paper/JavaScript_prototype_pollution_attack_in_NodeJS.pdf">here</a></p>
+<h3 id="the-early-days-2018">The early days (2018)</h3>
+<p><a href="https://github.com/bengl">Bryan English</a> writes in 2018 about the <a href="https://medium.com/intrinsic-blog/javascript-prototype-poisoning-vulnerabilities-in-the-wild-7bc15347c96">prototype poisoning labeled reports</a> recevied at <a href="https://hackerone.com/nodejs-ecosystem">HackerOne</a> to the <a href="https://github.com/nodejs/security-wg">Node.JS Securety Working Group</a>.
+Bryan describes an attack scenario where the attacker uses a prototype pollution method to append a prototype member called <code>admin:true</code> to all objects during a deep copy. The appended prototype is added to all new Objects created after the pollution, thus altering implicit prototype values in foreign objects.</p>
+<h3 id="issues-in-joi-hapi-and-bourn-2019">Issues in Joi, Hapi and Bourn (2019)</h3>
+<p>Joi is a schema-based input validation framework closely associated with the web framework Hapi.
+<a href="https://github.com/hueniverse">Eran Hammer</a> writes a <a href="https://www.fastify.io/docs/latest/Guides/Prototype-Poisoning/">lengthy article</a> about the devastating effect of prototype poisoning (at assignment initialization) in Joi and Hapi. Eran is, at the time, working with the Hapi community to research and act on a report from the engineering team at <a href="https://www.lob.com/category/engineering">Lob</a>. In the report, Lob engineering showed that they could bypass the schema validation in Joi using a client-supplied &ldquo;<code>__proto__</code>&rdquo; to sneak in values.</p>
+<p>This vulnerability is still at large in Hapi and Joi. The recommended solution is to wrap all incoming input in a &ldquo;safer&rdquo; JSON parser called <a href="https://www.npmjs.com/package/@hapi/bourne">Bourne</a>.</p>
+<p>In a <a href="https://github.com/hapijs/hapi/issues/3916">hapi GitHub issue</a> Eran explains that:</p>
+<blockquote>
+<p>If you use <code>onCredentials</code> or <code>onPostAuth</code> in your code, or if you use the <code>base64json</code> cookie encoding format, review your handling of <code>request.payload</code> and <code>request.state</code> objects to ensure your current (pre-patched) code is not at risk.</p>
+</blockquote>
+<p><a href="https://github.com/hapijs/bourne">Bourne</a>, is a wrapper to filter out &ldquo;<code>__proto__</code>&rdquo; strings from user input to Joi. <a href="https://hapi.dev/#security">Hapi documentation</a> doesn&rsquo;t mention that Bourne filtering is mandatory on all input. This is likely a reason why Bourne adaptation is not the norm.</p>
+<h3 id="the-body-parser-2019">The body-parser (2019)</h3>
+<p><a href="https://github.com/ljharb/qs/pull/428">Body-parser</a> is a popular library used for HTTP field parsing in Express.
+The <code>body-parser</code> library use <code>qs</code> (query string) that <a href="(https://github.com/ljharb/qs/pull/428)">was patched against prototype poisoning</a> in February 2022.</p>
+<p>The Express <a href="https://github.com/expressjs/body-parser/releases/tag/1.19.2">body-parser</a> library has an Open issue from 2019 discussing the issue of <a href="https://github.com/expressjs/body-parser/issues/347">input containing &ldquo;<code>__proto__</code>&rdquo;</a>.</p>
+<h1 id="contact">Contact</h1>
+<p>For media, consulting and guidance contact:</p>
+<p>JavaScript security consulting: Anton Linné, anton at intelsquirrel dot com.
+Application security, change management and detection: Christoffer Jerkeby, christoffer at jerkeby dot se.</p>
+</section>
+
+  
+  
+
+  
+  
+  
+  <nav class="post-nav">
+     
+    <a class="next" href="https://www.jerkeby.se/newsletter/posts/how-to-detect-xss-attacks/"><span>How to detect XSS attacks</span><span>→</span></a>
+    
+  </nav>
+  
+
+  
+  
+</article>
+
+</main>
+
+    <footer class="footer">
+  <p>&copy; 2022 <a href="https://www.jerkeby.se/newsletter">Newsletter</a></p>
+  <p>Powered by <a href="https://gohugo.io/" rel="noopener" target="_blank">Hugo️️</a>️</p>
+  <p>
+    <a href="https://github.com/nanxiaobei/hugo-paper" rel="noopener" target="_blank">Paper 5.1</a>
+  </p>
+</footer>
+
+  </body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html lang="en-us">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  
+  <title>How to detect XSS attacks - Newsletter</title>
+
+  
+  
+  <meta name="description" content="Key indicators for successful XSS attacks are Cookie use from multiple origins, CSP policy violations, . This article explains the typical success and attempt indicators for Cross Site Scripting attacks.
+Indicators of violation make out a risk score. Once a risk score threshold has been breached multiple indicators are presented to the investigator in an alert.
+As a defender of large web services finding live attacks can be difficult. Knowing what to look for means that its possible to build detection for typical Cross Site Scripting attacks." />
+  <meta name="author" content="" />
+  
+
+  
+  
+  
+  
+  
+  
+  <link rel="preload stylesheet" as="style" href="https://www.jerkeby.se/newsletter/app.min.css" />
+
+  
+  <link rel="preload stylesheet" as="style" href="https://www.jerkeby.se/newsletter/an-old-hope.min.css" />
+  <script
+    defer
+    src="https://www.jerkeby.se/newsletter/highlight.min.js"
+    onload="hljs.initHighlightingOnLoad();"
+  ></script>
+  
+
+  
+  <link rel="preload" as="image" href="https://www.jerkeby.se/newsletter/theme.png" />
+
+  
+  <link rel="preload" as="image" href="https://www.jerkeby.se/newsletter/twitter.svg" />
+  
+  <link rel="preload" as="image" href="https://www.jerkeby.se/newsletter/github.svg" />
+  
+
+  
+  <link rel="icon" href="https://www.jerkeby.se/newsletter/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://www.jerkeby.se/newsletter/apple-touch-icon.png" />
+
+  
+  <meta name="generator" content="Hugo 0.102.3" />
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="How to detect XSS attacks" />
+<meta property="og:description" content="Key indicators for successful XSS attacks are Cookie use from multiple origins, CSP policy violations, . This article explains the typical success and attempt indicators for Cross Site Scripting attacks.
+Indicators of violation make out a risk score. Once a risk score threshold has been breached multiple indicators are presented to the investigator in an alert.
+As a defender of large web services finding live attacks can be difficult. Knowing what to look for means that its possible to build detection for typical Cross Site Scripting attacks." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/how-to-detect-xss-attacks/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-06-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-06-02T00:00:00+00:00" />
+
+
+  
+  <meta itemprop="name" content="How to detect XSS attacks">
+<meta itemprop="description" content="Key indicators for successful XSS attacks are Cookie use from multiple origins, CSP policy violations, . This article explains the typical success and attempt indicators for Cross Site Scripting attacks.
+Indicators of violation make out a risk score. Once a risk score threshold has been breached multiple indicators are presented to the investigator in an alert.
+As a defender of large web services finding live attacks can be difficult. Knowing what to look for means that its possible to build detection for typical Cross Site Scripting attacks."><meta itemprop="datePublished" content="2022-06-02T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-06-02T00:00:00+00:00" />
+<meta itemprop="wordCount" content="774">
+<meta itemprop="keywords" content="" />
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="How to detect XSS attacks"/>
+<meta name="twitter:description" content="Key indicators for successful XSS attacks are Cookie use from multiple origins, CSP policy violations, . This article explains the typical success and attempt indicators for Cross Site Scripting attacks.
+Indicators of violation make out a risk score. Once a risk score threshold has been breached multiple indicators are presented to the investigator in an alert.
+As a defender of large web services finding live attacks can be difficult. Knowing what to look for means that its possible to build detection for typical Cross Site Scripting attacks."/>
+
+  
+  
+</head>
+
+
+  <body class="not-ready" data-menu="true">
+    <header class="header">
+  
+  <p class="logo">
+  <a class="site-name" href="https://www.jerkeby.se/newsletter">Newsletter</a><a class="btn-dark"></a>
+  </p>
+  
+
+  <script>
+    let bodyClx = document.body.classList;
+    let btnDark = document.querySelector('.btn-dark');
+    let sysDark = window.matchMedia('(prefers-color-scheme: dark)');
+    let darkVal = localStorage.getItem('dark');
+
+    let setDark = (isDark) => {
+      bodyClx[isDark ? 'add' : 'remove']('dark');
+      localStorage.setItem('dark', isDark ? 'yes' : 'no');
+    };
+
+    setDark(darkVal ? darkVal === 'yes' : sysDark.matches);
+    requestAnimationFrame(() => bodyClx.remove('not-ready'));
+
+    btnDark.addEventListener('click', () => setDark(!bodyClx.contains('dark')));
+    sysDark.addEventListener('change', (event) => setDark(event.matches));
+  </script>
+
+  
+  
+  <nav class="menu">
+    
+    <a class="" href="/newsletter/">Home</a>
+    
+    <a class="" href="/newsletter/contact/">Contact</a>
+    
+    <a class="" href="https://jerkeby.us5.list-manage.com/subscribe?u=ddd7ae486331199e51e491d97&amp;id=0d2493f44c">Sign Up</a>
+    
+  </nav>
+  
+
+  
+  <nav class="social">
+    
+    <a
+      class="twitter"
+      style="--url: url(./twitter.svg)"
+      href="https://twitter.com/kuggofficial"
+      target="_blank"
+    ></a>
+    
+    <a
+      class="github"
+      style="--url: url(./github.svg)"
+      href="https://github.com/kugg"
+      target="_blank"
+    ></a>
+    
+  </nav>
+  
+</header>
+
+
+    <main class="main">
+
+<article class="post-single">
+  <header class="post-title">
+    <p>
+      <time>Jun 2, 2022</time>
+      
+    </p>
+    <h1>How to detect XSS attacks</h1>
+  </header>
+  <section class="post-content"><p>Key indicators for successful XSS attacks are Cookie use from multiple origins, CSP policy violations, .
+This article explains the typical success and attempt indicators for Cross Site Scripting attacks.</p>
+<p>Indicators of violation make out a risk score.
+Once a risk score threshold has been breached multiple indicators are presented to the investigator in an alert.</p>
+<p>As a defender of large web services finding live attacks can be difficult. Knowing what to look for means that its possible to build detection for typical Cross Site Scripting attacks.</p>
+<h2 id="success-indicators">Success indicators:</h2>
+<p>A successindicator is an indicator that a security violation has already occured.</p>
+<h3 id="csp-policy-violation">CSP policy violation</h3>
+<h4 id="descrption">Descrption</h4>
+<h4 id="indication">Indication</h4>
+<h4 id="detection-point">Detection point</h4>
+<h4 id="confidence-level">Confidence level</h4>
+<h3 id="cookie-use-from-multiple-ip-addresses-andor-agents">Cookie use from multiple IP addresses and/or agents</h3>
+<p>The source IP address of a HTTP request does not nessecarily correspond to one client. Multiple users can use one ipaddress. This is why we refer to User-Agent and IP-Address combination.
+The User-Agent header is defined by the browser and descibes the browser environment and version.</p>
+<h4 id="descrption-1">Descrption</h4>
+<p>Collecting client identifiers helps investigations but may also be a success indicator.</p>
+<h4 id="indication-1">Indication</h4>
+<p>If one cookie is used by multiple IP-Address/UA combinations it may indicate that a cookie has been extracted by an attecker from a victims browser.</p>
+<h4 id="detection-point-1">Detection point</h4>
+<h4 id="confidence-level-1">Confidence level</h4>
+<h3 id="unexpected-content-type">Unexpected <code>Content-Type</code></h3>
+<h4 id="descrption-2">Descrption</h4>
+<h4 id="indication-2">Indication</h4>
+<h4 id="detection-point-2">Detection point</h4>
+<h4 id="confidence-level-2">Confidence level</h4>
+<h3 id="unexpected-accept-headers">Unexpected <code>Accept</code> headers</h3>
+<h4 id="descrption-3">Descrption</h4>
+<p>The accept header indicate to the server what type of response format the client expects. Following links leads to an open ended Accept header that is use dto request any file format.
+Loading Images, Videos, CSS, JavaScript or XML using specified tags generate a specific Acceppt header for expected format.</p>
+<h4 id="indication-3">Indication</h4>
+<p>An application component receives an accept header that indicate that the client expects an image when it attempts to send a Search query.
+This is an indication that the client was tricked to load the resource as part of an <code>&lt;IMG&gt;</code>.
+This method is typically used to automate an XSS attack to avoid user interraction with the victim.</p>
+<h4 id="detection-point-3">Detection point</h4>
+<p>The detection point is an application component that is filetype aware. It must know what the resource format it provides and compare it to the Accept header.</p>
+<h4 id="confidence-level-3">Confidence level</h4>
+<p>The confidence level for this indicator is Moderate to High.
+There may be false possitives in ambigous endpoints such as <code>/download?filename=</code>.</p>
+<h3 id="unexpected-dom-changes">Unexpected DOM changes</h3>
+<h4 id="descrption-4">Descrption</h4>
+<h4 id="indication-4">Indication</h4>
+<h4 id="detection-point-4">Detection point</h4>
+<p>Sentry.io shows a DOM for the given user that contains methods that was not originally in the server loaded DOM</p>
+<h4 id="confidence-level-4">Confidence level</h4>
+<h3 id="the-user-journey-is-erratic">The user journey is erratic</h3>
+<h4 id="descrption-5">Descrption</h4>
+<p>The user journey is the order or requests ro reach a specific state. Frameworks like castle.io provide monitoring of user journeys.
+An interrupted or erratic journey is one where the client unexpectedly make a request to an endpoint that hsouldnt be available to user from its current view.</p>
+<h4 id="indication-5">Indication</h4>
+<p>The erratic user behaviour may be an indicator that the victim browser is now acting on behalf of the attacker.</p>
+<h4 id="detection-point-5">Detection point</h4>
+<p>Catle.io and Sentry.io both provide information about the client context and the user journey.</p>
+<h4 id="confidence-level-5">Confidence level</h4>
+<p>Low</p>
+<h2 id="attempt-indicators">Attempt indicators</h2>
+<p>An attempt indicator has a lower risk score than a success indicator but are instrumental in finding the offending XSS request.</p>
+<h3 id="request-contains-javascript">Request contains JavaScript</h3>
+<h4 id="descrption-6">Descrption</h4>
+<p>An input validation detects that the input does not follow expected syntactic format.</p>
+<h4 id="indication-6">Indication</h4>
+<h4 id="detection-point-6">Detection point</h4>
+<h4 id="confidence-level-6">Confidence level</h4>
+<h3 id="request-is-triggered-from-external-origin">Request is triggered from external origin</h3>
+<h4 id="descrption-7">Descrption</h4>
+<p>The Orgin header is an HTTP header that cannot be altered by the client. The header indicates from which protocol, domain and port the request originated.
+An application may keep track of its own origin and verify the origin header of a request to ensure that it originated from a controlled location.</p>
+<h4 id="indication-7">Indication</h4>
+<p>An unexpected <code>origin</code> header indicate that the request was sent from another domain. The external domain may be allowed but not reasonable for the destination.</p>
+<h4 id="detection-point-7">Detection point</h4>
+<p>If a cross origin policy is not in place, the attempt is detected by a check of the <code>Origin</code> header on a POST request.</p>
+<h4 id="confidence-level-7">Confidence level</h4>
+<p>A HTTP POST request was made from an unexpected external origin indicate an attempted XSS with moderate confidence.</p>
+<h3 id="the-request-contains-encoded-input">The request contains encoded input</h3>
+<h4 id="description">Description</h4>
+<p>The user controlled input in the request contains a characterset that is typically used by one specific encoding format.</p>
+<h4 id="indication-8">Indication</h4>
+<p>The attacker use encoding or doubleencoding to mask the XSS attack intent from its victim.</p>
+<h4 id="detection-point-8">Detection point</h4>
+<p>Detected by a syntactic input validator or exception thrown by application while parsing a format.</p>
+<h4 id="confidence-level-8">Confidence level</h4>
+<p>User input may contain URL and Base64 encoded input for multiple reasons.
+If the encoding of the request violate the expected input data type or syntax there is a Low confidence level of attempted XSS.</p>
+</section>
+
+  
+  
+
+  
+  
+  
+  <nav class="post-nav">
+    
+    <a class="prev" href="https://www.jerkeby.se/newsletter/posts/prototype-poisoning/"><span>←</span><span>Prototype poisoning, it&#39;s everywhere</span></a>
+     
+    <a class="next" href="https://www.jerkeby.se/newsletter/posts/risk-aware-applications/"><span>Risk-aware applications</span><span>→</span></a>
+    
+  </nav>
+  
+
+  
+  
+</article>
+
+</main>
+
+    <footer class="footer">
+  <p>&copy; 2022 <a href="https://www.jerkeby.se/newsletter">Newsletter</a></p>
+  <p>Powered by <a href="https://gohugo.io/" rel="noopener" target="_blank">Hugo️️</a>️</p>
+  <p>
+    <a href="https://github.com/nanxiaobei/hugo-paper" rel="noopener" target="_blank">Paper 5.1</a>
+  </p>
+</footer>
+
+  </body>
+</html>

@@ -8,11 +8,17 @@ authors:
 ---
 # Prototype poisoning, it's everywhere
 Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment.
-It's a JavaScript feature that can be exploited by an attacker using a "`__proto__`" key in structured input. The value of the "`__proto__`" key overwrites the prototype of the destination object and its members.
+Prototype mutation is a JavaScript feature that can be exploited by an attacker using a "`__proto__`" key in structured input. The value of the "`__proto__`" key overwrites the prototype of the destination object and its members.
 
 ## Example
 The [now patched](https://github.com/ljharb/qs/pull/428) qs input library used by [body-parser](https://github.com/expressjs/body-parser/releases/tag/1.19.2) for parsing HTTP messages in Express.
 
+Server code:
+```
+let input = JSON.parse(req.body);
+```
+
+Request:
 ```
 POST / HTTP/2
 Host: example.com
@@ -27,7 +33,9 @@ Content-Length: 45
 }
 ```
 
-The attacker overwrites the prototype members of the `req.body` object.
+The attacker overwrites the prototype members of the `req.body` object. The pollution occurs when the request body is parsed and assigned to an object without sanitizing the "`__proto__`" key.
+
+
 The `toString` function is no longer a function. Instead, `toString` is a variable with the value `null`.
 
 ## Impact
@@ -46,10 +54,10 @@ The typical attack avenues for this bug class are:
 * Appending member values used as arguments to third-party libraries causes changes in application behaviour.
 * Overwrite prototype members to bypass input validation schemas.
 
-## Detection
+## Identifiction
 This section covers guidance on how to get started with building prototype poisoning detections.
 The static code analysis (SAST) approach uses a code scanning tool such as SemGrep or CodeQL.
-A more dynamic approach using application testing with a `Prototype Poisoning Polyglot` would not require access to source code.
+A more dynamic approach (DAST), by tests the target application inputs with a `Prototype Poisoning Polyglot`.
 
 ### DAST (Prototype Poisoning Polyglot)
 A verification string value must be appended to a structurally valid JSON input containing the expected fields of the target application. The input will get more coverage in the target application with a valid base request.
@@ -140,12 +148,17 @@ This vulnerability is still at large in Hapi and Joi. The recommended solution i
 In a [hapi GitHub issue](https://github.com/hapijs/hapi/issues/3916) Eran explains that:
 > If you use `onCredentials` or `onPostAuth` in your code, or if you use the `base64json` cookie encoding format, review your handling of `request.payload` and `request.state` objects to ensure your current (pre-patched) code is not at risk.
 
-[Hapi documentation](https://hapi.dev/#security) doesn't mention that Bourne filtering is mandatory on all input. This is likely a reason why Bourne adaptation is not the norm.
-
-[Bourne](https://github.com/hapijs/bourne), is a wrapper to filter out "`__proto__`" strings from user input to Joi.
+[Bourne](https://github.com/hapijs/bourne), is a wrapper to filter out "`__proto__`" strings from user input to Joi. [Hapi documentation](https://hapi.dev/#security) doesn't mention that Bourne filtering is mandatory on all input. This is likely a reason why Bourne adaptation is not the norm.
 
 ### The body-parser (2019)
 [Body-parser](https://github.com/ljharb/qs/pull/428) is a popular library used for HTTP field parsing in Express.
 The `body-parser` library use `qs` (query string) that [was patched against prototype poisoning]((https://github.com/ljharb/qs/pull/428)) in February 2022.
 
-The Express body-parser library has an Open issue from 2019 discussing the issue of [input containing "`__proto__`"](https://github.com/expressjs/body-parser/issues/347).
+The Express [body-parser](https://github.com/expressjs/body-parser/releases/tag/1.19.2) library has an Open issue from 2019 discussing the issue of [input containing "`__proto__`"](https://github.com/expressjs/body-parser/issues/347).
+
+# Contact
+
+For media, consulting and guidance contact:
+
+JavaScript security consulting: Anton Linné, anton at intelsquirrel dot com.
+Application security, change management and detection: Christoffer Jerkeby, christoffer at jerkeby dot se.

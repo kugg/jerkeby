@@ -6,7 +6,28 @@
     <description>Recent content in Posts on Newsletter</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 10 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://www.jerkeby.se/newsletter/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 06 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://www.jerkeby.se/newsletter/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Prototype poisoning, it&#39;s everywhere</title>
+      <link>https://www.jerkeby.se/newsletter/posts/prototype-poisoning/</link>
+      <pubDate>Sat, 06 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.jerkeby.se/newsletter/posts/prototype-poisoning/</guid>
+      <description>Prototype poisoning, it&amp;rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &amp;ldquo;__proto__&amp;rdquo; key in structured input. The value of the &amp;ldquo;__proto__&amp;rdquo; key overwrites the prototype of the destination object and its members.
+Example The now patched qs input library used by body-parser for parsing HTTP messages in Express.</description>
+    </item>
+    
+    <item>
+      <title>How to detect XSS attacks</title>
+      <link>https://www.jerkeby.se/newsletter/posts/how-to-detect-xss-attacks/</link>
+      <pubDate>Thu, 02 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.jerkeby.se/newsletter/posts/how-to-detect-xss-attacks/</guid>
+      <description>Key indicators for successful XSS attacks are Cookie use from multiple origins, CSP policy violations, . This article explains the typical success and attempt indicators for Cross Site Scripting attacks.
+Indicators of violation make out a risk score. Once a risk score threshold has been breached multiple indicators are presented to the investigator in an alert.
+As a defender of large web services finding live attacks can be difficult. Knowing what to look for means that its possible to build detection for typical Cross Site Scripting attacks.</description>
+    </item>
+    
     <item>
       <title>Risk-aware applications</title>
       <link>https://www.jerkeby.se/newsletter/posts/risk-aware-applications/</link>
@@ -42,7 +63,7 @@ Understanding the risks When I find memory corruption vulnerabilities during pen
       <pubDate>Mon, 18 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>https://www.jerkeby.se/newsletter/posts/capturing-robots-with-kvicksand/</guid>
-      <description>Last year I was doing a series ofwebinars on software fuzzing. Me andPasi from F-Secure compared methods where we tried two different techniques for fuzzing HTTP clients. Fuzzing is essentially a brute-force method for finding bugs in software. You try various inputs and see what happens. My method was based on running each fuzzer engine in a Docker instance, using a local network and a shared file system for coordination between instances.</description>
+      <description>Last year I was doing a series of webinars on software fuzzing. Me and Pasi from F-Secure compared methods where we tried two different techniques for fuzzing HTTP clients. Fuzzing is essentially a brute-force method for finding bugs in software. You try various inputs and see what happens. My method was based on running each fuzzer engine in a Docker instance, using a local network and a shared file system for coordination between instances.</description>
     </item>
     
     <item>
