@@ -21,12 +21,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
   
-  <title>Prototype poisoning, it&#39;s everywhere - Newsletter</title>
+  <title>This is prototype poisoning - Newsletter</title>
 
   
   
   <meta name="description" content="Prototype poisoning, it&rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members.
-Example The now patched qs input library used by body-parser for parsing HTTP messages in Express." />
+Example Server code:
+let input = JSON.parse(req.body); Request:
+POST / HTTP/2 Host: example.com Content-Type: application/JSON Content-Length: 45 { &#34;value&#34;: 1, &#34;__proto__&#34;: { &#34;toString&#34;: null } } The attacker overwrites the prototype members of the req." />
   <meta name="author" content="" />
   
 
@@ -75,9 +77,11 @@ Example The now patched qs input library used by body-parser for parsing HTTP me
   
   
   
-  <meta property="og:title" content="Prototype poisoning, it&#39;s everywhere" />
+  <meta property="og:title" content="This is prototype poisoning" />
 <meta property="og:description" content="Prototype poisoning, it&rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members.
-Example The now patched qs input library used by body-parser for parsing HTTP messages in Express." />
+Example Server code:
+let input = JSON.parse(req.body); Request:
+POST / HTTP/2 Host: example.com Content-Type: application/JSON Content-Length: 45 { &#34;value&#34;: 1, &#34;__proto__&#34;: { &#34;toString&#34;: null } } The attacker overwrites the prototype members of the req." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/prototype-poisoning/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-08-06T00:00:00+00:00" />
@@ -85,17 +89,21 @@ Example The now patched qs input library used by body-parser for parsing HTTP me
 
 
   
-  <meta itemprop="name" content="Prototype poisoning, it&#39;s everywhere">
+  <meta itemprop="name" content="This is prototype poisoning">
 <meta itemprop="description" content="Prototype poisoning, it&rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members.
-Example The now patched qs input library used by body-parser for parsing HTTP messages in Express."><meta itemprop="datePublished" content="2022-08-06T00:00:00+00:00" />
+Example Server code:
+let input = JSON.parse(req.body); Request:
+POST / HTTP/2 Host: example.com Content-Type: application/JSON Content-Length: 45 { &#34;value&#34;: 1, &#34;__proto__&#34;: { &#34;toString&#34;: null } } The attacker overwrites the prototype members of the req."><meta itemprop="datePublished" content="2022-08-06T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-08-06T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1228">
+<meta itemprop="wordCount" content="1230">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Prototype poisoning, it&#39;s everywhere"/>
+<meta name="twitter:title" content="This is prototype poisoning"/>
 <meta name="twitter:description" content="Prototype poisoning, it&rsquo;s everywhere Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment. Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members.
-Example The now patched qs input library used by body-parser for parsing HTTP messages in Express."/>
+Example Server code:
+let input = JSON.parse(req.body); Request:
+POST / HTTP/2 Host: example.com Content-Type: application/JSON Content-Length: 45 { &#34;value&#34;: 1, &#34;__proto__&#34;: { &#34;toString&#34;: null } } The attacker overwrites the prototype members of the req."/>
 
   
   
@@ -171,13 +179,12 @@ Example The now patched qs input library used by body-parser for parsing HTTP me
       <time>Aug 6, 2022</time>
       
     </p>
-    <h1>Prototype poisoning, it&#39;s everywhere</h1>
+    <h1>This is prototype poisoning</h1>
   </header>
   <section class="post-content"><h1 id="prototype-poisoning-its-everywhere">Prototype poisoning, it&rsquo;s everywhere</h1>
 <p>Prototype poisoning happens when an object inherits a prototype from a parent object at the assignment.
 Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;<code>__proto__</code>&rdquo; key in structured input. The value of the &ldquo;<code>__proto__</code>&rdquo; key overwrites the prototype of the destination object and its members.</p>
 <h2 id="example">Example</h2>
-<p>The <a href="https://github.com/ljharb/qs/pull/428">now patched</a> qs input library used by <a href="https://github.com/expressjs/body-parser/releases/tag/1.19.2">body-parser</a> for parsing HTTP messages in Express.</p>
 <p>Server code:</p>
 <pre tabindex="0"><code>let input = JSON.parse(req.body);
 </code></pre><p>Request:</p>
@@ -212,7 +219,7 @@ The application never logs the value of the <code>req.body</code>.</p>
 The static code analysis (SAST) approach uses a code scanning tool such as SemGrep or CodeQL.
 A more dynamic approach (DAST), by tests the target application inputs with a <code>Prototype Poisoning Polyglot</code>.</p>
 <h3 id="dast-prototype-poisoning-polyglot">DAST (Prototype Poisoning Polyglot)</h3>
-<p>A verification string value must be appended to a structurally valid JSON input containing the expected fields of the target application. The input will get more coverage in the target application with a valid base request.</p>
+<p>Appending a custom prototype to all JSON objects can be a useful method to detect prototype poisoning. A &ldquo;<code>__proto__</code>&rdquo; string value must be appended to a structurally valid JSON input containing the expected fields of the target application. The input will get more coverage in the target application with a valid base request.</p>
 <p>Assuming the default input to an application is &ldquo;<code>username</code>&rdquo;, &ldquo;<code>password</code>&rdquo; the base request would look like this.</p>
 <pre tabindex="0"><code>{
    &#39;username&#39;: &#39;a&#39;,

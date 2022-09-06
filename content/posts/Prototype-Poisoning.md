@@ -1,5 +1,5 @@
 ---
-title: "Prototype poisoning, it's everywhere"
+title: "This is prototype poisoning"
 date: "2022-08-06"
 draft: true
 authors:
@@ -11,8 +11,6 @@ Prototype poisoning happens when an object inherits a prototype from a parent ob
 Prototype mutation is a JavaScript feature that can be exploited by an attacker using a "`__proto__`" key in structured input. The value of the "`__proto__`" key overwrites the prototype of the destination object and its members.
 
 ## Example
-The [now patched](https://github.com/ljharb/qs/pull/428) qs input library used by [body-parser](https://github.com/expressjs/body-parser/releases/tag/1.19.2) for parsing HTTP messages in Express.
-
 Server code:
 ```
 let input = JSON.parse(req.body);
@@ -60,7 +58,7 @@ The static code analysis (SAST) approach uses a code scanning tool such as SemGr
 A more dynamic approach (DAST), by tests the target application inputs with a `Prototype Poisoning Polyglot`.
 
 ### DAST (Prototype Poisoning Polyglot)
-A verification string value must be appended to a structurally valid JSON input containing the expected fields of the target application. The input will get more coverage in the target application with a valid base request.
+Appending a custom prototype to all JSON objects can be a useful method to detect prototype poisoning. A "`__proto__`" string value must be appended to a structurally valid JSON input containing the expected fields of the target application. The input will get more coverage in the target application with a valid base request.
 
 Assuming the default input to an application is "`username`", "`password`" the base request would look like this.
 
