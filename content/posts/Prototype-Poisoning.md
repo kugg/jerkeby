@@ -54,7 +54,7 @@ The typical attack avenues for this bug class are:
 * Causing Denial of Service by inferring infinite loops (Loop Manipulation).
 * Manipulating global values to cause program flow alteration (Global variable tampering) or Denial of Service.
 
-## Identifiction
+## Identification
 This section covers guidance on how to get started with building prototype poisoning detections.
 The static code analysis ([SAST](https://en.wikipedia.org/wiki/Static_application_security_testing)) approach uses a code scanning tool such as SemGrep or CodeQL.
 A more dynamic approach ([DAST](https://en.wikipedia.org/wiki/Dynamic_application_security_testing)), by tests the target application inputs with a `Prototype Poisoning Polyglot`.
