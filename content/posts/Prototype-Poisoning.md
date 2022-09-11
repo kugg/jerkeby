@@ -56,8 +56,8 @@ The typical attack avenues for this bug class are:
 
 ## Identifiction
 This section covers guidance on how to get started with building prototype poisoning detections.
-The static code analysis (SAST) approach uses a code scanning tool such as SemGrep or CodeQL.
-A more dynamic approach (DAST), by tests the target application inputs with a `Prototype Poisoning Polyglot`.
+The static code analysis ([SAST](https://en.wikipedia.org/wiki/Static_application_security_testing)) approach uses a code scanning tool such as SemGrep or CodeQL.
+A more dynamic approach ([DAST](https://en.wikipedia.org/wiki/Dynamic_application_security_testing)), by tests the target application inputs with a `Prototype Poisoning Polyglot`.
 
 ### DAST Testing (Prototype Poisoning Polyglot)
 Appending a custom prototype to all JSON objects can be a useful method to detect prototype poisoning. A "`__proto__`" string value must be appended to a structurally valid JSON input containing the expected fields of the target application. The input will get more coverage in the target application with a valid base request.
@@ -89,7 +89,10 @@ The modified discovery structure would be:
 }
 ```
 
-The modified discovery string replaces the most common object prototypes with null. Access to source code can contribute to a more comprehensive list of possible implicit prototype members. The expected outcome of a successful poisoning attack is `500 Internal Server Error` or a connection Timeout. The application log should have 'TypeError' message.
+The modified discovery string replaces the most common object prototypes with null. Access to source code can contribute to a more comprehensive list of possible implicit prototype members. The expected outcome of a successful poisoning attack is `500 Internal Server Error` or a connection Timeout. The application log should have `TypeError` message.
+
+For input filtering bypass inspiration see read the [bourne testcases](https://github.com/hapijs/bourne/blob/master/test/index.js).
+For query string format dynamic testing see [qs testcases](https://github.com/ljharb/qs/pull/428/commits/8b4cc14cda94a5c89341b77e5fe435ec6c41be2d#diff-b266c4cbb2cefa3caf90e138f935e3cf489c6655e84c1ca9d0425bb0d9af9cc6).
 
 ### SAST (CodeQL and LYNX)
 A CodeQL query allows researchers to search for a defined behaviour through large codebases. The query to find prototype poisoning vulnerabilities must define a relevant source and sink. The source is a user-controlled input with hierarchical structures, such as an HTTP field containing named arrays, dictionaries or `JSON`. The sink is a reference to an inherited prototype member.
@@ -102,6 +105,9 @@ The implicit prototype functions inherited from `Object` are:
 * toSource()
 * toString()
 * valueOf()
+
+[Jorges](https://twitter.com/jorge_ctf) writeup on [Finding Prototype Pollution with CodeQL](https://jorgectf.github.io/blog/post/finding-prototype-pollution-gadgets-with-codeql/)
+ provides inspiration on how to query JavaScript for prototype mutation.
 
 There may be other implicit members in the target environment. If none of the standard properties are used by the target application a app-specific attribute manipulation approach may be more applicatble.
 
@@ -151,6 +157,7 @@ Joi is a schema-based input validation framework closely associated with the web
 [Eran Hammer](https://github.com/hueniverse) writes a [lengthy article](https://www.fastify.io/docs/latest/Guides/Prototype-Poisoning/) about the devastating effect of prototype poisoning (at assignment initialization) in Joi and Hapi. Eran is, at the time, working with the Hapi community to research and act on a report from the engineering team at [Lob](https://www.lob.com/category/engineering). In the report, Lob engineering showed that they could bypass the schema validation in Joi using a client-supplied "`__proto__`" to sneak in values.
 
 This vulnerability is still at large in Hapi and Joi. The recommended solution is to wrap all incoming input in a "safer" JSON parser called [Bourne](https://www.npmjs.com/package/@hapi/bourne).
+The [test cases provided with bourne](https://github.com/hapijs/bourne/blob/master/test/index.js) demonstrates various methods on how to inject prototypes in JSON, bypassing rudimentary content filtering.
 
 In a [hapi GitHub issue](https://github.com/hapijs/hapi/issues/3916) Eran explains that:
 > If you use `onCredentials` or `onPostAuth` in your code, or if you use the `base64json` cookie encoding format, review your handling of `request.payload` and `request.state` objects to ensure your current (pre-patched) code is not at risk.
@@ -159,7 +166,10 @@ In a [hapi GitHub issue](https://github.com/hapijs/hapi/issues/3916) Eran explai
 
 ### The body-parser (2019)
 [Body-parser](https://github.com/ljharb/qs/pull/428) is a popular library used for HTTP field parsing in Express.
-The `body-parser` library use `qs` (query string) that [was patched against prototype poisoning]((https://github.com/ljharb/qs/pull/428)) in February 2022.
+The `body-parser` library use `qs` (query string) that [was patched against prototype poisoning](https://github.com/ljharb/qs/pull/428) in February 2022.
+The [testcase in the `qs` patch](https://github.com/ljharb/qs/pull/428/commits/8b4cc14cda94a5c89341b77e5fe435ec6c41be2d) demonstrates how to do prototype poisoning in a query string or body.
+
+> `categories[__proto__]=cats&categories[__proto__]=dogs&categories[some][json]=toInject`
 
 The Express [body-parser](https://github.com/expressjs/body-parser/releases/tag/1.19.2) library has an Open issue from 2019 discussing the issue of [input containing "`__proto__`"](https://github.com/expressjs/body-parser/issues/347).
 
