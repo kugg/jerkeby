@@ -89,7 +89,7 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
 <meta itemprop="description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
 Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON."><meta itemprop="datePublished" content="2022-08-06T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-08-06T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1256">
+<meta itemprop="wordCount" content="1451">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/>
@@ -178,7 +178,7 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
 <img src="/images/Prototype-Poisoning.png" alt="Prototype Poisoning"></p>
 <h2 id="example">Example</h2>
 <p>Server code:</p>
-<pre tabindex="0"><code>let input = JSON.parse(req.body);
+<pre tabindex="0"><code>let input = Object.assign({}, JSON.parse(req.body));
 </code></pre><p>Request:</p>
 <pre tabindex="0"><code>POST / HTTP/2
 Host: example.com
@@ -201,16 +201,18 @@ The application never logs the value of the <code>req.body</code>.</p>
 <p>The typical attack avenues for this bug class are:</p>
 <ul>
 <li>Adding implicitly called functions with executable code. Function overwriting may be possible if the input format supports it. <code>JSON</code> does not support function bodies as a data type.</li>
-<li>Remote Code Execution, through code evaluation, when any prototype value is consumed by an <code>eval()</code> statement.</li>
+<li>Remote Code Execution or Command Injection, through code evaluation, when any prototype value is consumed by an <code>eval()</code> or <code>system()</code> statement.</li>
 <li>Property injection by appending member variables such as &ldquo;<code>debug: true</code>&rdquo; can cause drastic alterations in application flow.</li>
-<li>Appending member values used as arguments to third-party libraries causes changes in application behaviour.</li>
+<li>Appending member values used as arguments to third-party libraries causes changes in application behaviour (Argument injection).</li>
 <li>Overwrite prototype members to bypass input validation schemas.</li>
+<li>Causing Denial of Service by inferring infinite loops (Loop Manipulation).</li>
+<li>Manipulating global values to cause program flow alteration (Global variable tampering) or Denial of Service.</li>
 </ul>
 <h2 id="identifiction">Identifiction</h2>
 <p>This section covers guidance on how to get started with building prototype poisoning detections.
 The static code analysis (SAST) approach uses a code scanning tool such as SemGrep or CodeQL.
 A more dynamic approach (DAST), by tests the target application inputs with a <code>Prototype Poisoning Polyglot</code>.</p>
-<h3 id="dast-prototype-poisoning-polyglot">DAST (Prototype Poisoning Polyglot)</h3>
+<h3 id="dast-testing-prototype-poisoning-polyglot">DAST Testing (Prototype Poisoning Polyglot)</h3>
 <p>Appending a custom prototype to all JSON objects can be a useful method to detect prototype poisoning. A &ldquo;<code>__proto__</code>&rdquo; string value must be appended to a structurally valid JSON input containing the expected fields of the target application. The input will get more coverage in the target application with a valid base request.</p>
 <p>Assuming the default input to an application is &ldquo;<code>username</code>&rdquo;, &ldquo;<code>password</code>&rdquo; the base request would look like this.</p>
 <pre tabindex="0"><code>{
@@ -232,7 +234,7 @@ A more dynamic approach (DAST), by tests the target application inputs with a <c
    }
 }
 </code></pre><p>The modified discovery string replaces the most common object prototypes with null. Access to source code can contribute to a more comprehensive list of possible implicit prototype members. The expected outcome of a successful poisoning attack is <code>500 Internal Server Error</code> or a connection Timeout. The application log should have &lsquo;TypeError&rsquo; message.</p>
-<h3 id="sast-codeql-">SAST (CodeQL )</h3>
+<h3 id="sast-codeql-and-lynx">SAST (CodeQL and LYNX)</h3>
 <p>A CodeQL query allows researchers to search for a defined behaviour through large codebases. The query to find prototype poisoning vulnerabilities must define a relevant source and sink. The source is a user-controlled input with hierarchical structures, such as an HTTP field containing named arrays, dictionaries or <code>JSON</code>. The sink is a reference to an inherited prototype member.
 The implicit prototype functions inherited from <code>Object</code> are:</p>
 <ul>
@@ -244,6 +246,8 @@ The implicit prototype functions inherited from <code>Object</code> are:</p>
 <li>toString()</li>
 <li>valueOf()</li>
 </ul>
+<p>There may be other implicit members in the target environment. If none of the standard properties are used by the target application a app-specific attribute manipulation approach may be more applicatble.</p>
+<p>The Hidden Property Abuse scanning tool <a href="https://github.com/xiaofen9/Lynx">LYNX</a> is capable of identifying potentially user controlled property candidatesi in the target application.</p>
 <p>There may be other implicit members in the target environment. A well-crafted CodeQL query could first detect all
 implicit prototype members then search for their use.</p>
 <h1 id="prior-art-in-prototype-mutation-poisoning-and-pollution">Prior art in prototype Mutation, Poisoning and Pollution</h1>
@@ -263,6 +267,9 @@ can affect the parent Object prototype by chaining multiple &ldquo;<code>__proto
 <pre tabindex="0"><code>variable[NAME] = VALUE
 </code></pre><p>In this example the attacker can control both <code>NAME</code> and <code>VALUE</code> the attacker can choose to set <code>NAME</code> to &ldquo;<code>__proto__</code>&rdquo; or even &ldquo;<code>__proto__.__proto__</code>&rdquo; and <code>VALUE</code> to &ldquo;<code>{'toString': null}</code>&rdquo;. Thus overwriting the prototype or even the parent object prototype with any structure or array of members.</p>
 <p>Prototype pollution occurs in deep merge functions where a local Object merges with a user input Object. Read more <a href="https://github.com/HoLyVieR/prototype-pollution-nsec18/blob/master/paper/JavaScript_prototype_pollution_attack_in_NodeJS.pdf">here</a></p>
+<h3 id="hidden-property-abuse-2017">Hidden Property Abuse (2017)</h3>
+<p>A paper on <a href="https://www.usenix.org/system/files/sec21fall-xiao.pdf">hidden propery abuse by Feng Xiao et. al</a> presented at usenix describes how to manipulate add non prototype properties on Objects to alter program flow. The authors created a scanning tool called <a href="https://github.com/xiaofen9/Lynx">LYNX</a> for detecting Hidden Property Abuse (HPA) in JavaScript code. The bug class attack paths are identical to prototype poisoning but the attack vector use various &ldquo;prototype carrying objects&rdquo; instead of prototype pollution.
+While the LYNX scanning tool currently support querystring and JSON input, note that there are many other implicit input formats such as the HTTP header format itself, XML etc that may be input vectors for prototype pollution.</p>
 <h3 id="the-early-days-2018">The early days (2018)</h3>
 <p><a href="https://github.com/bengl">Bryan English</a> writes in 2018 about the <a href="https://medium.com/intrinsic-blog/javascript-prototype-poisoning-vulnerabilities-in-the-wild-7bc15347c96">prototype poisoning labeled reports</a> recevied at <a href="https://hackerone.com/nodejs-ecosystem">HackerOne</a> to the <a href="https://github.com/nodejs/security-wg">Node.JS Securety Working Group</a>.
 Bryan describes an attack scenario where the attacker uses a prototype pollution method to append a prototype member called <code>admin:true</code> to all objects during a deep copy. The appended prototype is added to all new Objects created after the pollution, thus altering implicit prototype values in foreign objects.</p>

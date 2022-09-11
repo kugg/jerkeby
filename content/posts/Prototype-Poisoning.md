@@ -14,7 +14,7 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
 ## Example
 Server code:
 ```
-let input = JSON.parse(req.body);
+let input = Object.assign({}, JSON.parse(req.body));
 ```
 
 Request:
@@ -47,17 +47,19 @@ The application never logs the value of the `req.body`.
 The typical attack avenues for this bug class are:
 
 * Adding implicitly called functions with executable code. Function overwriting may be possible if the input format supports it. `JSON` does not support function bodies as a data type.
-* Remote Code Execution, through code evaluation, when any prototype value is consumed by an `eval()` statement.
+* Remote Code Execution or Command Injection, through code evaluation, when any prototype value is consumed by an `eval()` or `system()` statement.
 * Property injection by appending member variables such as "`debug: true`" can cause drastic alterations in application flow.
-* Appending member values used as arguments to third-party libraries causes changes in application behaviour.
+* Appending member values used as arguments to third-party libraries causes changes in application behaviour (Argument injection). 
 * Overwrite prototype members to bypass input validation schemas.
+* Causing Denial of Service by inferring infinite loops (Loop Manipulation).
+* Manipulating global values to cause program flow alteration (Global variable tampering) or Denial of Service.
 
 ## Identifiction
 This section covers guidance on how to get started with building prototype poisoning detections.
 The static code analysis (SAST) approach uses a code scanning tool such as SemGrep or CodeQL.
 A more dynamic approach (DAST), by tests the target application inputs with a `Prototype Poisoning Polyglot`.
 
-### DAST (Prototype Poisoning Polyglot)
+### DAST Testing (Prototype Poisoning Polyglot)
 Appending a custom prototype to all JSON objects can be a useful method to detect prototype poisoning. A "`__proto__`" string value must be appended to a structurally valid JSON input containing the expected fields of the target application. The input will get more coverage in the target application with a valid base request.
 
 Assuming the default input to an application is "`username`", "`password`" the base request would look like this.
@@ -89,7 +91,7 @@ The modified discovery structure would be:
 
 The modified discovery string replaces the most common object prototypes with null. Access to source code can contribute to a more comprehensive list of possible implicit prototype members. The expected outcome of a successful poisoning attack is `500 Internal Server Error` or a connection Timeout. The application log should have 'TypeError' message.
 
-### SAST (CodeQL )
+### SAST (CodeQL and LYNX)
 A CodeQL query allows researchers to search for a defined behaviour through large codebases. The query to find prototype poisoning vulnerabilities must define a relevant source and sink. The source is a user-controlled input with hierarchical structures, such as an HTTP field containing named arrays, dictionaries or `JSON`. The sink is a reference to an inherited prototype member.
 The implicit prototype functions inherited from `Object` are:
 
@@ -100,6 +102,10 @@ The implicit prototype functions inherited from `Object` are:
 * toSource()
 * toString()
 * valueOf()
+
+There may be other implicit members in the target environment. If none of the standard properties are used by the target application a app-specific attribute manipulation approach may be more applicatble.
+
+The Hidden Property Abuse scanning tool [LYNX](https://github.com/xiaofen9/Lynx) is capable of identifying potentially user controlled property candidatesi in the target application.
 
 There may be other implicit members in the target environment. A well-crafted CodeQL query could first detect all
 implicit prototype members then search for their use.
@@ -132,6 +138,9 @@ variable[NAME] = VALUE
 In this example the attacker can control both `NAME` and `VALUE` the attacker can choose to set `NAME` to "`__proto__`" or even "`__proto__.__proto__`" and `VALUE` to "`{'toString': null}`". Thus overwriting the prototype or even the parent object prototype with any structure or array of members.
 
 Prototype pollution occurs in deep merge functions where a local Object merges with a user input Object. Read more [here](https://github.com/HoLyVieR/prototype-pollution-nsec18/blob/master/paper/JavaScript_prototype_pollution_attack_in_NodeJS.pdf)
+### Hidden Property Abuse (2017)
+A paper on [hidden propery abuse by Feng Xiao et. al](https://www.usenix.org/system/files/sec21fall-xiao.pdf) presented at usenix describes how to manipulate add non prototype properties on Objects to alter program flow. The authors created a scanning tool called [LYNX](https://github.com/xiaofen9/Lynx) for detecting Hidden Property Abuse (HPA) in JavaScript code. The bug class attack paths are identical to prototype poisoning but the attack vector use various "prototype carrying objects" instead of prototype pollution.
+While the LYNX scanning tool currently support querystring and JSON input, note that there are many other implicit input formats such as the HTTP header format itself, XML etc that may be input vectors for prototype pollution.
 
 ### The early days (2018)
 [Bryan English](https://github.com/bengl) writes in 2018 about the [prototype poisoning labeled reports](https://medium.com/intrinsic-blog/javascript-prototype-poisoning-vulnerabilities-in-the-wild-7bc15347c96) recevied at [HackerOne](https://hackerone.com/nodejs-ecosystem) to the [Node.JS Securety Working Group](https://github.com/nodejs/security-wg).
