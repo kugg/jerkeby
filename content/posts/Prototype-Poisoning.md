@@ -113,9 +113,6 @@ There may be other implicit members in the target environment. If none of the st
 
 The Hidden Property Abuse scanning tool [LYNX](https://github.com/xiaofen9/Lynx) is capable of identifying potentially user controlled property candidatesi in the target application.
 
-There may be other implicit members in the target environment. A well-crafted CodeQL query could first detect all
-implicit prototype members then search for their use.
-
 # Prior art in prototype Mutation, Poisoning and Pollution
 As researchers, we acknowledge that it's difficult to distinguish one security flaw from another. This chapter aims to bring clarity to the related concepts.
 

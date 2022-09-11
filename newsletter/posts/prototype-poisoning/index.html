@@ -89,7 +89,7 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
 <meta itemprop="description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
 Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON."><meta itemprop="datePublished" content="2022-08-06T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-08-06T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1527">
+<meta itemprop="wordCount" content="1501">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/>
@@ -252,8 +252,6 @@ The implicit prototype functions inherited from <code>Object</code> are:</p>
 provides inspiration on how to query JavaScript for prototype mutation.</p>
 <p>There may be other implicit members in the target environment. If none of the standard properties are used by the target application a app-specific attribute manipulation approach may be more applicatble.</p>
 <p>The Hidden Property Abuse scanning tool <a href="https://github.com/xiaofen9/Lynx">LYNX</a> is capable of identifying potentially user controlled property candidatesi in the target application.</p>
-<p>There may be other implicit members in the target environment. A well-crafted CodeQL query could first detect all
-implicit prototype members then search for their use.</p>
 <h1 id="prior-art-in-prototype-mutation-poisoning-and-pollution">Prior art in prototype Mutation, Poisoning and Pollution</h1>
 <p>As researchers, we acknowledge that it&rsquo;s difficult to distinguish one security flaw from another. This chapter aims to bring clarity to the related concepts.</p>
 <h2 id="prototype-mutation">Prototype Mutation</h2>
