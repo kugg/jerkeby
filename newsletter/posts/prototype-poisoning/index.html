@@ -89,7 +89,7 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
 <meta itemprop="description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
 Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON."><meta itemprop="datePublished" content="2022-08-06T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-08-06T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1501">
+<meta itemprop="wordCount" content="1793">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/>
@@ -293,6 +293,14 @@ The <a href="https://github.com/ljharb/qs/pull/428/commits/8b4cc14cda94a5c89341b
 <p><code>categories[__proto__]=cats&amp;categories[__proto__]=dogs&amp;categories[some][json]=toInject</code></p>
 </blockquote>
 <p>The Express <a href="https://github.com/expressjs/body-parser/releases/tag/1.19.2">body-parser</a> library has an Open issue from 2019 discussing the issue of <a href="https://github.com/expressjs/body-parser/issues/347">input containing &ldquo;<code>__proto__</code>&rdquo;</a>.</p>
+<h3 id="hidden-property-abuse-2019-2021">Hidden Property Abuse (2019-2021)</h3>
+<p>Last but not least, a paper on <a href="https://www.usenix.org/system/files/sec21fall-xiao.pdf">hidden propery abuse by Feng Xiao et. al USENIX21</a> presented at usenix describes how to manipulate add non prototype properties on Objects to alter program flow. The authors created a scanning tool called <a href="https://github.com/xiaofen9/Lynx">LYNX</a> for detecting Hidden Property Abuse (HPA) in JavaScript code. The bug class attack paths are identical to prototype poisoning but the attack vector use various &ldquo;prototype carrying objects&rdquo; instead of prototype pollution.
+The researchers shows the power of symbolic execution tools by reporting <a href="https://www.usenix.org/system/files/sec21_slides_xiao.pdf">15 different CVE&rsquo;s in the period 2019-2020</a>. For a full <a href="https://i.blackhat.com/USA-20/Wednesday/us-20-Xiao-Discovering-Hidden-Properties-To-Attack-Nodejs-Ecosystem.pdf">CVE reference see page 4 here</a>.
+Fen Xiao, devices two attack paths for HPA, the prototype inheritance hijacking and app-specific attribute manipilation. Prototype inheritance hijacking means to define attributes in user input that mimic prototype names. The attributes are referenced instead of the (unmodified) prototype. The exploit method have lead to SQL injection in <a href="https://jira.mongodb.org/browse/NODE-2514">mongodb</a> and <a href="https://security.snyk.io/vuln/SNYK-JS-TAFFY-546521">taffy</a>.
+The app-specific attribute manipulation technique is a technique where an additional attribute is added that are going to be refered to by the target application directly.
+In this case the <a href="https://github.com/mongo-express/mongo-express/blob/master/lib/routes/document.js#L49">addDocument</a> of <a href="https://github.com/mongo-express/mongo-express/">mongo-express</a> make use of the bson parser to convert <code>req.document</code> in to a bson structure.
+The <code>mongodb-query-parser</code> provides a bson format parser that executes <code>toBSON()</code> if it exists. If the mongo document contains an attribute named <code>toBSON</code> the values can be passed to an <a href="https://github.com/mongodb-js/query-parser/compare/v1.6.0-rc.0...master">MQL query called <code>safer-eval</code></a> which can result in an infinite loop and <a href="https://github.com/mongo-express/mongo-express/commit/58f4cc50b5a93104505dd3bea6b6324e9d56729c">block the event handler</a>. This issue is tracked as <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-6639">CVE-2020-6639</a>.</p>
+<p>While the LYNX symbolic execution tool currently support query string and JSON input, note that there are many other implicit input formats such as the HTTP header format itself, XML etc. that may be input channels for prototype pollution.</p>
 <h1 id="contact">Contact</h1>
 <p>For media, consulting and guidance contact:</p>
 <p>JavaScript security consulting: Anton Linné, anton at intelsquirrel dot com.

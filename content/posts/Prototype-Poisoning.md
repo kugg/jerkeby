@@ -170,6 +170,16 @@ The [testcase in the `qs` patch](https://github.com/ljharb/qs/pull/428/commits/8
 
 The Express [body-parser](https://github.com/expressjs/body-parser/releases/tag/1.19.2) library has an Open issue from 2019 discussing the issue of [input containing "`__proto__`"](https://github.com/expressjs/body-parser/issues/347).
 
+### Hidden Property Abuse (2019-2021)
+Last but not least, a paper on [hidden propery abuse by Feng Xiao et. al USENIX21](https://www.usenix.org/system/files/sec21fall-xiao.pdf) presented at usenix describes how to manipulate add non prototype properties on Objects to alter program flow. The authors created a scanning tool called [LYNX](https://github.com/xiaofen9/Lynx) for detecting Hidden Property Abuse (HPA) in JavaScript code. The bug class attack paths are identical to prototype poisoning but the attack vector use various "prototype carrying objects" instead of prototype pollution.
+The researchers shows the power of symbolic execution tools by reporting [15 different CVE's in the period 2019-2020](https://www.usenix.org/system/files/sec21_slides_xiao.pdf). For a full [CVE reference see page 4 here](https://i.blackhat.com/USA-20/Wednesday/us-20-Xiao-Discovering-Hidden-Properties-To-Attack-Nodejs-Ecosystem.pdf).
+Fen Xiao, devices two attack paths for HPA, the prototype inheritance hijacking and app-specific attribute manipilation. Prototype inheritance hijacking means to define attributes in user input that mimic prototype names. The attributes are referenced instead of the (unmodified) prototype. The exploit method have lead to SQL injection in [mongodb](https://jira.mongodb.org/browse/NODE-2514) and [taffy](https://security.snyk.io/vuln/SNYK-JS-TAFFY-546521).
+The app-specific attribute manipulation technique is a technique where an additional attribute is added that are going to be refered to by the target application directly.
+In this case the [addDocument](https://github.com/mongo-express/mongo-express/blob/master/lib/routes/document.js#L49) of [mongo-express](https://github.com/mongo-express/mongo-express/) make use of the bson parser to convert `req.document` in to a bson structure.
+The `mongodb-query-parser` provides a bson format parser that executes `toBSON()` if it exists. If the mongo document contains an attribute named `toBSON` the values can be passed to an [MQL query called `safer-eval`](https://github.com/mongodb-js/query-parser/compare/v1.6.0-rc.0...master) which can result in an infinite loop and [block the event handler](https://github.com/mongo-express/mongo-express/commit/58f4cc50b5a93104505dd3bea6b6324e9d56729c). This issue is tracked as [CVE-2020-6639](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-6639).
+
+While the LYNX symbolic execution tool currently support query string and JSON input, note that there are many other implicit input formats such as the HTTP header format itself, XML etc. that may be input channels for prototype pollution.
+
 # Contact
 
 For media, consulting and guidance contact:
