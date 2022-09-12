@@ -141,9 +141,6 @@ variable[NAME] = VALUE
 In this example the attacker can control both `NAME` and `VALUE` the attacker can choose to set `NAME` to "`__proto__`" or even "`__proto__.__proto__`" and `VALUE` to "`{'toString': null}`". Thus overwriting the prototype or even the parent object prototype with any structure or array of members.
 
 Prototype pollution occurs in deep merge functions where a local Object merges with a user input Object. Read more [here](https://github.com/HoLyVieR/prototype-pollution-nsec18/blob/master/paper/JavaScript_prototype_pollution_attack_in_NodeJS.pdf)
-### Hidden Property Abuse (2017)
-A paper on [hidden propery abuse by Feng Xiao et. al](https://www.usenix.org/system/files/sec21fall-xiao.pdf) presented at usenix describes how to manipulate add non prototype properties on Objects to alter program flow. The authors created a scanning tool called [LYNX](https://github.com/xiaofen9/Lynx) for detecting Hidden Property Abuse (HPA) in JavaScript code. The bug class attack paths are identical to prototype poisoning but the attack vector use various "prototype carrying objects" instead of prototype pollution.
-While the LYNX scanning tool currently support querystring and JSON input, note that there are many other implicit input formats such as the HTTP header format itself, XML etc that may be input vectors for prototype pollution.
 
 ### The early days (2018)
 [Bryan English](https://github.com/bengl) writes in 2018 about the [prototype poisoning labeled reports](https://medium.com/intrinsic-blog/javascript-prototype-poisoning-vulnerabilities-in-the-wild-7bc15347c96) recevied at [HackerOne](https://hackerone.com/nodejs-ecosystem) to the [Node.JS Securety Working Group](https://github.com/nodejs/security-wg).

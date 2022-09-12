@@ -89,7 +89,7 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
 <meta itemprop="description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
 Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON."><meta itemprop="datePublished" content="2022-08-06T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-08-06T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1793">
+<meta itemprop="wordCount" content="1684">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/>
@@ -269,9 +269,6 @@ can affect the parent Object prototype by chaining multiple &ldquo;<code>__proto
 <pre tabindex="0"><code>variable[NAME] = VALUE
 </code></pre><p>In this example the attacker can control both <code>NAME</code> and <code>VALUE</code> the attacker can choose to set <code>NAME</code> to &ldquo;<code>__proto__</code>&rdquo; or even &ldquo;<code>__proto__.__proto__</code>&rdquo; and <code>VALUE</code> to &ldquo;<code>{'toString': null}</code>&rdquo;. Thus overwriting the prototype or even the parent object prototype with any structure or array of members.</p>
 <p>Prototype pollution occurs in deep merge functions where a local Object merges with a user input Object. Read more <a href="https://github.com/HoLyVieR/prototype-pollution-nsec18/blob/master/paper/JavaScript_prototype_pollution_attack_in_NodeJS.pdf">here</a></p>
-<h3 id="hidden-property-abuse-2017">Hidden Property Abuse (2017)</h3>
-<p>A paper on <a href="https://www.usenix.org/system/files/sec21fall-xiao.pdf">hidden propery abuse by Feng Xiao et. al</a> presented at usenix describes how to manipulate add non prototype properties on Objects to alter program flow. The authors created a scanning tool called <a href="https://github.com/xiaofen9/Lynx">LYNX</a> for detecting Hidden Property Abuse (HPA) in JavaScript code. The bug class attack paths are identical to prototype poisoning but the attack vector use various &ldquo;prototype carrying objects&rdquo; instead of prototype pollution.
-While the LYNX scanning tool currently support querystring and JSON input, note that there are many other implicit input formats such as the HTTP header format itself, XML etc that may be input vectors for prototype pollution.</p>
 <h3 id="the-early-days-2018">The early days (2018)</h3>
 <p><a href="https://github.com/bengl">Bryan English</a> writes in 2018 about the <a href="https://medium.com/intrinsic-blog/javascript-prototype-poisoning-vulnerabilities-in-the-wild-7bc15347c96">prototype poisoning labeled reports</a> recevied at <a href="https://hackerone.com/nodejs-ecosystem">HackerOne</a> to the <a href="https://github.com/nodejs/security-wg">Node.JS Securety Working Group</a>.
 Bryan describes an attack scenario where the attacker uses a prototype pollution method to append a prototype member called <code>admin:true</code> to all objects during a deep copy. The appended prototype is added to all new Objects created after the pollution, thus altering implicit prototype values in foreign objects.</p>
