@@ -80,16 +80,16 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
 Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/prototype-poisoning/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-08-06T00:00:00+00:00" />
-<meta property="article:modified_time" content="2022-08-06T00:00:00+00:00" />
+<meta property="article:published_time" content="2022-09-14T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-09-14T00:00:00+00:00" />
 
 
   
   <meta itemprop="name" content="What is prototype poisoning? Prototype mutation bugs explained">
 <meta itemprop="description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
-Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON."><meta itemprop="datePublished" content="2022-08-06T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-08-06T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1684">
+Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON."><meta itemprop="datePublished" content="2022-09-14T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-09-14T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1671">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/>
@@ -168,7 +168,7 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
 <article class="post-single">
   <header class="post-title">
     <p>
-      <time>Aug 6, 2022</time>
+      <time>Sep 14, 2022</time>
       
     </p>
     <h1>What is prototype poisoning? Prototype mutation bugs explained</h1>
@@ -205,7 +205,7 @@ The application never logs the value of the <code>req.body</code>.</p>
 <li>Property injection by appending member variables such as &ldquo;<code>debug: true</code>&rdquo; can cause drastic alterations in application flow.</li>
 <li>Appending member values used as arguments to third-party libraries causes changes in application behaviour (Argument injection).</li>
 <li>Overwrite prototype members to bypass input validation schemas.</li>
-<li>Causing Denial of Service by inferring infinite loops (Loop Manipulation).</li>
+<li>Causing Denial of Service by inferring infinite loops (Loop Manipulation or recursive calls).</li>
 <li>Manipulating global values to cause program flow alteration (Global variable tampering) or Denial of Service.</li>
 </ul>
 <h2 id="identification">Identification</h2>
@@ -223,17 +223,9 @@ A more dynamic approach (<a href="https://en.wikipedia.org/wiki/Dynamic_applicat
 <pre tabindex="0"><code>{
    &#39;username&#39;: &#39;a&#39;,
    &#39;password&#39;: &#39;b&#39;,
-   &#39;__proto__&#39;: {
-      &#39;hasOwnProperty&#39;:null,
-      &#39;isPropertyOf&#39;:null,
-      &#39;propertyIsEnumerable&#39;:null,
-      &#39;toLocaleString&#39;:null,
-      &#39;toSource&#39;:null,
-      &#39;toString&#39;:null,
-      &#39;valueOf&#39;:null
-   }
+   &#39;__proto__&#39;: null
 }
-</code></pre><p>The modified discovery string replaces the most common object prototypes with null. Access to source code can contribute to a more comprehensive list of possible implicit prototype members. The expected outcome of a successful poisoning attack is <code>500 Internal Server Error</code> or a connection Timeout. The application log should have <code>TypeError</code> message.</p>
+</code></pre><p>The modified discovery string replaces any reference to any protoype attribute with null. Access to source code can contribute to a more comprehensive list of possible implicit prototype members. The expected outcome of a successful poisoning attack is <code>500 Internal Server Error</code> or a connection Timeout. The application log should have <code>TypeError</code> message.</p>
 <p>For input filtering bypass inspiration see read the <a href="https://github.com/hapijs/bourne/blob/master/test/index.js">bourne testcases</a>.
 For query string format dynamic testing see <a href="https://github.com/ljharb/qs/pull/428/commits/8b4cc14cda94a5c89341b77e5fe435ec6c41be2d#diff-b266c4cbb2cefa3caf90e138f935e3cf489c6655e84c1ca9d0425bb0d9af9cc6">qs testcases</a>.</p>
 <h3 id="sast-codeql-and-lynx">SAST (CodeQL and LYNX)</h3>
@@ -264,10 +256,10 @@ provides inspiration on how to query JavaScript for prototype mutation.</p>
 impact are different. Prototype inheritance is an unavoidable JavaScript functionality.</p>
 <h3 id="pollution">Pollution</h3>
 <p>The prototype pollution vulnerability is similar in input but different in impact and effect. A prototype pollution vulnerability
-can affect the parent Object prototype by chaining multiple &ldquo;<code>__proto__.__proto__</code>&rdquo; to affect the <code>dunder object prototype</code>.</p>
+can affect the parent Object prototype by chaining multiple &ldquo;<code>__proto__</code>&rdquo; to affect the <code>parent object prototype</code>.</p>
 <p>Prototype pollution typically occurs when the attacker can control the name of the array field and its value.</p>
 <pre tabindex="0"><code>variable[NAME] = VALUE
-</code></pre><p>In this example the attacker can control both <code>NAME</code> and <code>VALUE</code> the attacker can choose to set <code>NAME</code> to &ldquo;<code>__proto__</code>&rdquo; or even &ldquo;<code>__proto__.__proto__</code>&rdquo; and <code>VALUE</code> to &ldquo;<code>{'toString': null}</code>&rdquo;. Thus overwriting the prototype or even the parent object prototype with any structure or array of members.</p>
+</code></pre><p>In this example the attacker can control both <code>NAME</code> and <code>VALUE</code> the attacker can choose to set <code>NAME</code> to &ldquo;<code>__proto__</code>&rdquo; and <code>VALUE</code> to &ldquo;<code>{'toString': null}</code>&rdquo;. Thus overwriting the prototype with any structure or array of members.</p>
 <p>Prototype pollution occurs in deep merge functions where a local Object merges with a user input Object. Read more <a href="https://github.com/HoLyVieR/prototype-pollution-nsec18/blob/master/paper/JavaScript_prototype_pollution_attack_in_NodeJS.pdf">here</a></p>
 <h3 id="the-early-days-2018">The early days (2018)</h3>
 <p><a href="https://github.com/bengl">Bryan English</a> writes in 2018 about the <a href="https://medium.com/intrinsic-blog/javascript-prototype-poisoning-vulnerabilities-in-the-wild-7bc15347c96">prototype poisoning labeled reports</a> recevied at <a href="https://hackerone.com/nodejs-ecosystem">HackerOne</a> to the <a href="https://github.com/nodejs/security-wg">Node.JS Securety Working Group</a>.

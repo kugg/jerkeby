@@ -1,7 +1,7 @@
 ---
 title: "What is prototype poisoning? Prototype mutation bugs explained"
-date: "2022-08-06"
-draft: true
+date: "2022-09-14"
+draft: false
 authors:
   - Christoffer Jerkeby
   - Anton Linné
@@ -51,7 +51,7 @@ The typical attack avenues for this bug class are:
 * Property injection by appending member variables such as "`debug: true`" can cause drastic alterations in application flow.
 * Appending member values used as arguments to third-party libraries causes changes in application behaviour (Argument injection). 
 * Overwrite prototype members to bypass input validation schemas.
-* Causing Denial of Service by inferring infinite loops (Loop Manipulation).
+* Causing Denial of Service by inferring infinite loops (Loop Manipulation or recursive calls).
 * Manipulating global values to cause program flow alteration (Global variable tampering) or Denial of Service.
 
 ## Identification
@@ -77,19 +77,11 @@ The modified discovery structure would be:
 {
    'username': 'a',
    'password': 'b',
-   '__proto__': {
-      'hasOwnProperty':null,
-      'isPropertyOf':null,
-      'propertyIsEnumerable':null,
-      'toLocaleString':null,
-      'toSource':null,
-      'toString':null,
-      'valueOf':null
-   }
+   '__proto__': null
 }
 ```
 
-The modified discovery string replaces the most common object prototypes with null. Access to source code can contribute to a more comprehensive list of possible implicit prototype members. The expected outcome of a successful poisoning attack is `500 Internal Server Error` or a connection Timeout. The application log should have `TypeError` message.
+The modified discovery string replaces any reference to any protoype attribute with null. Access to source code can contribute to a more comprehensive list of possible implicit prototype members. The expected outcome of a successful poisoning attack is `500 Internal Server Error` or a connection Timeout. The application log should have `TypeError` message.
 
 For input filtering bypass inspiration see read the [bourne testcases](https://github.com/hapijs/bourne/blob/master/test/index.js).
 For query string format dynamic testing see [qs testcases](https://github.com/ljharb/qs/pull/428/commits/8b4cc14cda94a5c89341b77e5fe435ec6c41be2d#diff-b266c4cbb2cefa3caf90e138f935e3cf489c6655e84c1ca9d0425bb0d9af9cc6).
@@ -130,7 +122,7 @@ impact are different. Prototype inheritance is an unavoidable JavaScript functio
 
 ### Pollution
 The prototype pollution vulnerability is similar in input but different in impact and effect. A prototype pollution vulnerability
-can affect the parent Object prototype by chaining multiple "`__proto__.__proto__`" to affect the `dunder object prototype`.
+can affect the parent Object prototype by chaining multiple "`__proto__`" to affect the `parent object prototype`.
 
 Prototype pollution typically occurs when the attacker can control the name of the array field and its value.
 
@@ -138,7 +130,7 @@ Prototype pollution typically occurs when the attacker can control the name of t
 variable[NAME] = VALUE
 ```
 
-In this example the attacker can control both `NAME` and `VALUE` the attacker can choose to set `NAME` to "`__proto__`" or even "`__proto__.__proto__`" and `VALUE` to "`{'toString': null}`". Thus overwriting the prototype or even the parent object prototype with any structure or array of members.
+In this example the attacker can control both `NAME` and `VALUE` the attacker can choose to set `NAME` to "`__proto__`" and `VALUE` to "`{'toString': null}`". Thus overwriting the prototype with any structure or array of members.
 
 Prototype pollution occurs in deep merge functions where a local Object merges with a user input Object. Read more [here](https://github.com/HoLyVieR/prototype-pollution-nsec18/blob/master/paper/JavaScript_prototype_pollution_attack_in_NodeJS.pdf)
 
