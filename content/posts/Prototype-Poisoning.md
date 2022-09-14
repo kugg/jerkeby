@@ -101,9 +101,9 @@ The implicit prototype functions inherited from `Object` are:
 [Jorges](https://twitter.com/jorge_ctf) writeup on [Finding Prototype Pollution with CodeQL](https://jorgectf.github.io/blog/post/finding-prototype-pollution-gadgets-with-codeql/)
  provides inspiration on how to query JavaScript for prototype mutation.
 
-There may be other implicit members in the target environment. If none of the standard properties are used by the target application a app-specific attribute manipulation approach may be more applicatble.
+There may be other implicit members in the target environment. If none of the standard properties are used by the target application a app-specific attribute manipulation approach may be more applicable.
 
-The Hidden Property Abuse scanning tool [LYNX](https://github.com/xiaofen9/Lynx) is capable of identifying potentially user controlled property candidatesi in the target application.
+The Hidden Property Abuse scanning tool [LYNX](https://github.com/xiaofen9/Lynx) is capable of identifying potentially user controlled property candidates in the target application.
 
 # Prior art in prototype Mutation, Poisoning and Pollution
 As researchers, we acknowledge that it's difficult to distinguish one security flaw from another. This chapter aims to bring clarity to the related concepts.
