@@ -18,17 +18,6 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
     </item>
     
     <item>
-      <title>How to detect XSS attacks</title>
-      <link>https://www.jerkeby.se/newsletter/posts/how-to-detect-xss-attacks/</link>
-      <pubDate>Thu, 02 Jun 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.jerkeby.se/newsletter/posts/how-to-detect-xss-attacks/</guid>
-      <description>Key indicators for successful XSS attacks are Cookie use from multiple origins, CSP policy violations, . This article explains the typical success and attempt indicators for Cross Site Scripting attacks.
-Indicators of violation make out a risk score. Once a risk score threshold has been breached multiple indicators are presented to the investigator in an alert.
-As a defender of large web services finding live attacks can be difficult. Knowing what to look for means that its possible to build detection for typical Cross Site Scripting attacks.</description>
-    </item>
-    
-    <item>
       <title>Risk-aware applications</title>
       <link>https://www.jerkeby.se/newsletter/posts/risk-aware-applications/</link>
       <pubDate>Mon, 10 Jan 2022 00:00:00 +0000</pubDate>
