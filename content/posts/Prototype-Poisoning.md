@@ -1,5 +1,5 @@
 ---
-title: "What is prototype poisoning? Prototype bugs explained"
+title: "What is prototype poisoning? Prototype bugs explained!"
 date: "2022-09-14"
 draft: false
 authors:
@@ -7,6 +7,7 @@ authors:
   - Anton Linné
 images: 
   - /images/Prototype-poisoning-Anton-Linne-Christoffer-Jerkeby.jpg
+description: What is prototype poisoning? Prototype bugs explained! Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
 ---
 ![Prototype Poisoning on stage](/images/Prototype-poisoning-Anton-Linne-Christoffer-Jerkeby.jpg)
 
