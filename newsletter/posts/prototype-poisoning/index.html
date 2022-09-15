@@ -89,7 +89,7 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
 <meta itemprop="description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
 Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON."><meta itemprop="datePublished" content="2022-09-14T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-09-14T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1671">
+<meta itemprop="wordCount" content="1681">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary"/>
@@ -208,6 +208,13 @@ The application never logs the value of the <code>req.body</code>.</p>
 <li>Causing Denial of Service by inferring infinite loops (Loop Manipulation or recursive calls).</li>
 <li>Manipulating global values to cause program flow alteration (Global variable tampering) or Denial of Service.</li>
 </ul>
+<h2 id="video">Video</h2>
+<p>See the full talk from <a href="https://www.sec-t.org/talks/#Christoffer-Jerkeby-Anton-Linne">SEC-T community night</a> here:
+
+<div class="10823">
+  <iframe src="https://www.youtube.com/embed/K3ocqLFHkpw" allowfullscreen title="YouTube Video"></iframe>
+</div>
+</p>
 <h2 id="identification">Identification</h2>
 <p>This section covers guidance on how to get started with building prototype poisoning detections.
 The static code analysis (<a href="https://en.wikipedia.org/wiki/Static_application_security_testing">SAST</a>) approach uses a code scanning tool such as SemGrep or CodeQL.

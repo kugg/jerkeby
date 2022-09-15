@@ -54,6 +54,10 @@ The typical attack avenues for this bug class are:
 * Causing Denial of Service by inferring infinite loops (Loop Manipulation or recursive calls).
 * Manipulating global values to cause program flow alteration (Global variable tampering) or Denial of Service.
 
+## Video
+See the full talk from [SEC-T community night](https://www.sec-t.org/talks/#Christoffer-Jerkeby-Anton-Linne) here:
+{{< youtube K3ocqLFHkpw 10823 >}}
+
 ## Identification
 This section covers guidance on how to get started with building prototype poisoning detections.
 The static code analysis ([SAST](https://en.wikipedia.org/wiki/Static_application_security_testing)) approach uses a code scanning tool such as SemGrep or CodeQL.
