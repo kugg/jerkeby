@@ -8,7 +8,7 @@ authors:
 images: 
   - /images/Prototype-poisoning-Anton-Linne-Christoffer-Jerkeby.jpg
 ---
-![Prototype Poisoning on stage](/images/Prototype-poisoning-Aton-Linne-Christoffer-Jerkeby.jpg)
+![Prototype Poisoning on stage](/images/Prototype-poisoning-Anton-Linne-Christoffer-Jerkeby.jpg)
 
 Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
 
