@@ -174,8 +174,8 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
     <h1>What is prototype poisoning? Prototype mutation bugs explained</h1>
   </header>
   <section class="post-content"><p>Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.</p>
-<p>Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;<code>__proto__</code>&rdquo; key in structured input. The value of the &ldquo;<code>__proto__</code>&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON.
-<img src="/images/Prototype-Poisoning.png" alt="Prototype Poisoning"></p>
+<p>Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;<code>__proto__</code>&rdquo; key in structured input. The value of the &ldquo;<code>__proto__</code>&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON.</p>
+<p><img src="/images/Prototype-Poisoning.png" alt="Prototype Poisoning"></p>
 <h2 id="example">Example</h2>
 <p>Server code:</p>
 <pre tabindex="0"><code>let input = Object.assign({}, JSON.parse(req.body));
