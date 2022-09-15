@@ -56,7 +56,7 @@ The typical attack avenues for this bug class are:
 
 ## Video
 See the full talk from [SEC-T community night](https://www.sec-t.org/talks/#Christoffer-Jerkeby-Anton-Linne) here:
-{{< youtube K3ocqLFHkpw 10823 >}}
+{{< youtube K3ocqLFHkpw 10959 >}}
 
 ## Identification
 This section covers guidance on how to get started with building prototype poisoning detections.
