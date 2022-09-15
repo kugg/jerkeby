@@ -1,6 +1,6 @@
 baseURL = "https://www.jerkeby.se/newsletter"
 languageCode = "en-us"
-title = "Newsletter"
+title = "Research"
 theme = "paper"
 author = "Kugg"
 
@@ -8,7 +8,8 @@ author = "Kugg"
  twitter = 'kuggofficial'
  github = 'kugg'
  dateFormat = "02 Jan 2006"
-
+ title = 'Independent security consultant - jerkeby.se'
+ description = 'A deep dive in to penetration testing, 0day-Research & DevSecOps'
 [menu]
   [[menu.main]]
     identifier = "Home"
