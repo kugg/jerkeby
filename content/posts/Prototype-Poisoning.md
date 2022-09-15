@@ -7,6 +7,7 @@ authors:
   - Anton Linné
 images: 
   - /images/Prototype-poisoning-Anton-Linne-Christoffer-Jerkeby.jpg
+summary: A new vulnerability class that's everywhere. Learn how to exploit & differentiate prototype pollution from poisoning.
 description: A new vulnerability class that's everywhere. Learn how to exploit & differentiate prototype pollution from poisoning.
 ---
 ![Prototype Poisoning on stage](/images/Prototype-poisoning-Anton-Linne-Christoffer-Jerkeby.jpg)
