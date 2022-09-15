@@ -79,7 +79,7 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
 <meta property="og:description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
 Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/prototype-poisoning/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/prototype-poisoning/" /><meta property="og:image" content="https://www.jerkeby.se/images/Prototype-poisoning-Anton-Linne-Christoffer-Jerkeby.jpg" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-09-14T00:00:00+00:00" />
 <meta property="article:modified_time" content="2022-09-14T00:00:00+00:00" />
 
@@ -89,10 +89,12 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
 <meta itemprop="description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
 Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON."><meta itemprop="datePublished" content="2022-09-14T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-09-14T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1681">
+<meta itemprop="wordCount" content="1681"><meta itemprop="image" content="https://www.jerkeby.se/images/Prototype-poisoning-Anton-Linne-Christoffer-Jerkeby.jpg">
 <meta itemprop="keywords" content="" />
   
-  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.jerkeby.se/images/Prototype-poisoning-Anton-Linne-Christoffer-Jerkeby.jpg"/>
+
 <meta name="twitter:title" content="What is prototype poisoning? Prototype mutation bugs explained"/>
 <meta name="twitter:description" content="Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.
 Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;__proto__&rdquo; key in structured input. The value of the &ldquo;__proto__&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON."/>
@@ -173,7 +175,8 @@ Prototype mutation is a JavaScript feature that can be exploited by an attacker 
     </p>
     <h1>What is prototype poisoning? Prototype mutation bugs explained</h1>
   </header>
-  <section class="post-content"><p>Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.</p>
+  <section class="post-content"><p><img src="/images/Prototype-poisoning-Aton-Linne-Christoffer-Jerkeby.jpg" alt="Prototype Poisoning on stage"></p>
+<p>Prototype poisoning is when an object inherits a prototype from user input. It leads to input filter bypass, parameter injection and denial of service.</p>
 <p>Prototype mutation is a JavaScript feature that can be exploited by an attacker using a &ldquo;<code>__proto__</code>&rdquo; key in structured input. The value of the &ldquo;<code>__proto__</code>&rdquo; key overwrites the prototype of the destination object and its members. Poisoning can be found in many formats and protocols, but this article will focus on JSON.</p>
 <p><img src="/images/Prototype-Poisoning.png" alt="Prototype Poisoning"></p>
 <h2 id="example">Example</h2>
