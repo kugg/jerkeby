@@ -213,7 +213,6 @@ The application never logs the value of the <code>req.body</code>.</p>
   <iframe src="https://www.youtube.com/embed/K3ocqLFHkpw" allowfullscreen title="YouTube Video"></iframe>
 </div>
 </p>
-<p>This is a research project by <a href="https://twitter.com/safts0ppa">Anton Linné</a> and <a href="https://twitter.com/kuggofficial">Christoffer Jerkeby</a>.</p>
 <h2 id="identification">Identification</h2>
 <p>This section covers guidance on how to get started with building prototype poisoning detections.
 The static code analysis (<a href="https://en.wikipedia.org/wiki/Static_application_security_testing">SAST</a>) approach uses a code scanning tool such as SemGrep or CodeQL.
@@ -297,6 +296,7 @@ In this case the <a href="https://github.com/mongo-express/mongo-express/blob/ma
 The <code>mongodb-query-parser</code> provides a bson format parser that executes <code>toBSON()</code> if it exists. If the mongo document contains an attribute named <code>toBSON</code> the values can be passed to an <a href="https://github.com/mongodb-js/query-parser/compare/v1.6.0-rc.0...master">MQL query called <code>safer-eval</code></a> which can result in an infinite loop and <a href="https://github.com/mongo-express/mongo-express/commit/58f4cc50b5a93104505dd3bea6b6324e9d56729c">block the event handler</a>. This issue is tracked as <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-6639">CVE-2020-6639</a>.</p>
 <p>While the LYNX symbolic execution tool currently support query string and JSON input, note that there are many other implicit input formats such as the HTTP header format itself, XML etc. that may be input channels for prototype pollution.</p>
 <h1 id="contact">Contact</h1>
+<p>This is a research project by <a href="https://twitter.com/safts0ppa">Anton Linné</a> and <a href="https://twitter.com/kuggofficial">Christoffer Jerkeby</a>.</p>
 <p>For media, consulting and guidance contact:</p>
 <p>JavaScript security consulting: Anton Linné, anton at intelsquirrel dot com.
 Application security, change management and detection: Christoffer Jerkeby, christoffer at jerkeby dot se.</p>
