@@ -5,23 +5,23 @@ draft: true
 authors:
   - Christoffer Jerkeby
 images: 
-  - /images/
+  - /images/business_logic.gif
 summary: Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic.
 description: Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic.
 ---
-![Insecure design](/images/)
+![Insecure design](/images/business_logic.gif)
 
 > "When things were supposed to work one way, but they also worked in other ways." - Christoffer Jerkeby
 
-[OWASP 2021 A04 Insecure Design](https://owasp.org/Top10/A04_2021-Insecure_Design/) a miss-alignment between technology and business flow. We cannot predict all vulnerabilities, but we can handle failure.
+[OWASP 2021 A04 Insecure Design](https://owasp.org/Top10/A04_2021-Insecure_Design/) is a miss-alignment between technology and business flow. We cannot predict all problems, but we can handle failure gracefully.
 
 Insecure design happens when we develop components in accordance with the specification. Insecure design happens when we use secure frameworks. Insecure design happens when we use state-of-the-art testing tools. We come prepared, and yet the system fails us.
 
 # Bummer!
-Why is it that we are still getting these vulnerabilities despite shifting left?
+Why is it that we are still getting these vulnerabilities despite [shifting left](https://learn.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2012/ee330950(v=vs.110)?redirectedfrom=MSDN)?
 
 We must:
-1. Accept that we cannot predict all vulnerabilities.
+1. Accept that we cannot predict all faults.
 2. Learn about common logical fallacies.
 3. Anticipate failure in business flows.
 
