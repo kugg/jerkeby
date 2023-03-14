@@ -1,7 +1,7 @@
 ---
 title: "Dealing with security faults in business logic"
-date: "2023-03-13"
-draft: true
+date: "2023-03-14"
+draft: false
 authors:
   - Christoffer Jerkeby
 images: 
@@ -25,7 +25,7 @@ We must:
 2. Learn about common logical fallacies
 3. Anticipate failure in business flows
 
-In threat modelling, we use the acronym ["STRIDE"](https://www.youtube.com/watch?v=iGkX06sVFFM)(Spoofing, Tampering, Repudiation, Information disclosure, Denial of service and Elevation of privilege) to remind us what we are trying to achieve and what can go wrong. Even with STRIDE, anticipating logical flaws can sometimes be challenging. All models are incorrect, but some are useful. Insecure software design stems from incorrect assumptions and less accurate models. The misalignment can start when we draw our `Data Flow Diagram` (DFD) for the threat model. I call this behaviour: `inaccurate model`. Misalignment can also occur when circumstances change after the software is in production. When outside conditions outside of the model change, I call the pattern of events: `changed circumstances`.
+In threat modelling, we use the acronym ["STRIDE"](https://www.youtube.com/watch?v=iGkX06sVFFM) (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service and Elevation of privilege) to remind us what we are trying to achieve and what can go wrong. Even with STRIDE, anticipating logical flaws can sometimes be challenging. All models are incorrect, but some are useful. Insecure software design stems from incorrect assumptions and less accurate models. The misalignment can start when we draw our `Data Flow Diagram` (DFD) for the threat model. I call this behaviour: `inaccurate model`. Misalignment can also occur when circumstances change after the software is in production. When outside conditions outside of the model change, I call the pattern of events: `changed circumstances`.
 
 !["Do not assume anything, clear your mind must be" - Master Yoda](/images/Business_logic_yoda.jpeg)
 
@@ -79,7 +79,7 @@ Johan Bergström writes in [Becomming Resilient](https://www.routledge.com/Resil
 3. Anticipate the potential
 4. Learn from the factual
 
-(It rhymes, so it must be true)
+![All this is true, because it rhymes](/images/Business_logic_lego_truth.png)
 
 How should we respond to a bug of this kind?
 * We will `raise an incident`.

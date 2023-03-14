@@ -75,14 +75,14 @@
 <meta property="og:description" content="Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/business-logic/" /><meta property="og:image" content="https://www.jerkeby.se/images/business_logic.gif" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2023-03-13T00:00:00+00:00" />
-<meta property="article:modified_time" content="2023-03-13T00:00:00+00:00" />
+<meta property="article:published_time" content="2023-03-14T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-03-14T00:00:00+00:00" />
 
   
   <meta itemprop="name" content="Dealing with security faults in business logic">
-<meta itemprop="description" content="Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic."><meta itemprop="datePublished" content="2023-03-13T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2023-03-13T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1175"><meta itemprop="image" content="https://www.jerkeby.se/images/business_logic.gif">
+<meta itemprop="description" content="Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic."><meta itemprop="datePublished" content="2023-03-14T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-03-14T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1169"><meta itemprop="image" content="https://www.jerkeby.se/images/business_logic.gif">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary_large_image"/>
@@ -162,7 +162,7 @@
 <article class="post-single">
   <header class="post-title">
     <p>
-      <time>Mar 13, 2023</time>
+      <time>Mar 14, 2023</time>
       
     </p>
     <h1>Dealing with security faults in business logic</h1>
@@ -181,7 +181,7 @@
 <li>Learn about common logical fallacies</li>
 <li>Anticipate failure in business flows</li>
 </ol>
-<p>In threat modelling, we use the acronym <a href="https://www.youtube.com/watch?v=iGkX06sVFFM">&ldquo;STRIDE&rdquo;</a>(Spoofing, Tampering, Repudiation, Information disclosure, Denial of service and Elevation of privilege) to remind us what we are trying to achieve and what can go wrong. Even with STRIDE, anticipating logical flaws can sometimes be challenging. All models are incorrect, but some are useful. Insecure software design stems from incorrect assumptions and less accurate models. The misalignment can start when we draw our <code>Data Flow Diagram</code> (DFD) for the threat model. I call this behaviour: <code>inaccurate model</code>. Misalignment can also occur when circumstances change after the software is in production. When outside conditions outside of the model change, I call the pattern of events: <code>changed circumstances</code>.</p>
+<p>In threat modelling, we use the acronym <a href="https://www.youtube.com/watch?v=iGkX06sVFFM">&ldquo;STRIDE&rdquo;</a> (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service and Elevation of privilege) to remind us what we are trying to achieve and what can go wrong. Even with STRIDE, anticipating logical flaws can sometimes be challenging. All models are incorrect, but some are useful. Insecure software design stems from incorrect assumptions and less accurate models. The misalignment can start when we draw our <code>Data Flow Diagram</code> (DFD) for the threat model. I call this behaviour: <code>inaccurate model</code>. Misalignment can also occur when circumstances change after the software is in production. When outside conditions outside of the model change, I call the pattern of events: <code>changed circumstances</code>.</p>
 <p><img src="/images/Business_logic_yoda.jpeg" alt="&amp;ldquo;Do not assume anything, clear your mind must be&amp;rdquo; - Master Yoda"></p>
 <p>Just as in <a href="https://martinfowler.com/bliki/BoundedContext.html">Domain Driven Design</a>, we want to ensure developers and testers understand the domain the application serves. Most importantly, we want to avoid implicit assumptions about user behaviour or the behaviour of other parts of the application. The question is, how do we achieve this?</p>
 <p>Let&rsquo;s take a look at our examples!</p>
@@ -216,7 +216,7 @@ As &ldquo;shift-left&rdquo; aim to prevent fault, we must accept that misconcept
 <li>Anticipate the potential</li>
 <li>Learn from the factual</li>
 </ol>
-<p>(It rhymes, so it must be true)</p>
+<p><img src="/images/Business_logic_lego_truth.png" alt="All this is true, because it rhymes"></p>
 <p>How should we respond to a bug of this kind?</p>
 <ul>
 <li>We will <code>raise an incident</code>.</li>
