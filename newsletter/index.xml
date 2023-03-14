@@ -6,7 +6,16 @@
     <description>Recent content on Research</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 14 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://www.jerkeby.se/newsletter/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 13 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://www.jerkeby.se/newsletter/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dealing with security faults in business logic</title>
+      <link>https://www.jerkeby.se/newsletter/posts/business-logic/</link>
+      <pubDate>Mon, 13 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.jerkeby.se/newsletter/posts/business-logic/</guid>
+      <description>Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic.</description>
+    </item>
+    
     <item>
       <title>What is prototype poisoning? Prototype bugs explained!</title>
       <link>https://www.jerkeby.se/newsletter/posts/prototype-poisoning/</link>

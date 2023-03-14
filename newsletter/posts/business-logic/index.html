@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html lang="en-us">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  
+  <title>Dealing with security faults in business logic - Research</title>
+  
+  
+  <meta name="description" content="Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic." />
+  <meta name="author" content="" />
+  
+
+  
+  
+  
+  
+  
+  
+  <link rel="preload stylesheet" as="style" href="https://www.jerkeby.se/newsletter/app.min.css" />
+
+  
+  <link rel="preload stylesheet" as="style" href="https://www.jerkeby.se/newsletter/an-old-hope.min.css" />
+  <script
+    defer
+    src="https://www.jerkeby.se/newsletter/highlight.min.js"
+    onload="hljs.initHighlightingOnLoad();"
+  ></script>
+  
+
+  
+  <link rel="preload" as="image" href="https://www.jerkeby.se/newsletter/theme.png" />
+
+  
+  <link rel="preload" as="image" href="https://www.jerkeby.se/newsletter/twitter.svg" />
+  
+  <link rel="preload" as="image" href="https://www.jerkeby.se/newsletter/github.svg" />
+  
+
+  
+  <link rel="icon" href="https://www.jerkeby.se/newsletter/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://www.jerkeby.se/newsletter/apple-touch-icon.png" />
+
+  
+  <meta name="generator" content="Hugo 0.111.2">
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="Dealing with security faults in business logic" />
+<meta property="og:description" content="Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/business-logic/" /><meta property="og:image" content="https://www.jerkeby.se/images/business_logic.gif" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-03-13T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-03-13T00:00:00+00:00" />
+
+  
+  <meta itemprop="name" content="Dealing with security faults in business logic">
+<meta itemprop="description" content="Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic."><meta itemprop="datePublished" content="2023-03-13T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2023-03-13T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1178"><meta itemprop="image" content="https://www.jerkeby.se/images/business_logic.gif">
+<meta itemprop="keywords" content="" />
+  
+  <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://www.jerkeby.se/images/business_logic.gif"/>
+
+<meta name="twitter:title" content="Dealing with security faults in business logic"/>
+<meta name="twitter:description" content="Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic."/>
+
+  
+  
+</head>
+
+
+  <body class="not-ready" data-menu="true">
+    <header class="header">
+  
+  <p class="logo">
+  <a class="site-name" href="https://www.jerkeby.se/newsletter">Research</a><a class="btn-dark"></a>
+  </p>
+  
+
+  <script>
+    let bodyClx = document.body.classList;
+    let btnDark = document.querySelector('.btn-dark');
+    let sysDark = window.matchMedia('(prefers-color-scheme: dark)');
+    let darkVal = localStorage.getItem('dark');
+
+    let setDark = (isDark) => {
+      bodyClx[isDark ? 'add' : 'remove']('dark');
+      localStorage.setItem('dark', isDark ? 'yes' : 'no');
+    };
+
+    setDark(darkVal ? darkVal === 'yes' : sysDark.matches);
+    requestAnimationFrame(() => bodyClx.remove('not-ready'));
+
+    btnDark.addEventListener('click', () => setDark(!bodyClx.contains('dark')));
+    sysDark.addEventListener('change', (event) => setDark(event.matches));
+  </script>
+
+  
+  
+  <nav class="menu">
+    
+    <a class="" href="/newsletter/">Home</a>
+    
+    <a class="" href="/newsletter/contact/">Contact</a>
+    
+    <a class="" href="https://jerkeby.us5.list-manage.com/subscribe?u=ddd7ae486331199e51e491d97&amp;id=0d2493f44c">Sign Up</a>
+    
+  </nav>
+  
+
+  
+  <nav class="social">
+    
+    <a
+      class="twitter"
+      style="--url: url(./twitter.svg)"
+      href="https://twitter.com/kuggofficial"
+      target="_blank"
+    ></a>
+    
+    <a
+      class="github"
+      style="--url: url(./github.svg)"
+      href="https://github.com/kugg"
+      target="_blank"
+    ></a>
+    
+  </nav>
+  
+</header>
+
+
+    <main class="main">
+
+<article class="post-single">
+  <header class="post-title">
+    <p>
+      <time>Mar 13, 2023</time>
+      
+    </p>
+    <h1>Dealing with security faults in business logic</h1>
+  </header>
+  <section class="post-content"><p><img src="/images/business_logic.gif" alt="Insecure design"></p>
+<blockquote>
+<p>&ldquo;When things were supposed to work one way, but they also worked in other ways.&rdquo; - Christoffer Jerkeby</p>
+</blockquote>
+<p><a href="https://owasp.org/Top10/A04_2021-Insecure_Design/">OWASP 2021 A04 Insecure Design</a> is a miss-alignment between technology and business flow. We cannot predict all problems, but we can handle failure gracefully.</p>
+<p>Insecure design happens when we develop components in accordance with the specification. Insecure design happens when we use secure frameworks. Insecure design happens when we use state-of-the-art testing tools. We come prepared, and yet the system fails us.</p>
+<h1 id="bummer">Bummer!</h1>
+<p>Why is it that we are still getting these vulnerabilities despite <a href="https://learn.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2012/ee330950(v=vs.110)?redirectedfrom=MSDN">shifting left</a>?</p>
+<p>We must:</p>
+<ol>
+<li>Accept that we cannot predict all faults</li>
+<li>Learn about common logical fallacies</li>
+<li>Anticipate failure in business flows</li>
+</ol>
+<p>In threat modelling, we use the acronym <a href="https://www.youtube.com/watch?v=iGkX06sVFFM">&ldquo;STRIDE&rdquo;</a>(Spoofing, Tampering, Repudiation, Information disclosure, Denial of service and Elevation of privilege) to remind us what we are trying to achieve and what can go wrong. Even with STRIDE, anticipating logical flaws can sometimes be challenging. All models are incorrect, but some are useful. Insecure software design stems from incorrect assumptions and less accurate models. The misalignment can start when we draw our <code>Data Flow Diagram</code> (DFD) for the threat model. I call this behaviour: <code>inaccurate model</code>. Misalignment can also occur when circumstances change after the software is in production. When outside conditions outside of the model change, I call the pattern of events: <code>changed circumstances</code>.</p>
+<p><img src="/images/Business_logic_yoda.jpeg" alt="&amp;ldquo;Do not assume anything, clear your mind must be&amp;rdquo; - Master Yoda"></p>
+<p>Just as in <a href="https://martinfowler.com/bliki/BoundedContext.html">Domain Driven Design</a>, we want to ensure developers and testers understand the domain the application serves. Most importantly, we want to avoid implicit assumptions about user behaviour or the behaviour of other parts of the application. The question is, how do we achieve this?</p>
+<p>Let&rsquo;s take a look at our examples!</p>
+<h2 id="business-logic-errors-cwe-840httpscwemitreorgdatadefinitions840html">Business logic errors <a href="https://cwe.mitre.org/data/definitions/840.html">(CWE-840)</a></h2>
+<h3 id="trust-boundary-violation-cwe-501httpscwemitreorgdatadefinitions501html">Trust Boundary Violation <a href="https://cwe.mitre.org/data/definitions/501.html">(CWE-501)</a></h3>
+<p>Trust boundary violation is when an untrusted application handles privileged information. Typically violations occur when handling user-supplied parameters before authentication. In my experience these violations commonly occur in low-risk software that adds security-dependent features late in development. To a product owner or lead developer, it&rsquo;s not apparent that the legacy code requirements have changed to include security. I call this behavioural pattern <code>security afterthought</code>.</p>
+<p>In this example, the user-supplied parameter <code>username</code> value becomes a session attribute without any authentication check ( or input validation).</p>
+<pre tabindex="0"><code>username = request.getParameter(&#34;username&#34;);
+if (session.getAttribute(ATTR_USR) == null) {
+   session.setAttribute(ATTR_USR, username);
+}
+</code></pre><h3 id="authentication-bypass-using-an-alternate-path-or-channel-cwe-288">Authentication Bypass Using an Alternate Path or Channel (CWE-288)</h3>
+<p>In my experience authentication bypasses have traditionally occurred when inconsistent authentication checks are applied, commonly in frameworks where the developer must explicitly declare that authentication is required. The bug class has since grown to include applications with more states than &ldquo;logged in&rdquo; and &ldquo;not logged in&rdquo;.</p>
+<p>When a user receives an authentication token for performing one single action, the rest of the application is unaware of any &ldquo;new&rdquo; token state limitations.</p>
+<p>Here are a few examples:</p>
+<h4 id="registration-flow-token">Registration flow token</h4>
+<p>At the end of a user registration flow, it&rsquo;s common to give the user a logged-in session as their new user without validating the email address or requiring the user to log in. A consequence of providing a &ldquo;post-registration login token&rdquo; may be that from the point of receiving the token, they can request any API endpoint inside the application without having a fully verified account.</p>
+<h4 id="password-reset-token">Password reset token</h4>
+<p>Users who have requested a password request token and clicked the link receive a session token dedicated to changing the user password. In this case, the user does not change the password. They use that session to perform other API actions. This authentication bypass method skips a mandated MFA authentication.</p>
+<h3 id="race-conditions-cwe-362httpscwemitreorgdatadefinitions362html">Race conditions <a href="https://cwe.mitre.org/data/definitions/362.html">(CWE-362)</a></h3>
+<p>A race condition is when events occur in an unexpected order. A consequence is that contextual information is missing or overwritten, resulting in faults that an attacker can exploit. A popular example is a bank transfer conducted twice to overdraft the account before checking the balance.</p>
+<p>An unexpected version is when we realise that one client can simultaneously perform thousands of concurrent requests. A feature that attempts to count requests or rate limit connections can be overwhelmed if the attacker aligns their threads sufficiently.</p>
+<p>These three scenarios is part of a pattern that I call <code>missing perspective</code>.</p>
+<p>Once again, the assumptions made during design are broken.</p>
+<h1 id="anticipating-potential-failure">Anticipating potential failure</h1>
+<p>These vulnerability classes break assumptions in three dimensions: &ldquo;time&rdquo;, &ldquo;space-boundary&rdquo; and &ldquo;legacy logic&rdquo;.
+As &ldquo;shift-left&rdquo; aim to prevent fault, we must accept that misconceptions like these will happen as long as we develop code incrementally. If we had a detailed understanding of the software we are designing before starting, we could design robust software with the three dimensions in mind. However, even if we desire clairvoyance capabilities, it&rsquo;s not who we are. <em>Yet!</em></p>
+<p>Johan Bergström writes in <a href="https://www.routledge.com/Resilience-Engineering-in-Practice-Volume-2-Becoming-Resilient/Nemeth-Hollnagel/p/book/9781472425157">Becomming Resilient</a> Chapter 9 that we must:</p>
+<ol>
+<li>Respond to the actual</li>
+<li>Monitor the critical</li>
+<li>Anticipate the potential</li>
+<li>Learn from the factual</li>
+</ol>
+<p>(It rhymes, so it must be true)</p>
+<p>How should we respond to a bug of this kind?</p>
+<ul>
+<li>We will <code>raise an incident</code>.</li>
+<li>We will <code>relay observations from systems</code>, <code>analyse the modus of the attacker</code> and <code>form a hypothesis</code>.</li>
+<li>We will prepare a <code>fix of the vulnerability</code>.</li>
+</ul>
+<p>See: <a href="https://lup.lub.lu.se/luur/download?func=downloadFile&amp;recordOId=8084520&amp;fileOId=8084521">Allspaw, John. (2015). TRADE-OFFS UNDER PRESSURE, Lund University</a>.</p>
+<p>The cost of these remediation efforts depends on our preparation and collective experience dealing with failure.</p>
+<p>One way to prepare for the unexpected is to <code>monitor the customer journey</code>. To us, the customer journey is a critical business function. Monitoring it would only be natural to business stakeholders. Cataloguing exceptions raised by our application, creating actionable error descriptions, and a coherent log output gives us insight into our customer journey&rsquo;s <code>negative experiences</code>.</p>
+<p>Once identified, we can anticipate exceptions raised by software executing unanticipated flows. In the banking case, the race condition could result in multiple <code>InsufficientFundsException</code>&rsquo;s. In the case of out-of-order requests, we could monitor for <code>reference before assignment</code> or <code>NullPointerException</code> vulnerabilities as they would indicate that the request came out of order. Neat!</p>
+<p>Lastly, we will learn from past experiences. These events are factual shared stories. Let us cherish them with <a href="https://www.youtube.com/watch?v=4nRahQddtJ0">blameless retrospects</a>. In this process, we identify risks and return to them in our next threat model workshop. Great!</p>
+<h1 id="actively-challenging-assumptions">Actively challenging assumptions</h1>
+<p>Using penetration testing, bug bounty and <a href="https://www.oreilly.com/library/view/security-chaos-engineering/9781492080350/">security chaos engineering experiments</a>, we can trigger failure states in our business that will present an alternative view to the development organisation. The alternative view challenges the <code>missing perspective</code>, <code>security afterthought</code>, <code>changed circumstances</code> and <code>inacurate model</code>. To improve value of the alternative view it&rsquo;s important to share the assumptions with the tester prior to the test. Contextual knowledge combined with the experience of failure improves our capacity to deal with the unexpected.</p>
+<h1 id="summary">Summary</h1>
+<p>Reading this, you have learned that:</p>
+<ol>
+<li>We will attempt to design our software with security in mind based on assumptions.</li>
+<li>Logical vulnerabilities can occur because we always carry (false) assumptions when we develop code.</li>
+<li>Software resilience is about accepting the premise that we will make false assumptions and that software needs maintenance.</li>
+</ol>
+<h1 id="learn-more">Learn More</h1>
+<p>If you speak Swedish, you might be interested in this video where I talk about how to establish an AppSec program and make alternative views valuable.</p>
+
+<div class="10959">
+  <iframe src="https://www.youtube.com/embed/QTDn-KVDAcg" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+</section>
+
+  
+  
+
+  
+  
+  
+  <nav class="post-nav">
+     
+    <a class="next" href="https://www.jerkeby.se/newsletter/posts/prototype-poisoning/"><span>What is prototype poisoning? Prototype bugs explained!</span><span>→</span></a>
+    
+  </nav>
+  
+
+  
+  
+</article>
+
+</main>
+
+    <footer class="footer">
+  <p>&copy; 2023 <a href="https://www.jerkeby.se/newsletter">Research</a></p>
+  <p>Powered by <a href="https://gohugo.io/" rel="noopener" target="_blank">Hugo️️</a>️</p>
+  <p>
+    <a href="https://github.com/nanxiaobei/hugo-paper" rel="noopener" target="_blank">Paper 5.1</a>
+  </p>
+</footer>
+
+  </body>
+</html>
