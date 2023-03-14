@@ -25,7 +25,7 @@ We must:
 2. Learn about common logical fallacies
 3. Anticipate failure in business flows
 
-In threat modelling, we use the acronym ["STRIDE"](https://www.youtube.com/watch?v=iGkX06sVFFM) (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service and Elevation of privilege) to remind us what we are trying to achieve and what can go wrong. Even with STRIDE, anticipating logical flaws can sometimes be challenging. All models are incorrect, but some are useful. Insecure software design stems from incorrect assumptions and less accurate models. The misalignment can start when we draw our `Data Flow Diagram` (DFD) for the threat model. I call this behaviour: `inaccurate model`. Misalignment can also occur when circumstances change after the software is in production. When outside conditions outside of the model change, I call the pattern of events: `changed circumstances`.
+In threat modelling, we use the acronym ["STRIDE"](https://www.youtube.com/watch?v=iGkX06sVFFM) (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service and Elevation of privilege) to remind us what we are trying to achieve and what can go wrong. Even with STRIDE, anticipating logical flaws can sometimes be challenging. [All models are incorrect, but some are useful](https://jamesclear.com/all-models-are-wrong#:~:text=In%201976%2C%20a%20British%20statistician,is%20correct%20in%20all%20cases.). Insecure design of software stems from incorrect assumptions and less accurate models. The misalignment can start when we draw our `Data Flow Diagram` (DFD) for the threat model. I call this anti-pattern the `inaccurate model`. Misalignment can also occur when circumstances change after the software is in production. When outside conditions outside of the model change, I call this `changed circumstances`.
 
 !["Do not assume anything, clear your mind must be" - Master Yoda](/images/Business_logic_yoda.jpeg)
 
@@ -35,7 +35,7 @@ Let's take a look at our examples!
 
 ## Business logic errors [(CWE-840)](https://cwe.mitre.org/data/definitions/840.html)
 ### Trust Boundary Violation [(CWE-501)](https://cwe.mitre.org/data/definitions/501.html)
-Trust boundary violation is when an untrusted application handles privileged information. Typically violations occur when handling user-supplied parameters before authentication. In my experience these violations commonly occur in low-risk software that adds security-dependent features late in development. To a product owner or lead developer, it's not apparent that the legacy code requirements have changed to include security. I call this behavioural pattern `security afterthought`.
+Trust boundary violation is when an untrusted application handles privileged information. Typically violations occur when handling user-supplied parameters before authentication. In my experience these violations commonly occur in low-risk software that adds security-dependent features late in development. To a product owner or lead developer, it's not apparent that the legacy code requirements have changed to include security. I call this behavioural pattern `security afterthought`. The `security afterthought` pattern is often a consequence of insecure design.
  
 In this example, the user-supplied parameter `username` value becomes a session attribute without any authentication check ( or input validation).
 
@@ -46,8 +46,10 @@ if (session.getAttribute(ATTR_USR) == null) {
 }
 ```
 
+Preferably a more structured method for handling user input securely should have been provided from the design phase. Such as the entity modelling pattern from [Secure by design by Dan Bergh Johnsson, Daniel Deogun and Daniel Sawano](https://www.manning.com/books/secure-by-design).
+
 ### Authentication Bypass Using an Alternate Path or Channel (CWE-288)
-In my experience authentication bypasses have traditionally occurred when inconsistent authentication checks are applied, commonly in frameworks where the developer must explicitly declare that authentication is required. The bug class has since grown to include applications with more states than "logged in" and "not logged in".
+In my experience authentication bypasses have traditionally occurred when inconsistent authentication checks are applied, commonly in frameworks where the developer must explicitly declare that authentication is required. The bug-class has since grown to include applications with more states than "logged in" and "not logged in".
 
 When a user receives an authentication token for performing one single action, the rest of the application is unaware of any "new" token state limitations.
 
@@ -66,7 +68,7 @@ An unexpected version is when we realise that one client can simultaneously perf
 
 These three scenarios are part of a pattern that I call `missing perspective`.
 
-Once again, the assumptions made during design are broken.
+Once again, the assumptions made during design phase are broken.
 
 # Anticipating potential failure
 These vulnerability classes break assumptions in three dimensions: "time", "space-boundary" and "legacy logic".
@@ -92,20 +94,20 @@ The cost of these remediation efforts depends on our preparation and collective 
 
 One way to prepare for the unexpected is to `monitor the customer journey`. To us, the customer journey is a critical business function. Monitoring it would only be natural to business stakeholders. Cataloguing exceptions raised by our application, creating actionable error descriptions, and a coherent log output gives us insight into our customer journey's `negative experiences`.
 
-Once identified, we can anticipate exceptions raised by software executing unanticipated flows. In the banking case, the race condition could result in multiple `InsufficientFundsException`'s. In the case of out-of-order requests, we could monitor for `reference before assignment` or `NullPointerException` vulnerabilities as they would indicate that the request came out of order. Neat!
+Once identified, we can anticipate exceptions raised by software executing unanticipated flows. In the banking case, the race condition could result in multiple `InsufficientFundsException`'s. In the case of out-of-order requests, we could monitor for `reference before assignment` or `NullPointerException` vulnerabilities as they would indicate that the request came out of order. Neat, now we have a method to evaluate our business logic!
 
-Lastly, we will learn from past experiences. These events are factual shared stories. Let us cherish them with [blameless retrospects](https://www.youtube.com/watch?v=4nRahQddtJ0). In this process, we identify risks and return to them in our next threat model workshop. Great!
+Lastly, we will learn from past experiences. These events are factual shared stories. Let us cherish them with [blameless retrospects](https://www.youtube.com/watch?v=4nRahQddtJ0). In this process, we identify risks and return to them in our next threat model workshop and decide on controls for our design. Great!
 
 # Actively challenging assumptions
-Using penetration testing, bug bounty and [security chaos engineering experiments](https://www.oreilly.com/library/view/security-chaos-engineering/9781492080350/), we can trigger failure states in our business that will present an alternative view to the development organisation. The alternative view challenges the `missing perspective`, `security afterthought`, `changed circumstances` and `inacurate model`. To improve value of the alternative view it's important to share the assumptions with the tester prior to the test. Contextual knowledge combined with the experience of failure improves our capacity to deal with the unexpected.
+Using penetration testing, bug bounty and [security chaos engineering experiments](https://www.oreilly.com/library/view/security-chaos-engineering/9781492080350/), we can trigger failure states in our business that will present an alternative view to the development organisation. The alternative view challenges the `missing perspective`, `security afterthought`, `changed circumstances` and `inacurate model`. To improve value of the alternative view it's important to share the assumptions with the tester prior to the test. Contextual knowledge combined with the experience of failure improves our capacity to deal with the unexpected and help us align with business logic.
 
 # Summary
 Reading this, you have learned that:
 1. We will attempt to design our software with security in mind based on assumptions.
-2. Logical vulnerabilities can occur because we always carry (false) assumptions when we develop code.
+2. Logical vulnerabilities can occur because we always carry (false) assumptions when we develop code, this is called insecure design.
 3. Software resilience is about accepting the premise that we will make false assumptions and that software needs maintenance.
 
 # Learn More
-If you speak Swedish, you might be interested in this video where I talk about how to establish an AppSec program and make alternative views valuable.
+If you speak Swedish, you might be interested in this video where I talk about how to establish an AppSec program and make alternative views more valuable.
 
 {{< youtube QTDn-KVDAcg >}}
