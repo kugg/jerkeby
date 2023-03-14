@@ -72,7 +72,7 @@ Once again, the assumptions made during design are broken.
 These vulnerability classes break assumptions in three dimensions: "time", "space-boundary" and "legacy logic".
 As "shift-left" aim to prevent fault, we must accept that misconceptions like these will happen as long as we develop code incrementally. If we had a detailed understanding of the software we are designing before starting, we could design robust software with the three dimensions in mind. However, even if we desire clairvoyance capabilities, it's not who we are. *Yet!*
 
-Johan Bergström writes in (Becomming Resilient)[https://www.routledge.com/Resilience-Engineering-in-Practice-Volume-2-Becoming-Resilient/Nemeth-Hollnagel/p/book/9781472425157] Chapter 9 that we must:
+Johan Bergström writes in [Becomming Resilient](https://www.routledge.com/Resilience-Engineering-in-Practice-Volume-2-Becoming-Resilient/Nemeth-Hollnagel/p/book/9781472425157) Chapter 9 that we must:
 
 1. Respond to the actual
 2. Monitor the critical
@@ -83,18 +83,20 @@ Johan Bergström writes in (Becomming Resilient)[https://www.routledge.com/Resil
 
 How should we respond to a bug of this kind?
 * We will `raise an incident`.
-* We will `relay observations from systems`, `analyse the modus of the attacker` and `form a hypothesis`.
+* We will `relay observations from systems`, `analyse the modus of the attacker` and `form a hypothesis`. 
 * We will prepare a `fix of the vulnerability`.
+
+See: [Allspaw, John. (2015). TRADE-OFFS UNDER PRESSURE, Lund University](https://lup.lub.lu.se/luur/download?func=downloadFile&recordOId=8084520&fileOId=8084521).
 
 The cost of these remediation efforts depends on our preparation and collective experience dealing with failure.
 
-One way to prepare for the unexpected is to `monitor the customer journey`. To us, the customer journey is a critical business function. Monitoring it would only be natural to business stakeholders. Cataloguing exceptions raised by our application, creating actionable error descriptions, and a coherent log output gives us insight into our customer journey's negative experiences.
+One way to prepare for the unexpected is to `monitor the customer journey`. To us, the customer journey is a critical business function. Monitoring it would only be natural to business stakeholders. Cataloguing exceptions raised by our application, creating actionable error descriptions, and a coherent log output gives us insight into our customer journey's `negative experiences`.
 
 Once identified, we can anticipate exceptions raised by software executing unanticipated flows. In the banking case, the race condition could result in multiple `InsufficientFundsException`'s. In the case of out-of-order requests, we could monitor for `reference before assignment` or `NullPointerException` vulnerabilities as they would indicate that the request came out of order. Neat!
 
-Lastly, we will learn from past experiences. These events are factual shared stories. Let us cherish them with `blameless retrospects`. In this process, we identify risks and return to them in our next threat model workshop. Great!
+Lastly, we will learn from past experiences. These events are factual shared stories. Let us cherish them with [blameless retrospects](https://www.youtube.com/watch?v=4nRahQddtJ0). In this process, we identify risks and return to them in our next threat model workshop. Great!
 
-# Actively exploring more risks
+# Actively challenging assumptions
 Using penetration testing, bug bounty and [security chaos engineering experiments](https://www.oreilly.com/library/view/security-chaos-engineering/9781492080350/), we can trigger failure states in our business that will present an alternative view to the development organisation. The alternative view challenges the `missing perspective`, `security afterthought`, `changed circumstances` and `inacurate model`. To improve value of the alternative view it's important to share the assumptions with the tester prior to the test. Contextual knowledge combined with the experience of failure improves our capacity to deal with the unexpected.
 
 # Summary
