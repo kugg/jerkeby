@@ -82,7 +82,7 @@
   <meta itemprop="name" content="Dealing with security faults in business logic">
 <meta itemprop="description" content="Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic."><meta itemprop="datePublished" content="2023-03-14T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2023-03-14T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1246"><meta itemprop="image" content="https://www.jerkeby.se/images/business_logic.gif">
+<meta itemprop="wordCount" content="1248"><meta itemprop="image" content="https://www.jerkeby.se/images/business_logic.gif">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary_large_image"/>
@@ -178,8 +178,8 @@
 <p>We must:</p>
 <ol>
 <li>Accept that we cannot predict all faults</li>
-<li>Learn about common logical fallacies</li>
-<li>Anticipate failure in business flows</li>
+<li>Learn about common logical flaws</li>
+<li>Anticipate failure in business logic</li>
 </ol>
 <p>In threat modelling, we use the acronym <a href="https://www.youtube.com/watch?v=iGkX06sVFFM">&ldquo;STRIDE&rdquo;</a> (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service and Elevation of privilege) to remind us what we are trying to achieve and what can go wrong. Even with STRIDE, anticipating logical flaws can sometimes be challenging. <a href="https://jamesclear.com/all-models-are-wrong#:~:text=In%201976%2C%20a%20British%20statistician,is%20correct%20in%20all%20cases.">All models are incorrect, but some are useful</a>. Insecure design of software stems from incorrect assumptions and less accurate models. The misalignment can start when we draw our <code>Data Flow Diagram</code> (DFD) for the threat model. I call this anti-pattern the <code>inaccurate model</code>. Misalignment can also occur when circumstances change after the software is in production. When outside conditions outside of the model change, I call this <code>changed circumstances</code>.</p>
 <p><img src="/images/Business_logic_yoda.jpeg" alt="&amp;ldquo;Do not assume anything, clear your mind must be&amp;rdquo; - Master Yoda"></p>
@@ -226,11 +226,11 @@ As &ldquo;shift-left&rdquo; aim to prevent fault, we must accept that misconcept
 </ul>
 <p>See: <a href="https://lup.lub.lu.se/luur/download?func=downloadFile&amp;recordOId=8084520&amp;fileOId=8084521">Allspaw, John. (2015). TRADE-OFFS UNDER PRESSURE, Lund University</a>.</p>
 <p>The cost of these remediation efforts depends on our preparation and collective experience dealing with failure.</p>
-<p>One way to prepare for the unexpected is to <code>monitor the customer journey</code>. To us, the customer journey is a critical business function. Monitoring it would only be natural to business stakeholders. Cataloguing exceptions raised by our application, creating actionable error descriptions, and a coherent log output gives us insight into our customer journey&rsquo;s <code>negative experiences</code>.</p>
+<p>One way to prepare for the unexpected is to <code>monitor the customer journey</code>. To us, the customer journey is a critical business logic function. Monitoring it would only be natural to business stakeholders. Cataloguing exceptions raised by our application, creating actionable error descriptions, and a coherent log output gives us insight into our customer journey&rsquo;s <code>negative experiences</code>.</p>
 <p>Once identified, we can anticipate exceptions raised by software executing unanticipated flows. In the banking case, the race condition could result in multiple <code>InsufficientFundsException</code>&rsquo;s. In the case of out-of-order requests, we could monitor for <code>reference before assignment</code> or <code>NullPointerException</code> vulnerabilities as they would indicate that the request came out of order. Neat, now we have a method to evaluate our business logic!</p>
 <p>Lastly, we will learn from past experiences. These events are factual shared stories. Let us cherish them with <a href="https://www.youtube.com/watch?v=4nRahQddtJ0">blameless retrospects</a>. In this process, we identify risks and return to them in our next threat model workshop and decide on controls for our design. Great!</p>
 <h1 id="actively-challenging-assumptions">Actively challenging assumptions</h1>
-<p>Using penetration testing, bug bounty and <a href="https://www.oreilly.com/library/view/security-chaos-engineering/9781492080350/">security chaos engineering experiments</a>, we can trigger failure states in our business that will present an alternative view to the development organisation. The alternative view challenges the <code>missing perspective</code>, <code>security afterthought</code>, <code>changed circumstances</code> and <code>inacurate model</code>. To improve value of the alternative view it&rsquo;s important to share the assumptions with the tester prior to the test. Contextual knowledge combined with the experience of failure improves our capacity to deal with the unexpected and help us align with business logic.</p>
+<p>Using penetration testing, bug bounty and <a href="https://www.oreilly.com/library/view/security-chaos-engineering/9781492080350/">security chaos engineering experiments</a>, we can trigger failure states in our business logic that will present an alternative view to the development organisation. The alternative view challenges the <code>missing perspective</code>, <code>security afterthought</code>, <code>changed circumstances</code> and <code>inacurate model</code>. To improve value of the alternative view it&rsquo;s important to share the assumptions with the tester prior to the test. Contextual knowledge combined with the experience of failure improves our capacity to deal with the unexpected and help us align with business logic.</p>
 <h1 id="summary">Summary</h1>
 <p>Reading this, you have learned that:</p>
 <ol>
