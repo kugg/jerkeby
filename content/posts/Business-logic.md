@@ -1,13 +1,13 @@
 ---
-title: "Dealing with security faults in business logic"
+title: "Insecure design and failed business logic"
 date: "2023-03-14"
 draft: false
 authors:
   - Christoffer Jerkeby
 images: 
   - /images/business_logic.gif
-summary: Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic.
-description: Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic.
+summary: Spot the miss-alignment between technology and business flow. Learn how to handle failures in business logic.
+description: Spot the miss-alignment between technology and business flow. Learn how to handle failures in business logic.
 ---
 ![Insecure design](/images/business_logic.gif)
 
