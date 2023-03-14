@@ -64,7 +64,7 @@ A race condition is when events occur in an unexpected order. A consequence is t
 
 An unexpected version is when we realise that one client can simultaneously perform thousands of concurrent requests. A feature that attempts to count requests or rate limit connections can be overwhelmed if the attacker aligns their threads sufficiently.
 
-These three scenarios is part of a pattern that I call `missing perspective`.
+These three scenarios are part of a pattern that I call `missing perspective`.
 
 Once again, the assumptions made during design are broken.
 
@@ -83,7 +83,7 @@ Johan Bergström writes in [Becomming Resilient](https://www.routledge.com/Resil
 
 How should we respond to a bug of this kind?
 * We will `raise an incident`.
-* We will `relay observations from systems`, `analyse the modus of the attacker` and `form a hypothesis`. 
+* We will `relay observations from systems`, `analyse the fault` and `form a hypothesis`. 
 * We will prepare a `fix of the vulnerability`.
 
 See: [Allspaw, John. (2015). TRADE-OFFS UNDER PRESSURE, Lund University](https://lup.lub.lu.se/luur/download?func=downloadFile&recordOId=8084520&fileOId=8084521).

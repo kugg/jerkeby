@@ -82,7 +82,7 @@
   <meta itemprop="name" content="Dealing with security faults in business logic">
 <meta itemprop="description" content="Insecure design, a miss-alignment between technology and business flow. Learn how to handle failures in business logic."><meta itemprop="datePublished" content="2023-03-13T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2023-03-13T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1178"><meta itemprop="image" content="https://www.jerkeby.se/images/business_logic.gif">
+<meta itemprop="wordCount" content="1175"><meta itemprop="image" content="https://www.jerkeby.se/images/business_logic.gif">
 <meta itemprop="keywords" content="" />
   
   <meta name="twitter:card" content="summary_large_image"/>
@@ -204,7 +204,7 @@ if (session.getAttribute(ATTR_USR) == null) {
 <h3 id="race-conditions-cwe-362httpscwemitreorgdatadefinitions362html">Race conditions <a href="https://cwe.mitre.org/data/definitions/362.html">(CWE-362)</a></h3>
 <p>A race condition is when events occur in an unexpected order. A consequence is that contextual information is missing or overwritten, resulting in faults that an attacker can exploit. A popular example is a bank transfer conducted twice to overdraft the account before checking the balance.</p>
 <p>An unexpected version is when we realise that one client can simultaneously perform thousands of concurrent requests. A feature that attempts to count requests or rate limit connections can be overwhelmed if the attacker aligns their threads sufficiently.</p>
-<p>These three scenarios is part of a pattern that I call <code>missing perspective</code>.</p>
+<p>These three scenarios are part of a pattern that I call <code>missing perspective</code>.</p>
 <p>Once again, the assumptions made during design are broken.</p>
 <h1 id="anticipating-potential-failure">Anticipating potential failure</h1>
 <p>These vulnerability classes break assumptions in three dimensions: &ldquo;time&rdquo;, &ldquo;space-boundary&rdquo; and &ldquo;legacy logic&rdquo;.
@@ -220,7 +220,7 @@ As &ldquo;shift-left&rdquo; aim to prevent fault, we must accept that misconcept
 <p>How should we respond to a bug of this kind?</p>
 <ul>
 <li>We will <code>raise an incident</code>.</li>
-<li>We will <code>relay observations from systems</code>, <code>analyse the modus of the attacker</code> and <code>form a hypothesis</code>.</li>
+<li>We will <code>relay observations from systems</code>, <code>analyse the fault</code> and <code>form a hypothesis</code>.</li>
 <li>We will prepare a <code>fix of the vulnerability</code>.</li>
 </ul>
 <p>See: <a href="https://lup.lub.lu.se/luur/download?func=downloadFile&amp;recordOId=8084520&amp;fileOId=8084521">Allspaw, John. (2015). TRADE-OFFS UNDER PRESSURE, Lund University</a>.</p>
