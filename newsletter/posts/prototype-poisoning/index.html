@@ -59,13 +59,11 @@
   <link rel="apple-touch-icon" href="https://www.jerkeby.se/newsletter/apple-touch-icon.png" />
 
   
-  <meta name="generator" content="Hugo 0.102.3" />
+  <meta name="generator" content="Hugo 0.111.2">
 
   
   
 
-  
-  
   
   
   
@@ -79,7 +77,6 @@
 <meta property="og:url" content="https://www.jerkeby.se/newsletter/posts/prototype-poisoning/" /><meta property="og:image" content="https://www.jerkeby.se/images/Prototype-poisoning-Anton-Linne-Christoffer-Jerkeby.jpg" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-09-14T00:00:00+00:00" />
 <meta property="article:modified_time" content="2022-09-14T00:00:00+00:00" />
-
 
   
   <meta itemprop="name" content="What is prototype poisoning? Prototype bugs explained!">
@@ -208,7 +205,7 @@ The application never logs the value of the <code>req.body</code>.</p>
 </ul>
 <h2 id="video">Video</h2>
 <p>See the full talk from <a href="https://www.sec-t.org/talks/#Christoffer-Jerkeby-Anton-Linne">SEC-T community night</a> here:
-    
+
 <div class="10959">
   <iframe src="https://www.youtube.com/embed/K3ocqLFHkpw" allowfullscreen title="YouTube Video"></iframe>
 </div>
@@ -296,7 +293,6 @@ In this case the <a href="https://github.com/mongo-express/mongo-express/blob/ma
 The <code>mongodb-query-parser</code> provides a bson format parser that executes <code>toBSON()</code> if it exists. If the mongo document contains an attribute named <code>toBSON</code> the values can be passed to an <a href="https://github.com/mongodb-js/query-parser/compare/v1.6.0-rc.0...master">MQL query called <code>safer-eval</code></a> which can result in an infinite loop and <a href="https://github.com/mongo-express/mongo-express/commit/58f4cc50b5a93104505dd3bea6b6324e9d56729c">block the event handler</a>. This issue is tracked as <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-6639">CVE-2020-6639</a>.</p>
 <p>While the LYNX symbolic execution tool currently support query string and JSON input, note that there are many other implicit input formats such as the HTTP header format itself, XML etc. that may be input channels for prototype pollution.</p>
 <h1 id="contact">Contact</h1>
-<p>This is a research project by <a href="https://twitter.com/safts0ppa">Anton Linné</a> and <a href="https://twitter.com/kuggofficial">Christoffer Jerkeby</a>.</p>
 <p>For media, consulting and guidance contact:</p>
 <p>JavaScript security consulting: Anton Linné, anton at intelsquirrel dot com.
 Application security, change management and detection: Christoffer Jerkeby, christoffer at jerkeby dot se.</p>
@@ -322,7 +318,7 @@ Application security, change management and detection: Christoffer Jerkeby, chri
 </main>
 
     <footer class="footer">
-  <p>&copy; 2022 <a href="https://www.jerkeby.se/newsletter">Research</a></p>
+  <p>&copy; 2023 <a href="https://www.jerkeby.se/newsletter">Research</a></p>
   <p>Powered by <a href="https://gohugo.io/" rel="noopener" target="_blank">Hugo️️</a>️</p>
   <p>
     <a href="https://github.com/nanxiaobei/hugo-paper" rel="noopener" target="_blank">Paper 5.1</a>
