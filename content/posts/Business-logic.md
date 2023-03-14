@@ -1,6 +1,6 @@
 ---
 title: "Dealing with security faults in business logic"
-date: "2023-03-14"
+date: "2023-03-13"
 draft: true
 authors:
   - Christoffer Jerkeby
@@ -12,6 +12,7 @@ description: Insecure design, a miss-alignment between technology and business f
 ![Insecure design](/images/business_logic.gif)
 
 > "When things were supposed to work one way, but they also worked in other ways." - Christoffer Jerkeby
+
 [OWASP 2021 A04 Insecure Design](https://owasp.org/Top10/A04_2021-Insecure_Design/) is a miss-alignment between technology and business flow. We cannot predict all problems, but we can handle failure gracefully.
 
 Insecure design happens when we develop components in accordance with the specification. Insecure design happens when we use secure frameworks. Insecure design happens when we use state-of-the-art testing tools. We come prepared, and yet the system fails us.
