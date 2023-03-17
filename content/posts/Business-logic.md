@@ -22,16 +22,16 @@ Why is it that we are still getting these vulnerabilities despite [shifting left
 
 We must:
 1. Accept that we cannot predict all faults
-2. Learn about common logical flaws
+2. Learn from real world examples
 3. Anticipate failure in business logic
 
-In threat modelling, we use the acronym ["STRIDE"](https://www.youtube.com/watch?v=iGkX06sVFFM) (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service and Elevation of privilege) to remind us what we are trying to achieve and what can go wrong. Even with STRIDE, anticipating logical flaws can sometimes be challenging. [All models are incorrect, but some are useful](https://jamesclear.com/all-models-are-wrong#:~:text=In%201976%2C%20a%20British%20statistician,is%20correct%20in%20all%20cases.). Insecure design of software stems from incorrect assumptions and less accurate models. The misalignment can start when we draw our `Data Flow Diagram` (DFD) for the threat model. I call this anti-pattern the `inaccurate model`. Misalignment can also occur when circumstances change after the software is in production. When outside conditions outside of the model change, I call this `changed circumstances`.
+In threat modelling, we use the acronym ["STRIDE"](https://www.youtube.com/watch?v=iGkX06sVFFM) (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service and Elevation of privilege) to remind us what we are trying to achieve and what can go wrong. Even with STRIDE, anticipating logical flaws can sometimes be challenging. [All models are incorrect, but some are useful](https://jamesclear.com/all-models-are-wrong#:~:text=In%201976%2C%20a%20British%20statistician,is%20correct%20in%20all%20cases.). Insecure design of software stems from incorrect assumptions and less accurate models. The misalignment can start when we draw our `Data Flow Diagram` (DFD) for the threat model. I call this anti-pattern the `inaccurate model`. Misalignment can also occur when [circumstances change](https://how.complexsystems.fail/#14) after the software is released to production. When outside conditions outside of the model change, I call this `changed circumstances`.
 
 !["Do not assume anything, clear your mind must be" - Master Yoda](/images/Business_logic_yoda.jpeg)
 
 Just as in [Domain Driven Design](https://martinfowler.com/bliki/BoundedContext.html), we want to ensure developers and testers understand the domain the application serves. Most importantly, we want to avoid implicit assumptions about user behaviour or the behaviour of other parts of the application. The question is, how do we achieve this?
 
-Let's take a look at our examples!
+Let's take a look at our real world examples!
 
 ## Business logic errors [(CWE-840)](https://cwe.mitre.org/data/definitions/840.html)
 ### Trust Boundary Violation [(CWE-501)](https://cwe.mitre.org/data/definitions/501.html)
@@ -48,7 +48,7 @@ if (session.getAttribute(ATTR_USR) == null) {
 
 Preferably a more structured method for handling user input securely should have been provided from the design phase. Such as the entity modelling pattern from [Secure by design by Dan Bergh Johnsson, Daniel Deogun and Daniel Sawano](https://www.manning.com/books/secure-by-design).
 
-### Authentication Bypass Using an Alternate Path or Channel (CWE-288)
+### Authentication Bypass Using an Alternate Path or Channel [(CWE-288)](https://cwe.mitre.org/data/definitions/288.html)
 In my experience authentication bypasses have traditionally occurred when inconsistent authentication checks are applied, commonly in frameworks where the developer must explicitly declare that authentication is required. The bug-class has since grown to include applications with more states than "logged in" and "not logged in".
 
 When a user receives an authentication token for performing one single action, the rest of the application is unaware of any "new" token state limitations.
@@ -90,7 +90,7 @@ How should we respond to a bug of this kind?
 
 See: [Allspaw, John. (2015). TRADE-OFFS UNDER PRESSURE, Lund University](https://lup.lub.lu.se/luur/download?func=downloadFile&recordOId=8084520&fileOId=8084521).
 
-The cost of these remediation efforts depends on our preparation and collective experience dealing with failure.
+The cost of these remediation efforts depends on our preparation and collective [experience dealing with failure](https://how.complexsystems.fail/#18).
 
 One way to prepare for the unexpected is to `monitor the customer journey`. To us, the customer journey is a critical business logic function. Monitoring it would only be natural to business stakeholders. Cataloguing exceptions raised by our application, creating actionable error descriptions, and a coherent log output gives us insight into our customer journey's `negative experiences`.
 
