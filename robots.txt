@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 # Hi STÖK!
 Sitemap: https://www.jerkeby.se/newsletter/sitemap.xml
+
+User-agent: GPTBot
+Disallow: /
